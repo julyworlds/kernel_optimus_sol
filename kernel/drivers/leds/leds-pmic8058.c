@@ -14,6 +14,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
  * 02110-1301, USA.
  */
+/* BLN mod by XpauM */
 #include <linux/kernel.h>
 #include <linux/init.h>
 #include <linux/platform_device.h>
@@ -27,6 +28,11 @@
 #include <linux/earlysuspend.h>
 #endif
 #endif
+
+#ifdef CONFIG_GENERIC_BLN
+#include <linux/bln.h>
+#endif
+
 
 #define SSBI_REG_ADDR_DRV_KEYPAD	0x48
 #define PM8058_DRV_KEYPAD_BL_MASK	0xf0
@@ -322,6 +328,39 @@ static enum led_brightness pmic8058_led_get(struct led_classdev *led_cdev)
 	return LED_OFF;
 }
 
+static void enable_led_notification(void){
+  /* check if its suspended */
+  if (suspend_check == 1){
+	/* Power on leds */
+	struct pmic8058_led_data *led;
+	led = &led_data[PMIC8058_ID_LED_0];
+	mutex_lock(&led->lock);	
+	led_lc_set(led, LED_FULL);
+	mutex_unlock(&led->lock);
+  }
+  else
+    pr_info("%s: cannot set notification led, touchkeys are enabled\n",__FUNCTION__);
+}
+
+static void disable_led_notification(void){
+  /* check if its suspended */
+  if (suspend_check == 1){
+	/* Power off leds */
+	struct pmic8058_led_data *led;
+	led = &led_data[PMIC8058_ID_LED_0];
+	mutex_lock(&led->lock);	
+	led_lc_set(led, LED_OFF);
+	mutex_unlock(&led->lock);
+  }
+}
+
+static struct bln_implementation bln = {
+  .enable = enable_led_notification,
+  .disable = disable_led_notification,
+};
+
+
+
 static int pmic8058_led_probe(struct platform_device *pdev)
 {
 	struct pmic8058_leds_platform_data *pdata = pdev->dev.platform_data;
@@ -431,6 +470,10 @@ static int pmic8058_led_probe(struct platform_device *pdev)
 	}
 
 	platform_set_drvdata(pdev, led_data);
+	
+#ifdef CONFIG_GENERIC_BLN
+    register_bln_implementation(&bln);
+#endif
 
 	return 0;
 
@@ -443,10 +486,19 @@ fail_id_check:
 	return rc;
 }
 
+
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
 #ifdef CONFIG_HAS_EARLYSUSPEND
 static void leds_pmic8058_early_suspend(struct early_suspend *h)
 {
+
+#ifdef CONFIG_GENERIC_BLN
+/*
+ * Disallow powering off the touchkey leds
+ * while a notification is ongoing
+ */
+    if(!bln_is_ongoing())
+#endif		
 	suspend_check = 1;
 }
 
