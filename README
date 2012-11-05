@@ -1,0 +1,16 @@
+----XpauM-Kernel for stock-base OPTIMUS SOL (2.3)-----
+
+Last version:0.1
+
+Changelog:
+
+---0.1
+-BLN support (needs liblights modded with bln)
+-OC 1.5Ghz
+-VDD levels (SVS)
+-Added Smartassv2, interativex, brazilianwax, savagedzen, smoothass GOVERNORS
+-Added SIO Scheduler
+-SLUB Memory Allocator
+-KSM
+-A few optimizations
+
