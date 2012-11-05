@@ -294,8 +294,12 @@ static void pmic8058_led_work(struct work_struct *work)
 		break;
 	case PMIC8058_ID_LED_0:
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
-		if(led->brightness == 0 || suspend_check != 1)
+		if(led->brightness == 0 || suspend_check != 1 || bln_is_ongoing()){
 			led_lc_set(led, led->brightness);
+			//pr_info("%s: brightness changed -> id:%d brightness: %d\n",__FUNCTION__,led->id,led->brightness); //Debug info
+		}/*else{
+			pr_info("%s: brightness not changed -> id:%d\n",__FUNCTION__,led->id); //Debug info
+		}*/
 		break;
 #endif
 	case PMIC8058_ID_LED_1:
@@ -333,10 +337,15 @@ static void enable_led_notification(void){
   if (suspend_check == 1){
 	/* Power on leds */
 	struct pmic8058_led_data *led;
-	led = &led_data[PMIC8058_ID_LED_0];
-	mutex_lock(&led->lock);	
-	led_lc_set(led, LED_FULL);
-	mutex_unlock(&led->lock);
+	unsigned long flags;
+
+	led = &led_data[2]; //LEDS of keyboard
+	spin_lock_irqsave(&led->value_lock, flags);
+	led->brightness = LED_FULL;
+	schedule_work(&led->work);
+	spin_unlock_irqrestore(&led->value_lock, flags);	
+
+	pr_info("%s: leds are enabled\n",__FUNCTION__);
   }
   else
     pr_info("%s: cannot set notification led, touchkeys are enabled\n",__FUNCTION__);
@@ -347,11 +356,14 @@ static void disable_led_notification(void){
   if (suspend_check == 1){
 	/* Power off leds */
 	struct pmic8058_led_data *led;
-	led = &led_data[PMIC8058_ID_LED_0];
-	mutex_lock(&led->lock);	
-	led_lc_set(led, LED_OFF);
-	mutex_unlock(&led->lock);
-  }
+	unsigned long flags;
+	
+	led = &led_data[2];
+	spin_lock_irqsave(&led->value_lock, flags);
+	led->brightness = LED_OFF;
+	schedule_work(&led->work);
+	spin_unlock_irqrestore(&led->value_lock, flags);
+ }
 }
 
 static struct bln_implementation bln = {
@@ -490,15 +502,7 @@ fail_id_check:
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
 #ifdef CONFIG_HAS_EARLYSUSPEND
 static void leds_pmic8058_early_suspend(struct early_suspend *h)
-{
-
-#ifdef CONFIG_GENERIC_BLN
-/*
- * Disallow powering off the touchkey leds
- * while a notification is ongoing
- */
-    if(!bln_is_ongoing())
-#endif		
+{		
 	suspend_check = 1;
 }
 
