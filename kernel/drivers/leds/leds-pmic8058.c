@@ -341,7 +341,7 @@ static void enable_led_notification(void){
 
 	led = &led_data[2]; //LEDS of keyboard
 	spin_lock_irqsave(&led->value_lock, flags);
-	led->brightness = LED_FULL;
+	led->brightness = 2;//LED_FULL was too much brilliant
 	schedule_work(&led->work);
 	spin_unlock_irqrestore(&led->value_lock, flags);	
 
