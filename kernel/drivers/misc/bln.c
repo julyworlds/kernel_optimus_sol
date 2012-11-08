@@ -17,6 +17,7 @@
 #include <linux/mutex.h>
 #include <linux/timer.h>
 #include <linux/wakelock.h>
+#include <linux/delay.h>
 
 static bool bln_enabled = true; /* is BLN function is enabled */
 static bool bln_ongoing = false; /* ongoing LED Notification */
@@ -34,14 +35,15 @@ static struct timer_list blink_timer =
 static void blink_callback(struct work_struct *blink_work);
 static DECLARE_WORK(blink_work, blink_callback);
 
-#define BLINK_INTERVAL 500 /* on / off every 500ms */
-#define MAX_BLINK_COUNT 600 /* 10 minutes */
+#define BLINK_INTERVAL 1000 /* on / off every 1000ms */
+#define MAX_BLINK_COUNT 300 /* 10 minutes */
 #define BACKLIGHTNOTIFICATION_VERSION 9
 
-static void bln_enable_backlights(void)
+static bool bln_enable_backlights(void)
 {
 	if (bln_imp)
-		bln_imp->enable();
+		return bln_imp->enable();
+	return false;
 }
 
 static void bln_disable_backlights(void)
@@ -80,8 +82,10 @@ static void enable_led_notification(void)
 		blink_count = MAX_BLINK_COUNT;
 		add_timer(&blink_timer);
 	}
-
-	bln_enable_backlights();
+	int con=0;//Max time ~ 20*100 ms
+	while(!bln_enable_backlights() && con<20){
+		msleep(100);con++;
+	}
 	pr_info("%s: notification led enabled\n", __FUNCTION__);
 	bln_ongoing = true;
 }

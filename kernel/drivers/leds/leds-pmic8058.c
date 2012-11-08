@@ -294,7 +294,7 @@ static void pmic8058_led_work(struct work_struct *work)
 		break;
 	case PMIC8058_ID_LED_0:
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
-		if(led->brightness == 0 || suspend_check != 1 || bln_is_ongoing()){
+		if( (led->brightness == 0 && !bln_is_ongoing()) || suspend_check != 1 ){
 			led_lc_set(led, led->brightness);
 			//pr_info("%s: brightness changed -> id:%d brightness: %d\n",__FUNCTION__,led->id,led->brightness); //Debug info
 		}/*else{
@@ -332,7 +332,7 @@ static enum led_brightness pmic8058_led_get(struct led_classdev *led_cdev)
 	return LED_OFF;
 }
 
-static void enable_led_notification(void){
+static bool enable_led_notification(void){
   /* check if its suspended */
   if (suspend_check == 1){
 	/* Power on leds */
@@ -341,14 +341,18 @@ static void enable_led_notification(void){
 
 	led = &led_data[2]; //LEDS of keyboard
 	spin_lock_irqsave(&led->value_lock, flags);
-	led->brightness = 2;//LED_FULL was too much brilliant
-	schedule_work(&led->work);
+	led->brightness = 5;//LED_FULL was too much brilliant
+	mutex_lock(&led->lock);
+	led_lc_set(led, led->brightness);
+	mutex_unlock(&led->lock);	
 	spin_unlock_irqrestore(&led->value_lock, flags);	
 
 	pr_info("%s: leds are enabled\n",__FUNCTION__);
+	return true;
   }
   else
-    pr_info("%s: cannot set notification led, touchkeys are enabled\n",__FUNCTION__);
+    pr_info("%s: cannot set notification led, suspend_check = 0\n",__FUNCTION__);
+  return false;
 }
 
 static void disable_led_notification(void){
@@ -361,7 +365,9 @@ static void disable_led_notification(void){
 	led = &led_data[2];
 	spin_lock_irqsave(&led->value_lock, flags);
 	led->brightness = LED_OFF;
-	schedule_work(&led->work);
+	mutex_lock(&led->lock);
+	led_lc_set(led, led->brightness);
+	mutex_unlock(&led->lock);
 	spin_unlock_irqrestore(&led->value_lock, flags);
  }
 }
