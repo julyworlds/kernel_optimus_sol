@@ -1,10 +1,19 @@
 ----XpauM-Kernel for stock-base OPTIMUS SOL (2.3)-----
+----( Compiled with Linaro-toolchain 4.6 )       -----
+----( BLN support ported from galaxy s II )      -----
 
-Last version:0.1
+Last version:0.2
 
 Changelog:
 
----0.1
+---v0.2
+-Added VR Scheduler
+-Fixed a problem enablind BLN sometimes
+-Tweaked SIO and VR
+-Fixed a problem with SmartassV2
+-Changed name of kernel
+
+---v0.1
 -BLN support (needs liblights modded with bln)
 -OC 1.5Ghz
 -VDD levels (SVS)
