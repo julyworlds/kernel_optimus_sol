@@ -39,7 +39,7 @@ static void _outer_cache_range_op(unsigned long addr, int size,
 		unsigned long physaddr = 0;
 
 		if (flags & KGSL_MEMFLAGS_VMALLOC_MEM)
-			physaddr = page_to_phys(vmalloc_to_page((void *) end));
+			physaddr = page_to_phys(alloc_page(GFP_KERNEL | __GFP_ZERO | __GFP_HIGHMEM));
 		else if (flags & KGSL_MEMFLAGS_HOSTADDR)
 			physaddr = kgsl_virtaddr_to_physaddr(end);
 		else if (flags & KGSL_MEMFLAGS_CONPHYS)
@@ -153,6 +153,7 @@ kgsl_sharedmem_free(struct kgsl_memdesc *memdesc)
 	KGSL_MEM_VDBG("return\n");
 }
 
+
 int
 kgsl_sharedmem_readl(const struct kgsl_memdesc *memdesc,
 			uint32_t *dst,
@@ -170,7 +171,7 @@ kgsl_sharedmem_readl(const struct kgsl_memdesc *memdesc,
 				offsetbytes, memdesc->size);
 		return -ERANGE;
 	}
-	*dst = readl(memdesc->hostptr + offsetbytes);
+	*dst = readl_relaxed(memdesc->hostptr + offsetbytes);
 	return 0;
 }
 
@@ -212,7 +213,7 @@ kgsl_sharedmem_writel(const struct kgsl_memdesc *memdesc,
 	}
 	kgsl_cffdump_setmem(memdesc->gpuaddr + offsetbytes,
 		src, sizeof(uint));
-	writel(src, memdesc->hostptr + offsetbytes);
+	writel_relaxed(src, memdesc->hostptr + offsetbytes);
 	return 0;
 }
 
