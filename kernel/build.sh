@@ -1,3 +1,3 @@
-export PATH=$PATH:/home/xpaum/Desktop/Android/toolchain/Android_Toolchains/arm-eabi-linaro-4.6.2/bin
+export PATH=$PATH:/home/xpaum/Desktop/Android/gcc-linaro-4.7/bin
 
-make ARCH=arm CROSS_COMPILE=arm-eabi-
+make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-

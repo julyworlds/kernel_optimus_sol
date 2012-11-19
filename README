@@ -1,14 +1,20 @@
 ----XpauM-Kernel for stock-base OPTIMUS SOL (2.3)-----
-----( Compiled with Linaro-toolchain 4.6 )       -----
+----( Compiled with Linaro-toolchain )       -----
 ----( BLN support ported from galaxy s II )      -----
 
-Last version:0.2
+Last version: 0.3
 
 Changelog:
 
+---v0.3
+-Disabled KSM (unstable)
+-Default max_frequency:1ghz (u can change it with any app Ex:SetCpu)
+-Tweaks for kgsl driver
+-Update Linaro Toolchain : 4.7
+
 ---v0.2
 -Added VR Scheduler
--Fixed a problem enablind BLN sometimes
+-Fixed a problem enabling BLN sometimes
 -Tweaked SIO and VR
 -Fixed a problem with SmartassV2
 -Changed name of kernel

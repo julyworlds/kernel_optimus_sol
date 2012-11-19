@@ -39,7 +39,7 @@ static void _outer_cache_range_op(unsigned long addr, int size,
 		unsigned long physaddr = 0;
 
 		if (flags & KGSL_MEMFLAGS_VMALLOC_MEM)
-			physaddr = page_to_phys(alloc_page(GFP_KERNEL | __GFP_ZERO | __GFP_HIGHMEM));
+			physaddr = page_to_phys(vmalloc_to_page((void *) end));
 		else if (flags & KGSL_MEMFLAGS_HOSTADDR)
 			physaddr = kgsl_virtaddr_to_physaddr(end);
 		else if (flags & KGSL_MEMFLAGS_CONPHYS)
