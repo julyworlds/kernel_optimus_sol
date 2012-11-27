@@ -6,11 +6,14 @@ Last version: 0.3
 
 Changelog:
 
+---v0.4
+Coming soon (sweep2wake)
+
 ---v0.3
--Disabled KSM (unstable)
+-Added GPU OC: from 245 to 368 mhz
 -Default max_frequency:1ghz (u can change it with any app Ex:SetCpu)
 -Tweaks for kgsl driver
--Update Linaro Toolchain : 4.7
+-Compiled with update Linaro Toolchain : 4.7
 
 ---v0.2
 -Added VR Scheduler
