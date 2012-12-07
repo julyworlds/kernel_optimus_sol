@@ -207,7 +207,7 @@ void sw_unlock(u16 state){ //left-right 0x100->0x0->0x200->0x0->0x400
 					if(state == 0x100){
 						push_pwr();
 						pr_info("%s: sweep2wake unlock\n", __FUNCTION__);
-						success = true;	
+
 					}
 					if(count[3] != true){
 						count[3] = true;
@@ -254,7 +254,7 @@ void sw_lock (u16 state){ //right->left 0x400->0x0->0x200->0x0->0x100
 					if(state == 0x400){
 						push_pwr();
 						pr_info("%s: sweep2wake lock\n", __FUNCTION__);
-						success =  true;
+						
 					}
 					if(count[3] != true){
 						count[3] = true;
@@ -282,6 +282,7 @@ void sw_lock (u16 state){ //right->left 0x400->0x0->0x200->0x0->0x100
 
 	if(!success && count[0] == true){
 		reset_count();
+		del_timer(&timer);
 		pr_info("%s: sweep2wake reset\n", __FUNCTION__);
 	}
 }
