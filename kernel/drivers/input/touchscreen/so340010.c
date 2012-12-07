@@ -32,7 +32,9 @@
 #include <mach/vreg.h>
 #include <mach/board_lge.h>
 #include <linux/jiffies.h>
-
+#ifdef CONFIG_SWEEP2WAKE
+#include <linux/sweep2wake.h>
+#endif
 
 #define TSKEY_REG_INTER			(0x00)
 #define TSKEY_REG_GEN			(0x01)
@@ -60,6 +62,10 @@
 #define PRESS 	1
 #define RELEASE 0
 #define KEY_DELAYED_SEC		40
+
+#ifdef CONFIG_SWEEP2WAKE
+bool suspended = false;
+#endif
 
 struct class *touch_key_class;
 EXPORT_SYMBOL(touch_key_class);
@@ -314,9 +320,17 @@ static void so340010_delayed_key_work_func(struct work_struct *work)
 	if(last_key == 0 && state == 0)
 		return;
 
-	//printk(KERN_INFO"Do Delayed Work Queue[0x%x]\n", state);
-
-	so340010_report_event(state);
+	//printk(KERN_INFO"Do Delayed Work Queue[0x%x]\n", state);	
+#ifdef CONFIG_SWEEP2WAKE
+		if(suspended == false){
+			sw_lock(state);			
+			so340010_report_event(state);
+		}else{
+			sw_unlock(state);
+		}
+#else
+		so340010_report_event(state);
+#endif
 	last_key	= state;
 }
 
@@ -383,12 +397,14 @@ static void so340010_power_up(void)
 static void so340010_early_suspend(struct early_suspend *h)
 {
 	struct so340010_device *pdev = container_of(h, struct so340010_device, earlysuspend);
-
+#ifdef CONFIG_SWEEP2WAKE
+	suspended = true;
+#else
 	disable_irq(pdev->client->irq);
 
 	so340010_i2c_suspend(pdev->client, PMSG_SUSPEND);
 	so340010_power_down();
-
+#endif
 	return;
 }
 
@@ -396,7 +412,9 @@ static void so340010_late_resume(struct early_suspend *h)
 {
 	struct so340010_device *pdev = container_of(h, struct so340010_device, earlysuspend);
 	int ret = 0;
-
+#ifdef CONFIG_SWEEP2WAKE
+	suspended = false;
+#else
 	so340010_power_up();
 
 	ret = so340010_initialize();
@@ -405,7 +423,7 @@ static void so340010_late_resume(struct early_suspend *h)
 		printk(KERN_INFO"%s: failed to init\n", __func__);
 
 	enable_irq(pdev->client->irq);
-
+#endif
 	return;
 }
 #endif
