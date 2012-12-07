@@ -1,13 +1,16 @@
 ----XpauM-Kernel for stock-base OPTIMUS SOL (2.3)-----
-----( Compiled with Linaro-toolchain )       -----
+----( Compiled with Linaro-toolchain )           -----
 ----( BLN support ported from galaxy s II )      -----
+----( Idea of SWEEP2WAKE taken from XDA )        -----
 
-Last version: 0.3
+Last version: 0.4
 
 Changelog:
 
 ---v0.4
-Coming soon (sweep2wake)
+-Added SWEEP2WAKE support
+-New OC to 1.8 GHZ (1.8 is unstable its recommended 1.6 at max)
+-A few tweaks more
 
 ---v0.3
 -Added GPU OC: from 245 to 368 mhz
