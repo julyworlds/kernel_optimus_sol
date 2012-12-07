@@ -336,6 +336,11 @@ static void so340010_delayed_key_work_func(struct work_struct *work)
 
 static int so340010_i2c_suspend(struct i2c_client *i2c_dev, pm_message_t state)
 {
+#ifdef CONFIG_SWEEP2WAKE
+	if(sw_is_enabled() && sw_is_enabled_unlock()){	
+		suspended = true;
+	}else{
+#endif
 	struct so340010_device *pdev = i2c_get_clientdata(i2c_dev);
 
 	cancel_work_sync(&pdev->key_work);
@@ -348,19 +353,28 @@ static int so340010_i2c_suspend(struct i2c_client *i2c_dev, pm_message_t state)
 			suspend_code_table[0].val2,
 			suspend_code_table[0].val3,
 			suspend_code_table[0].val4);
-
+#ifdef CONFIG_SWEEP2WAKE
+	}
+#endif
 	return 0;
 }
 
 #ifndef CONFIG_HAS_EARLYSUSPEND
 static int so340010_i2c_resume(struct i2c_client *i2c_dev)
 {
+#ifdef CONFIG_SWEEP2WAKE
+	if(sw_is_enabled() && sw_is_enabled_unlock()){	
+		suspended = false;
+	}else{
+#endif
 	so340010_i2c_write(
 			resume_code_table[0].val1,
 			resume_code_table[0].val2,
 			resume_code_table[0].val3,
 			resume_code_table[0].val4);
-
+#ifdef CONFIG_SWEEP2WAKE
+	}
+#endif
 	return 0;
 }
 #endif
@@ -396,25 +410,33 @@ static void so340010_power_up(void)
 #ifdef CONFIG_HAS_EARLYSUSPEND
 static void so340010_early_suspend(struct early_suspend *h)
 {
-	struct so340010_device *pdev = container_of(h, struct so340010_device, earlysuspend);
 #ifdef CONFIG_SWEEP2WAKE
-	suspended = true;
-#else
+	if(sw_is_enabled() && sw_is_enabled_unlock()){	
+		suspended = true;
+	}else{
+#endif
+	struct so340010_device *pdev = container_of(h, struct so340010_device, earlysuspend);
+
 	disable_irq(pdev->client->irq);
 
 	so340010_i2c_suspend(pdev->client, PMSG_SUSPEND);
 	so340010_power_down();
+#ifdef CONFIG_SWEEP2WAKE
+	}
 #endif
 	return;
 }
 
 static void so340010_late_resume(struct early_suspend *h)
 {
+#ifdef CONFIG_SWEEP2WAKE
+	if(sw_is_enabled() && sw_is_enabled_unlock()){	
+		suspended = false;
+	}else{
+#endif
 	struct so340010_device *pdev = container_of(h, struct so340010_device, earlysuspend);
 	int ret = 0;
-#ifdef CONFIG_SWEEP2WAKE
-	suspended = false;
-#else
+
 	so340010_power_up();
 
 	ret = so340010_initialize();
@@ -423,6 +445,8 @@ static void so340010_late_resume(struct early_suspend *h)
 		printk(KERN_INFO"%s: failed to init\n", __func__);
 
 	enable_irq(pdev->client->irq);
+#ifdef CONFIG_SWEEP2WAKE
+	}
 #endif
 	return;
 }

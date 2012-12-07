@@ -60,6 +60,15 @@ void setInputDev (struct input_dev *dev){
 	input_dev=dev;
 }
 
+//is enabled?
+bool sw_is_enabled (){
+	return sw_enabled;
+}
+
+bool sw_is_enabled_unlock (){
+	return sw_unlockenable;
+}
+
 
 /* enable disable */
 static ssize_t sw_status_read(struct device *dev,
@@ -176,16 +185,15 @@ void timer_callback(unsigned long data)
 {
 	reset_count();
 	pr_info("%s: sweep2wake reset\n", __FUNCTION__);
-	del_timer(&timer);
 }
 
 //push the power button
 void push_pwr (){
 	if(input_dev != NULL){
-		input_event(input_dev, EV_KEY, KEY_END, 1);
+		input_event(input_dev, EV_KEY, KEY_POWER, 1);
 		input_event(input_dev, EV_SYN, 0, 0);
 		msleep(100);
-		input_event(input_dev, EV_KEY, KEY_END, 0);
+		input_event(input_dev, EV_KEY, KEY_POWER, 0);
 		input_event(input_dev, EV_SYN, 0, 0);
 		msleep(100);
 	}else{
