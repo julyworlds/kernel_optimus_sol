@@ -65,6 +65,7 @@
 
 #ifdef CONFIG_SWEEP2WAKE
 bool suspended = false;
+static DEFINE_MUTEX(sw_suspended_mutex);
 #endif
 
 struct class *touch_key_class;
@@ -337,9 +338,7 @@ static void so340010_delayed_key_work_func(struct work_struct *work)
 static int so340010_i2c_suspend(struct i2c_client *i2c_dev, pm_message_t state)
 {
 #ifdef CONFIG_SWEEP2WAKE
-	if(sw_is_enabled() && sw_is_enabled_unlock()){	
-		suspended = true;
-	}else{
+	if( !sw_is_enabled() && !sw_is_enabled_unlock()){
 #endif
 	struct so340010_device *pdev = i2c_get_clientdata(i2c_dev);
 
@@ -362,19 +361,13 @@ static int so340010_i2c_suspend(struct i2c_client *i2c_dev, pm_message_t state)
 #ifndef CONFIG_HAS_EARLYSUSPEND
 static int so340010_i2c_resume(struct i2c_client *i2c_dev)
 {
-#ifdef CONFIG_SWEEP2WAKE
-	if(sw_is_enabled() && sw_is_enabled_unlock()){	
-		suspended = false;
-	}else{
-#endif
+
 	so340010_i2c_write(
 			resume_code_table[0].val1,
 			resume_code_table[0].val2,
 			resume_code_table[0].val3,
 			resume_code_table[0].val4);
-#ifdef CONFIG_SWEEP2WAKE
-	}
-#endif
+
 	return 0;
 }
 #endif
@@ -382,6 +375,9 @@ static int so340010_i2c_resume(struct i2c_client *i2c_dev)
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
 static void so340010_power_down(void)
 {
+#ifdef CONFIG_SWEEP2WAKE
+	if( !sw_is_enabled() && !sw_is_enabled_unlock()){
+#endif
 	gpio_tlmm_config(GPIO_CFG(so340010_pdata->sda, 0, GPIO_CFG_INPUT,
 				GPIO_CFG_NO_PULL, GPIO_CFG_2MA), GPIO_CFG_DISABLE);
 	gpio_tlmm_config(GPIO_CFG(so340010_pdata->scl, 0, GPIO_CFG_INPUT,
@@ -390,10 +386,14 @@ static void so340010_power_down(void)
 				GPIO_CFG_NO_PULL, GPIO_CFG_2MA), GPIO_CFG_DISABLE);
 
 	so340010_pdata->power(0);
+#ifdef CONFIG_SWEEP2WAKE
+	}
+#endif
 }
 
 static void so340010_power_up(void)
 {
+
 	so340010_pdata->power(1);
 
 	gpio_tlmm_config(GPIO_CFG(so340010_pdata->scl, 0, GPIO_CFG_OUTPUT,
@@ -404,6 +404,7 @@ static void so340010_power_up(void)
 				GPIO_CFG_PULL_UP, GPIO_CFG_2MA), GPIO_CFG_ENABLE);
 
 	msleep(50);
+
 }
 #endif
 
@@ -412,7 +413,9 @@ static void so340010_early_suspend(struct early_suspend *h)
 {
 #ifdef CONFIG_SWEEP2WAKE
 	if(sw_is_enabled() && sw_is_enabled_unlock()){	
+		mutex_lock(&sw_suspended_mutex);		
 		suspended = true;
+		mutex_unlock(&sw_suspended_mutex);
 	}else{
 #endif
 	struct so340010_device *pdev = container_of(h, struct so340010_device, earlysuspend);
@@ -431,7 +434,9 @@ static void so340010_late_resume(struct early_suspend *h)
 {
 #ifdef CONFIG_SWEEP2WAKE
 	if(sw_is_enabled() && sw_is_enabled_unlock()){	
+		mutex_lock(&sw_suspended_mutex);	
 		suspended = false;
+		mutex_unlock(&sw_suspended_mutex);
 	}else{
 #endif
 	struct so340010_device *pdev = container_of(h, struct so340010_device, earlysuspend);

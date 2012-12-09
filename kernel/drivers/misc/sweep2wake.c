@@ -19,6 +19,7 @@
 
 #define TIMER_MAX 2000 // 2 sec
 
+static DEFINE_MUTEX(sw_power_mutex);
 bool sw_enabled = true; /* is sweep2wake enabled */
 bool sw_suspended = false; /* is system suspended */
 bool sw_unlockenable = true; /* unlock with sweep2wake left->right */
@@ -190,12 +191,14 @@ void timer_callback(unsigned long data)
 //push the power button
 void push_pwr (){
 	if(input_dev != NULL){
+		mutex_lock(&sw_power_mutex);
 		input_event(input_dev, EV_KEY, KEY_POWER, 1);
 		input_event(input_dev, EV_SYN, 0, 0);
 		msleep(100);
 		input_event(input_dev, EV_KEY, KEY_POWER, 0);
 		input_event(input_dev, EV_SYN, 0, 0);
 		msleep(100);
+		mutex_unlock(&sw_power_mutex);
 	}else{
 		pr_info("%s: SWEEP2WAKE: input-dev not initialized\n", __FUNCTION__);
 	}
