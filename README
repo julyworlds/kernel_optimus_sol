@@ -3,9 +3,17 @@
 ----( BLN support ported from galaxy s II )      -----
 ----( Idea of SWEEP2WAKE taken from XDA )        -----
 
-Last version: 0.4
+Last version: 0.51
 
 Changelog:
+---v0.51
+-update to latest linaro tc
+-tweaks for kernel and config
+
+---v0.5 
+-SWEEP2WAKE 100% functional
+-Cleaned config
+-Maybe final version ;)
 
 ---v0.4
 -Added SWEEP2WAKE support
