@@ -411,14 +411,17 @@ static void so340010_power_up(void)
 #ifdef CONFIG_HAS_EARLYSUSPEND
 static void so340010_early_suspend(struct early_suspend *h)
 {
+	struct so340010_device *pdev = container_of(h, struct so340010_device, earlysuspend);
 #ifdef CONFIG_SWEEP2WAKE
 	if(sw_is_enabled() && sw_is_enabled_unlock()){	
 		mutex_lock(&sw_suspended_mutex);		
 		suspended = true;
+		enable_irq_wake(pdev->client->irq);
+		enable_irq_wake(pdev->gpio_irq);
+		enable_irq_wake(pdev->irq);	
 		mutex_unlock(&sw_suspended_mutex);
 	}else{
 #endif
-	struct so340010_device *pdev = container_of(h, struct so340010_device, earlysuspend);
 
 	disable_irq(pdev->client->irq);
 
@@ -432,14 +435,17 @@ static void so340010_early_suspend(struct early_suspend *h)
 
 static void so340010_late_resume(struct early_suspend *h)
 {
+	struct so340010_device *pdev = container_of(h, struct so340010_device, earlysuspend);
 #ifdef CONFIG_SWEEP2WAKE
 	if(sw_is_enabled() && sw_is_enabled_unlock()){	
 		mutex_lock(&sw_suspended_mutex);	
 		suspended = false;
+		disable_irq_wake(pdev->client->irq);
+		disable_irq_wake(pdev->gpio_irq);
+		disable_irq_wake(pdev->irq);		
 		mutex_unlock(&sw_suspended_mutex);
 	}else{
 #endif
-	struct so340010_device *pdev = container_of(h, struct so340010_device, earlysuspend);
 	int ret = 0;
 
 	so340010_power_up();
