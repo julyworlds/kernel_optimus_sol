@@ -69,6 +69,8 @@ enum {
 
 extern int lge_bd_rev;
 
+int board_is_rev(char *rev_info);
+
 /* define gpio pin number of i2c-gpio */
 struct gpio_i2c_pin {
 	unsigned int sda_pin;
