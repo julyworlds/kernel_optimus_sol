@@ -338,7 +338,7 @@ static void so340010_delayed_key_work_func(struct work_struct *work)
 static int so340010_i2c_suspend(struct i2c_client *i2c_dev, pm_message_t state)
 {
 #ifdef CONFIG_SWEEP2WAKE
-	if( !sw_is_enabled() && !sw_is_enabled_unlock()){
+	if( !sw_is_enabled() || !sw_is_enabled_unlock()){
 #endif
 	struct so340010_device *pdev = i2c_get_clientdata(i2c_dev);
 
@@ -376,7 +376,7 @@ static int so340010_i2c_resume(struct i2c_client *i2c_dev)
 static void so340010_power_down(void)
 {
 #ifdef CONFIG_SWEEP2WAKE
-	if( !sw_is_enabled() && !sw_is_enabled_unlock()){
+	if( !sw_is_enabled() || !sw_is_enabled_unlock()){
 #endif
 	gpio_tlmm_config(GPIO_CFG(so340010_pdata->sda, 0, GPIO_CFG_INPUT,
 				GPIO_CFG_NO_PULL, GPIO_CFG_2MA), GPIO_CFG_DISABLE);
