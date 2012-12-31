@@ -125,7 +125,10 @@ void afe_loopback(int enable)
 EXPORT_SYMBOL(afe_loopback);
 
 #ifdef CONFIG_LGE_AUDIO_LOOPBACK
-
+	/* LGE_CHANGE
+	  * added for BT loopback
+	  * 2010-03-22, bob.cho@lge.com
+	  */
 int afe_config_ext_pcm_loopback(uint16_t enable)
 {
 	struct afe_ext_loopback_cmd_cfg cmd;

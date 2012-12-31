@@ -1,6 +1,6 @@
-/* 
+/* arch/arm/mach-msm/lge/board-victor-mmc.c
  * Copyright (C) 2010 LGE Corporation.
- * 
+ * Author: SungEun Kim <cleaneye.kim@lge.com>
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -740,7 +740,7 @@ static int msm_sdcc_get_wpswitch(struct device *dv)
 }
 #endif
 
-
+/* LGE_CHANGE_S, [gsm-wifi@lge.com], 2011-02-16, <Add BCM4330> */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 static unsigned int bcm432x_sdcc_wlan_slot_status(struct device *dev)
 {
@@ -762,7 +762,7 @@ static struct mmc_platform_data bcm432x_sdcc_wlan_data = {
     .nonremovable	= 0, //1->0
 };
 #endif  /* CONFIG_LGE_BCM432X_PATCH*/
-
+/* LGE_CHANGE_E, [gsm-wifi@lge.com], 2011-02-16, <Add BCM4330> */
 
 #ifdef CONFIG_MMC_MSM_SDC1_SUPPORT
 #if defined(CONFIG_CSDIO_VENDOR_ID) && \
@@ -818,7 +818,7 @@ static struct mmc_platform_data msm7x30_sdc2_data = {
 #endif
 
 #ifdef CONFIG_MMC_MSM_SDC3_SUPPORT
-
+/* LGE_CHANGE_S, [gsm-wifi@lge.com], 2011-02-16, <Add BCM4330> */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 #if 0
 static struct mmc_platform_data msm7x30_sdc3_data = {
@@ -838,7 +838,7 @@ static struct mmc_platform_data msm7x30_sdc3_data = {
 };
 #endif //#if 0
 #endif //#if defined(CONFIG_LGE_BCM432X_PATCH)
-
+/* LGE_CHANGE_E, [gsm-wifi@lge.com], 2011-02-16, <Add BCM4330> */
 #endif
 
 #ifdef CONFIG_MMC_MSM_SDC4_SUPPORT
@@ -939,7 +939,7 @@ static void __init msm7x30_init_mmc(void)
 	sdcc_vreg_data[2].vreg_data = vreg_s3;
 	sdcc_vreg_data[2].level = 1800;
 
-
+/* LGE_CHANGE_S, [gsm-wifi@lge.com], 2011-02-16, <Add BCM4330> */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 	/* GPIO config */
 	gpio_tlmm_config(GPIO_CFG(CONFIG_BCM4330_GPIO_WL_RESET, 0, GPIO_CFG_OUTPUT, GPIO_CFG_PULL_UP, GPIO_CFG_2MA), GPIO_CFG_ENABLE);
@@ -956,7 +956,7 @@ static void __init msm7x30_init_mmc(void)
 	msm_sdcc_setup_gpio(3, 1);
 	msm_add_sdcc(3, &msm7x30_sdc3_data);
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E, [gsm-wifi@lge.com], 2011-02-16, <Add BCM4330> */
 #endif
 #ifdef CONFIG_MMC_MSM_SDC4_SUPPORT
 	sdcc_vreg_data[3].vreg_data = vreg_mmc;

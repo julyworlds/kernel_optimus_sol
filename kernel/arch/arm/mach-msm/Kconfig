@@ -912,7 +912,7 @@ config MSM_RMT_STORAGE_CLIENT_STATS
 
 # LGE_CHANGE
 # modem needs to read and write the 3rd partition for calbackup
-
+# 2011-04-13, xwolf@lge.com
 config LGE_3RDPARTITION
 	depends on MSM_RMT_STORAGE_CLIENT
 	default n

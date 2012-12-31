@@ -203,5 +203,5 @@ module_init(lge_amp_ctl_init);
 module_exit(lge_amp_ctl_exit);
 
 MODULE_DESCRIPTION("lge_tpa2055 Amp Control");
-MODULE_AUTHOR("Kim EunHye");
+MODULE_AUTHOR("Kim EunHye <ehgrace.kim@lge.com>");
 MODULE_LICENSE("GPL");

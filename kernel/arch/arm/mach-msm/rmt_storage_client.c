@@ -157,7 +157,10 @@ static struct dentry *stats_dentry;
 #define RMT_STORAGE_ALLOC_RMT_BUF_CB_TYPE_PROC  5
 
 #ifdef CONFIG_LGE_REPORT_RMT_STORAGE_CLIENT_READY
-
+/* LGE_CHANGE
+*  notify that rmt storage client is ready to msm
+* 2011-03-23, cheongil.hyun@lge.com
+*/
 #define RMT_STORAGE_CHANGE_STATUS 10
 #endif
 
@@ -174,7 +177,11 @@ static struct dentry *stats_dentry;
 #define RAMFS_MDM_STORAGE_ID		0x4D4583A1
 
 #if defined (CONFIG_LGE_3RDPARTITION)
-
+/* LGE_CHANGE
+ * modem needs to read and write the 3rd partition for calbackup
+ * 2011-04-13, xwolf@lge.com
+ */
+/* MSM 3RD*/
 #define RAMFS_3RD_STORAGE_ID		0x4D451896
 #endif /* CONFIG_LGE_3RDPARTITION */
 
@@ -184,7 +191,10 @@ static struct dentry *stats_dentry;
 		     i++)
 
 #ifdef CONFIG_LGE_REPORT_RMT_STORAGE_CLIENT_READY
-
+		/* LGE_CHANGE
+		*  notify that rmt storage client is ready to msm
+		* 2011-03-23, cheongil.hyun@lge.com
+		*/
 static struct rmt_storage_srv *rmt_storage_get_srv(uint32_t prog);
 #endif
 
@@ -883,7 +893,10 @@ out:
 }
 
 #ifdef CONFIG_LGE_REPORT_RMT_STORAGE_CLIENT_READY
-
+/* LGE_CHANGE
+*  nv default write. 
+* 2011-03-23, cheongil.hyun@lge.com
+*/
 static int rmt_storate_report_available(void)
 {
 	struct rmt_storage_srv *srv = rmt_storage_get_srv(MSM_RMT_STORAGE_APIPROG);
@@ -906,7 +919,10 @@ static int rmt_storage_open(struct inode *ip, struct file *fp)
 	spin_unlock(&rmc->lock);
 
 #ifdef CONFIG_LGE_REPORT_RMT_STORAGE_CLIENT_READY
-
+	/* LGE_CHANGE
+	 *  notify that rmt storage client is ready to msm
+	 * 2011-03-23, cheongil.hyun@lge.com
+	 */
 	if(ret == 0)
 		rmt_storate_report_available();
 #endif
@@ -1605,7 +1621,10 @@ static uint32_t rmt_storage_get_sid(const char *path)
 	if (!strncmp(path, "/q6_fsg_parti_id_0x5B", MAX_PATH_NAME))
 		return RAMFS_MDM_STORAGE_ID;
 #if defined (CONFIG_LGE_3RDPARTITION)
-
+/* LGE_CHANGE
+ * modem needs to read and write the 3rd partition for calbackup
+ * 2011-04-13, xwolf@lge.com
+ */
     if (!strncmp(path, "/boot/3rdparty", MAX_PATH_NAME))
         return RAMFS_3RD_STORAGE_ID;
 #endif /* CONFIG_LGE_3RDPARTITION */

@@ -599,7 +599,10 @@ static void __devexit hs_rpc_deinit(void)
 }
 
 #ifndef CONFIG_LGE_HEADSET_2GPIO
-
+	/* In victor, "h2w" switch device is registered in lge_headset_MAX14579.c
+	 * so, do nothing here.
+	 * 2011-01-30, cleaneye.kim@lge.com
+	 */
 static ssize_t msm_headset_print_name(struct switch_dev *sdev, char *buf)
 {
 	switch (switch_get_state(&hs->sdev)) {
@@ -622,7 +625,10 @@ static int __devinit hs_probe(struct platform_device *pdev)
 		return -ENOMEM;
 
 #ifndef CONFIG_LGE_HEADSET_2GPIO
-
+	/* In victor, "h2w" switch device is registered in lge_headset_MAX14579.c
+	 * so, do nothing here.
+	 * 2011-01-30, cleaneye.kim@lge.com
+	 */
 	hs->sdev.name	= "h2w";
 	hs->sdev.print_name = msm_headset_print_name;
 
@@ -688,7 +694,10 @@ err_reg_input_dev:
 	input_free_device(ipdev);
 err_alloc_input_dev:
 #ifndef CONFIG_LGE_HEADSET_2GPIO
-
+	/* In victor, "h2w" switch device is registered in lge_headset_MAX14579.c
+	 * so, do nothing here.
+	 * 2011-01-30, cleaneye.kim@lge.com
+	 */
 	switch_dev_unregister(&hs->sdev);
 err_switch_dev_register:
 #endif

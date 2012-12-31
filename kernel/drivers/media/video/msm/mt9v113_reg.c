@@ -17,7 +17,9 @@
 #include "mt9v113.h"
 #include <linux/kernel.h>
 
-
+/* chaehee.lim@lge.com 
+   temp : we define the delay time on MSM as 0xFFFF address 
+*/
 /************************************************************
 ; slave address 0x7A
 ;	MCK:31M	PCK:60M

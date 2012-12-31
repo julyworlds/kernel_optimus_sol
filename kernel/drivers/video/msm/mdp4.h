@@ -311,9 +311,9 @@ struct mdp4_overlay_pipe {
 	uint32 blt_end;
 	struct completion dmas_comp;
 	struct mdp_overlay req_data;
-
+  //[LGE_UPDATE_S] taeyol.kim@lge.com 2011-06-04 : Support expanded surface area 
 	struct mdp_overlay req_data_org;
-
+	//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-06-04
 };
 
 #define MDP4_MAX_SHARE	2

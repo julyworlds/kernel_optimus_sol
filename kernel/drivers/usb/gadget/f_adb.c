@@ -33,10 +33,16 @@
 #include <linux/usb/android_composite.h>
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+/* LGE_CHANGE
+ * Add header for LGE android usb
+ * 2011-01-21, hyunhui.park@lge.com
+ */
 #include "u_lgeusb.h"
 
-
+/* LGE_CHANGE
+ * Mutex lock for adb enable functions.
+ * 2011-06-24, hyunhui.park@lge.com
+ */
 static struct mutex enable_lock;
 #endif
 
@@ -457,7 +463,10 @@ static struct miscdevice adb_device = {
 static int adb_enable_open(struct inode *ip, struct file *fp)
 {
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+	/* LGE_CHANGE
+	 * If manufacturing mode, skip enable adb.
+	 * 2011-01-21, hyunhui.park@lge.com
+	 */
 	if (lgeusb_get_current_mode() == LGEUSB_FACTORY_MODE) {
 		pr_info("%s: In LGE manufacturing mode, skip enable adb\n", __func__);
 		return -EINVAL;
@@ -483,7 +492,10 @@ static int adb_enable_open(struct inode *ip, struct file *fp)
 static int adb_enable_release(struct inode *ip, struct file *fp)
 {
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+	/* LGE_CHANGE
+	 * If manufacturing mode, skip enable adb.
+	 * 2011-01-21, hyunhui.park@lge.com
+	 */
 	if (lgeusb_get_current_mode() == LGEUSB_FACTORY_MODE) {
 		pr_info("%s: In LGE manufacturing mode, skip disable adb\n", __func__);
 		return -EINVAL;
@@ -657,7 +669,10 @@ static int adb_bind_config(struct usb_configuration *c)
 	_adb_dev = dev;
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+	/* LGE_CHANGE
+	 * initialize enable mutex.
+	 * 2011-06-24, hyunhui.park@lge.com
+	 */
 	mutex_init(&enable_lock);
 #endif
 

@@ -142,7 +142,10 @@ static void usb_config_work_func(struct work_struct *work)
 		ctxt->ch.notify(ctxt->ch.priv, USB_DIAG_CONNECT, NULL);
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+	/* LGE_CHANGE
+	 * LGE Android does not use QCT's original RPC about pid and serialno.
+	 * 2011-02-22, hyunhui.park@lge.com
+	 */
 	return;
 #endif
 

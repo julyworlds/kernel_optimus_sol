@@ -34,12 +34,12 @@
 #include <wlioctl.h>
 #include <wl_iw.h>
 
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-05-14, support start/stop */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 #include <asm/gpio.h>
 #include <linux/interrupt.h>
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-05-14, support start/stop */
 #define WL_ERROR(x) printf x
 #define WL_TRACE(x)
 
@@ -133,14 +133,14 @@ dhd_customer_gpio_wlan_ctrl(int onoff)
 #endif
 			WL_ERROR(("=========== WLAN placed in RESET ========\n"));
 
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-05-14, support start/stop */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
             if (gpio_get_value(CONFIG_BCM4330_GPIO_WL_RESET)) {
                 disable_irq(gpio_to_irq(CONFIG_BCM4330_GPIO_WL_RESET));
                 gpio_set_value(CONFIG_BCM4330_GPIO_WL_RESET, 0);
             }
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-05-14, support start/stop */
 
 		break;
 
@@ -155,7 +155,7 @@ dhd_customer_gpio_wlan_ctrl(int onoff)
 #endif
 			WL_ERROR(("=========== WLAN going back to live  ========\n"));
 
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-05-14, support start/stop */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
             if (!gpio_get_value(CONFIG_BCM4330_GPIO_WL_RESET)) {
                 gpio_set_value(CONFIG_BCM4330_GPIO_WL_RESET, 1);
@@ -165,7 +165,7 @@ dhd_customer_gpio_wlan_ctrl(int onoff)
                 enable_irq(gpio_to_irq(CONFIG_BCM4330_GPIO_WL_RESET));
             }
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-05-14, support start/stop */
 
 		break;
 

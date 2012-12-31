@@ -1,4 +1,4 @@
-
+// [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/platform_device.h>
@@ -102,18 +102,21 @@ static char testmode_input_key[MAX_KEYS] = {
 		TESTMODE_DPAD_LEFT, 		
 		TESTMODE_DPAD_RIGHT,
 		TESTMODE_LCDOFF_AND_LOCK,
-
+// START sungchae.koo@lge.com 2010/10/14 LAB1_FW : FACTORY_DEBUGGING {
 		TESTMODE_ENABLE_ADB,
-	
+// END sungchae.koo@lge.com 2010/10/14 LAB1_FW }		
+// START [jongrok.jung@lge.com] 20110309 Testmode 8.5  - db_integrity_check{		
 		TESTMODE_DB_INTEGRITY_CHECK,
 		TESTMODE_FPRI_CRC_CHECK,
 		TESTMODE_FILE_CRC_CHECK,
 		TESTMODE_DB_DUMP,
 		TESTMODE_DB_COPY,
-
+// END [jongrok.jung@lge.com] 20110309 Testmode 8.5 } 		
+// START LGE_BROADCAST andrew74.kim@lge.com 2011-03-18 : TDMB BLT Test {
+// Requested by Production Tech.
 		TESTMODE_INPUT_KEY_TDMB_PLAY_ON,
 		TESTMODE_INPUT_KEY_TDMB_PLAY_OFF, 
-
+// END LGE_BROADCAST}
 };
 
 void testmode_input_report_evt(int evtcode)

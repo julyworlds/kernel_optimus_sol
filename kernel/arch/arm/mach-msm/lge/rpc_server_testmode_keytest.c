@@ -1,4 +1,4 @@
-
+// [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE
 
 #include <linux/module.h>
 #include <mach/msm_rpcrouter.h>

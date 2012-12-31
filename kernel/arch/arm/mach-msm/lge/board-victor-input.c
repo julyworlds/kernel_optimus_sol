@@ -46,14 +46,16 @@ static void victor_gpio_event_input_init(void)
 	gpio_tlmm_config(GPIO_CFG(GPIO_VOL_DOWN, 0, GPIO_CFG_INPUT, GPIO_CFG_PULL_UP,
 				GPIO_CFG_2MA), GPIO_CFG_ENABLE);
 
-
+	// add wakeup source vol up/down key  [younchan.kim@lge.com]
 	enable_irq_wake(MSM_GPIO_TO_INT(GPIO_VOL_UP));
 	enable_irq_wake(MSM_GPIO_TO_INT(GPIO_VOL_DOWN));
 }
 
 static struct gpio_event_input_info victor_keypad_switch_info = {
 	.info.func = gpio_event_input_func,
-
+	/* irq for side key do not disable when suspend because of volume control on BGM
+	 * 2010-05-10, bob.cho@lge.com
+	 */	
 	.info.no_suspend = true,
 	.flags = 0,
 	.type = EV_KEY,
@@ -68,7 +70,9 @@ static struct gpio_event_info *victor_keypad_info[] = {
 static int victor_gpio_keypad_power(
 		const struct gpio_event_platform_data *pdata, bool on)
 {
-
+	/* this is dummy function to make gpio_event driver register suspend function
+	 * 2010-01-29, cleaneye.kim@lge.com
+	 */
 
 	return 0;
 }
@@ -115,7 +119,7 @@ static struct platform_device atcmd_virtual_device = {
 	},
 };
 
-
+// START [sangki.hyun@lge.com] [dom_testmode] 20100710 LAB1_FW TESTMODE_INPUT {
 // TESTMODE
 #ifdef CONFIG_MSM_RPCSERVER_TESTMODE
 struct testmode_input_platform_data {
@@ -134,7 +138,7 @@ static struct platform_device testmode_input_device = {
 	},
 };
 #endif
-
+// END [sangki.hyun@lge.com] [dom_testmode] 20100710 LAB1_FW }
 
 /* head set device */
 static struct msm_handset_platform_data hs_platform_data = {
@@ -539,7 +543,7 @@ static int prox_power_set(unsigned char onoff)
 
 static struct proximity_platform_data proxi_pdata = {
 	
-
+	//hyunjee.yoon@lge.com 2011-06-23
 	#ifdef CONFIG_LGE_MODEL_SU610
 	.irq_num	= PROXI_GPIO_DOUT,
 	.power		= prox_power_set,
@@ -547,15 +551,15 @@ static struct proximity_platform_data proxi_pdata = {
 	.operation_mode		= 0,
 	.debounce	 = 0,
 	.cycle = 0,
-	#else 
+		#else 
 	.irq_num	= PROXI_GPIO_DOUT,
 	.power		= prox_power_set,
-	.methods		= 1,
+	.methods		= 0,
 	.operation_mode		= 1,
 	.debounce	 = 0,
-	.cycle = 5,
+	.cycle = 2,
 	#endif
-
+	//hyunjee.yoon@lge.com 2011-06-23
 };
 
 static struct i2c_board_info prox_i2c_bdinfo[] = {
@@ -676,11 +680,11 @@ static struct platform_device *victor_input_devices[] __initdata = {
 	&headset_device,
 	&victor_gpio_keypad_device,
 	&atcmd_virtual_device,
-
+// START [sangki.hyun@lge.com][dom_testmode] 20100710 LAB1_FW TESTMODE_INPUT {
 #ifdef CONFIG_MSM_RPCSERVER_TESTMODE
 	&testmode_input_device,
 #endif
-
+// END [sangki.hyun@lge.com][dom_testmode] 20100710 LAB1_FW }
 };
 
 /* common function */

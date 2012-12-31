@@ -1567,7 +1567,7 @@ static int mdp4_overlay_req2pipe(struct mdp_overlay *req, int mixer,
 		return ptype;
 	}
 
-
+  //[LGE_UPDATE_S] taeyol.kim@lge.com 2011-04-27 : Cehck mixer number & z order
   if (req->id == MSMFB_NEW_REQUEST){
     int i;
     for( i=0; i<MDP4_MAX_PIPE; i++){
@@ -1581,7 +1581,7 @@ static int mdp4_overlay_req2pipe(struct mdp_overlay *req, int mixer,
           }
     }
   }
-
+  //[LGE_UPDATE_E] taeyol.kim@lge.com 2011-04-27
 
 	req_share = (req->flags & MDP_OV_PIPE_SHARE);
 
@@ -1811,7 +1811,7 @@ int mdp4_overlay_get(struct fb_info *info, struct mdp_overlay *req)
 	if (pipe == NULL)
 		return -ENODEV;
 
-
+  //[LGE_UPDATE_S] taeyol.kim@lge.com 2011-06-04 : Support expanded surface area 
 #if 1
   *req = pipe->req_data_org;
   pr_debug("mdp4_overlay_get - : x(%d), y(%d), w(%d), h(%d)\n", 
@@ -1819,7 +1819,7 @@ int mdp4_overlay_get(struct fb_info *info, struct mdp_overlay *req)
 #else // QCT org code
   *req = pipe->req_data;
 #endif
-
+	//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-06-04
 
 	return 0;
 }
@@ -1872,7 +1872,7 @@ static uint32 mdp4_overlay_get_perf_level(uint32 width, uint32 height,
 		return OVERLAY_PERF_LEVEL1;
 }
 
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-06-04 : Support expanded surface area
 int mdp4_overlay_recalculate_position( 
       struct fb_info *info,
       struct mdp_overlay *req,
@@ -1964,16 +1964,16 @@ int mdp4_overlay_recalculate_position(
 
   return 0;
 }
-
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-06-04
 
 int mdp4_overlay_set(struct fb_info *info, struct mdp_overlay *req)
 {
 	struct msm_fb_data_type *mfd = (struct msm_fb_data_type *)info->par;
 	int ret, mixer;
 	struct mdp4_overlay_pipe *pipe;
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-06-04 : Support expanded surface area 	
 	struct mdp_overlay npos;
-
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-06-04
 
 	if (mfd == NULL) {
 		pr_err("%s: mfd == NULL, -ENODEV\n", __func__);
@@ -1988,7 +1988,7 @@ int mdp4_overlay_set(struct fb_info *info, struct mdp_overlay *req)
 		return -EINTR;
 	}
 
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-06-04 : Support expanded surface area 
   ret = mdp4_overlay_recalculate_position( info, req, &npos );
   if( ret < 0 ){
     mutex_unlock(&mfd->dma->ov_mutex);
@@ -2025,17 +2025,17 @@ int mdp4_overlay_set(struct fb_info *info, struct mdp_overlay *req)
 		}
 	}
 #endif
-
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-06-04
 
 	mixer = mfd->panel_info.pdest;	/* DISPLAY_1 or DISPLAY_2 */
 
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-06-04 : Support expanded surface area 
 #if 1
   ret = mdp4_overlay_req2pipe(&npos, mixer, &pipe, mfd);
 #else // QCT org code
 	ret = mdp4_overlay_req2pipe(req, mixer, &pipe, mfd);
 #endif
-
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-06-04
 
 	if (ret < 0) {
 		mutex_unlock(&mfd->dma->ov_mutex);
@@ -2052,7 +2052,7 @@ int mdp4_overlay_set(struct fb_info *info, struct mdp_overlay *req)
 	}
 #endif
 
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-06-04 : Support expanded surface area 
 #if 1
   /* return id back to user */
   req->id = pipe->pipe_ndx; /* pipe_ndx start from 1 */
@@ -2065,7 +2065,7 @@ int mdp4_overlay_set(struct fb_info *info, struct mdp_overlay *req)
   req->id = pipe->pipe_ndx;	/* pipe_ndx start from 1 */
   pipe->req_data = *req;		/* keep original req */
 #endif
-
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-06-04
 
 	pipe->flags = req->flags;
 

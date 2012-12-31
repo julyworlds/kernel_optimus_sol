@@ -1,7 +1,7 @@
 
 // LGE_TEST_MODE
-// 
-/*
+// [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE
+/* arch/arm/mach-msm/rpc_server_testmode.c
  *
  * Copyright (c) 2008-2009, LG Electronics. All rights reserved.
  *
@@ -77,8 +77,10 @@ char external_memory_copy_test(void);
 //static int real_format_sdcard(void);
 extern void *testmode_dispath_command(uint32_t sub1_cmd, uint32_t sub2_cmd);
 
-
-#if 0  
+// START [sangki.hyun@lge.com] 20100710 LAB1_FW Testmode Memory Check {
+/* ==========================================================================
+===========================================================================*/
+#if 0  // [sangki.hyun@lge.com] 20100821 LAB1_FW : SDCARD SIZE Check
 struct statfs_local {
  __u32 f_type;
  __u32 f_bsize;
@@ -108,7 +110,9 @@ struct statfs_local {
  __u32 f_spare[5];
 } __attribute__ ((packed,aligned(4)));
 
-
+/* ==========================================================================
+===========================================================================*/
+// END [sangki.hyun@lge.com] 20100710 LAB1_FW }
 void *testmode_external_memory(uint32_t sub1_cmd, uint32_t sub2_cmd)
 {
     struct testmode_relay_result *relay_result;
@@ -152,10 +156,10 @@ void *testmode_external_memory(uint32_t sub1_cmd, uint32_t sub2_cmd)
 
 
         case SUB2_EXTERNAL_FLASH_USED_SIZE: 
-           
+            // START sangki.hyun@lge.com 20100901 LAB1_FW : sdcard used size {
             kzfree(relay_result);
             relay_result = testmode_dispath_command(sub1_cmd, sub2_cmd);
-           
+            // END sangki.hyun@lge.com 20100901 LAB1_FW : sdcard used size }
             
             if (sys_statfs64("/sdcard", sizeof(sf), (struct statfs64 *)&sf) != 0)
             {
@@ -168,10 +172,10 @@ void *testmode_external_memory(uint32_t sub1_cmd, uint32_t sub2_cmd)
             break;
 
         case SUB2_EXTERNAL_FLASH_FORMAT:		
-            
+            // START [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 {
             kzfree(relay_result);
             relay_result = testmode_dispath_command(sub1_cmd, sub2_cmd);
-           
+            // END [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 }
             break;
 
         case SUB2_EXTERNAL_FLASH_INTEGRITY:
@@ -236,7 +240,7 @@ file_fail:
 void *testmode_memory_volume_check(uint32_t sub1_cmd, uint32_t sub2_cmd)
 
 {
-
+// START [sangki.hyun@lge.com] 20100710 LAB1_FW Testmode Memory Check {
 	struct testmode_relay_result *relay_result;
 	struct statfs_local  sf;
 	unsigned int rt_mem_size = 3;
@@ -289,7 +293,7 @@ void *testmode_memory_volume_check(uint32_t sub1_cmd, uint32_t sub2_cmd)
 	// put the result to rpc buffer!
 	memcpy(relay_result->ret_string, &rt_mem_size, 4);
 
-
+// END [sangki.hyun@lge.com] 20100710 LAB1_FW }
 
 	return relay_result;
 
@@ -713,6 +717,6 @@ void *testmode_memory_bad_block_check(uint32_t sub1_cmd, uint32_t sub2_cmd)
     return relay_result;
     
 }
-
+// END [sangki.hyun@lge.com] 20100721 LAB1_FW : Testmode 8.1 }
 
 

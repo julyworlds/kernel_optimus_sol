@@ -481,5 +481,5 @@ module_init(lge_tty_atcmd_init);
 module_exit(lge_tty_atcmd_exit);
 
 MODULE_DESCRIPTION("LGE tty for bypassing atcmd stream");
-MODULE_AUTHOR("SungEun Kim ");
+MODULE_AUTHOR("SungEun Kim <cleaneye.kim@lge.com>");
 MODULE_LICENSE("GPL");

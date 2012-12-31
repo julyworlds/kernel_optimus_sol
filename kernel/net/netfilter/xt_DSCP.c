@@ -9,7 +9,6 @@
  *
  * See RFC2474 for a description of the DSCP field within the IP Header.
 */
-
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 #include <linux/module.h>
 #include <linux/skbuff.h>

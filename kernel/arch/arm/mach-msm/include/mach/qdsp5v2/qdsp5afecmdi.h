@@ -113,7 +113,10 @@ struct afe_cmd_loopback {
 } __attribute__ ((packed));
 
 #ifdef CONFIG_LGE_AUDIO_LOOPBACK
-
+	/* LGE_CHANGE
+	  * added for BT loopback
+	  * 2010-03-22, bob.cho@lge.com
+	  */
 #define AFE_CMD_EXT_PCM_LOOPBACK_CMD	0x0F
 struct afe_ext_loopback_cmd_cfg{
 	uint16_t cmd_id;

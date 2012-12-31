@@ -1100,7 +1100,10 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 	fbi->fix.smem_start = (unsigned long)fbram_phys;
 
 #ifdef CONFIG_FB_MSM_LCDC_LGDISPLAY_WVGA_OLED 
-
+/* LGE_CHANGE 
+* Disable clearing the frame buffer
+* 2011-03-22, cheongil.hyun@lge.com
+*/
 #else
 	memset(fbi->screen_base, 0x0, fix->smem_len);
 #endif
@@ -1156,9 +1159,9 @@ static int msm_fb_register(struct msm_fb_data_type *mfd)
 	if (mfd->panel_info.type != DTV_PANEL) {
 		mfd->early_suspend.suspend = msmfb_early_suspend;
 		mfd->early_suspend.resume = msmfb_early_resume;
-#if 0 
+#if 0 //def CONFIG_LGE_DOMESTIC 	//LGE 110629 ntdeaewan.choi@lge.com
 		mfd->early_suspend.level = EARLY_SUSPEND_LEVEL_DISABLE_FB + 2;
-#else						
+#else						//LGE 110629 ntdeaewan.choi@lge.com
 		mfd->early_suspend.level = EARLY_SUSPEND_LEVEL_DISABLE_FB - 2;
 #endif
 		register_early_suspend(&mfd->early_suspend);
@@ -1568,7 +1571,10 @@ static int msm_fb_set_par(struct fb_info *info)
 						       var->bits_per_pixel/8);
 
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
-
+/* LGE_CHANGE
+ *  to avoid the display off in boot time
+ *  2011-03-14 cheongil.hyun@lge.com
+ */
 #else
 	if (blank) {
 		msm_fb_blank_sub(FB_BLANK_POWERDOWN, info, mfd->op_enable);
@@ -2394,7 +2400,7 @@ static int msmfb_blit(struct fb_info *info, void __user *p)
 	return 0;
 }
 
-
+//ANDY_PORTING OSP [woongchang.kim@lge.com 110331]
 static int msmfb_osp_capture(struct fb_info *info, void __user *p)
 {
 	int ret;
@@ -2719,7 +2725,7 @@ static int msm_fb_ioctl(struct fb_info *info, unsigned int cmd,
 		up(&msm_fb_ioctl_ppp_sem);
 
 		break;
-
+//ANDY_PORTING OSP [woongchang.kim@lge.com 110331]
 	case MSMFB_OSP_CAPTURE:
 		down(&msm_fb_ioctl_ppp_sem);
 		ret = msmfb_osp_capture(info, argp);

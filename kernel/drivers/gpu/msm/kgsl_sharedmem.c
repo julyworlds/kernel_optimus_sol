@@ -153,7 +153,6 @@ kgsl_sharedmem_free(struct kgsl_memdesc *memdesc)
 	KGSL_MEM_VDBG("return\n");
 }
 
-
 int
 kgsl_sharedmem_readl(const struct kgsl_memdesc *memdesc,
 			uint32_t *dst,
@@ -171,7 +170,7 @@ kgsl_sharedmem_readl(const struct kgsl_memdesc *memdesc,
 				offsetbytes, memdesc->size);
 		return -ERANGE;
 	}
-	*dst = readl_relaxed(memdesc->hostptr + offsetbytes);
+	*dst = readl(memdesc->hostptr + offsetbytes);
 	return 0;
 }
 
@@ -213,7 +212,7 @@ kgsl_sharedmem_writel(const struct kgsl_memdesc *memdesc,
 	}
 	kgsl_cffdump_setmem(memdesc->gpuaddr + offsetbytes,
 		src, sizeof(uint));
-	writel_relaxed(src, memdesc->hostptr + offsetbytes);
+	writel(src, memdesc->hostptr + offsetbytes);
 	return 0;
 }
 

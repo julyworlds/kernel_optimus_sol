@@ -130,6 +130,7 @@ static void voice_auddev_cb_function(u32 evt_id,
 			v->dev_tx.enabled = VOICE_DEV_DISABLED;
 			v->dev_state = DEV_CHANGE;
 			mutex_lock(&voice.voc_lock);
+//LGE_UPDATE_S  taeho.youn@lge.com
 //second call for BT headset
 #ifndef CONFIG_LGE_DOMESTIC
 			if (v->voc_state == VOICE_ACQUIRE || v->voc_state == VOICE_CHANGE) {

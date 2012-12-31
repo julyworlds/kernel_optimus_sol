@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can find it at http://www.fsf.org.
  */
-
+// [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE
+// LGE_DOM_UPDATE_S jin333.kim@lge.com 2010/01/19 {
 #include <linux/module.h>
 #include <linux/kernel.h> 
 #include <linux/interrupt.h>
@@ -32,7 +33,8 @@
 
 extern void wirte_flight_mode(int mode);
 
-
+/* Sleep Test (250-42-0) Test mode */
+// START sangki.hyun@lge.com 20100914 LAB1_FW : Flight_mode {
 #if 0  // below function already exist in lge_ats_cmd.c 
 void wirte_flight_mode(int mode)
 {
@@ -50,10 +52,10 @@ void wirte_flight_mode(int mode)
 	}
 }
 #endif 
-
+// END sangki.hyun@lge.com 20100914 LAB1_FW : Flight_mode }
 
 #ifdef LGE_TEST_MODE_TBD
-extern int check_lcd_status(void);  
+extern int check_lcd_status(void);  // sangki.hyun@lge.com 20100901 LAB1_FW : sleep mode 
 #endif /* LGE_TEST_MODE_TBD */
 
 void* testmode_sleep_mode_test(uint32_t sub1_cmd, uint32_t sub2_cmd)
@@ -64,7 +66,7 @@ void* testmode_sleep_mode_test(uint32_t sub1_cmd, uint32_t sub2_cmd)
     
     relay_result = (struct testmode_relay_result *)kzalloc(sizeof(struct testmode_relay_result), GFP_KERNEL);
 
-    
+    // START sangki.hyun@lge.com 20100901 LAB1_FW : sleep mode {
     switch( sub2_cmd )
     {
         case 0:
@@ -90,18 +92,19 @@ void* testmode_sleep_mode_test(uint32_t sub1_cmd, uint32_t sub2_cmd)
             break;
         }
 
-        
+        // START sangki.hyun@lge.com 20100914 LAB1_FW : Flight_mode {
         case 1:
             wirte_flight_mode(1);   
             break;
-        
+        // END sangki.hyun@lge.com 20100914 LAB1_FW : Flight_mode }
         
         default:        
             break;
         
     }
-    
+    // END sangki.hyun@lge.com 20100901 LAB1_FW : sleep mode }
     return relay_result;
 }
-
+// LGE_TEST_MODE end 
+// END [sangki.hyun@lge.com] 20100615 LAB1_FW }
 

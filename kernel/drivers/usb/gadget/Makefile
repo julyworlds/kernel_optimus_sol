@@ -9,7 +9,7 @@ endif
 # Add lge usb utility code
 # FIXME: Compilation of this code must be performed
 # earlier than gadget code because of using dynamic debugging macro.
-# 
+# 2011-01-18, hyunhui.park@lge.com
 # LG specific
 obj-$(CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET)	+= u_lgeusb.o
 

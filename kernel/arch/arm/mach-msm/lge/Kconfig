@@ -115,12 +115,13 @@ config LGE_AUDIO_LOOPBACK
 
 config LGE_HIDDEN_RESET_PATCH
     bool "Support LGE hidden reset function"
-	default y
+	default n
 	depends on MACH_LGE
 	depends on ANDROID_RAM_CONSOLE
 	help
 	 LGE hidden reset function
 
+# START [sangki.hyun@lge.com][dom_testmode] 20100615 LAB1_FW LGE_TEST_MODE {
 config MSM_RPCSERVER_TESTMODE
 	depends on MSM_ONCRPCROUTER
 	default y
@@ -128,6 +129,6 @@ config MSM_RPCSERVER_TESTMODE
 	help
 	  Support for receiving handset events like headset detect,
 	  headset switch and clamshell state.	  
-
+# END [sangki.hyun@lge.com][dom_testmode] 20100615 LAB1_FW }
 
 endmenu

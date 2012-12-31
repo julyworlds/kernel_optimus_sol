@@ -129,7 +129,10 @@ struct reg_code_table {
 };
 
 #if defined (CONFIG_LGE_TUNE_610)
-
+/* 2011-03-22 by xwolf@lge.com
+ * skl6100 maps buttons at s1,s2,s3
+ * and has another sensor tunning values
+ */
 static struct reg_code_table initial_code_table[] = {
 	{TSKEY_REG_DUMMY, 	TSKEY_REG_INTER, 		TSKEY_REG_DUMMY, 	0x07},
 	{TSKEY_REG_DUMMY, 	TSKEY_REG_GEN, 			TSKEY_REG_DUMMY, 	0x30},

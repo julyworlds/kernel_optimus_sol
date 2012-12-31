@@ -62,7 +62,10 @@ int afe_config_fm_calibration_gain(uint16_t device_id,
 void afe_loopback(int enable);
 
 #ifdef CONFIG_LGE_AUDIO_LOOPBACK
-
+	/* LGE_CHANGE
+	  * added for BT loopback
+	  * 2010-03-22, bob.cho@lge.com
+	  */
 int afe_config_ext_pcm_loopback(uint16_t enable);
 #endif /*CONFIG_LGE_AUDIO_LOOPBACK*/
 

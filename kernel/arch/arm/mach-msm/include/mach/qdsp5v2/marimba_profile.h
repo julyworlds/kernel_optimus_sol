@@ -27,8 +27,11 @@
  *
  */
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
-
-#if defined(CONFIG_LGE_DOMESTIC)
+/* LGE_CHANGE
+  * Devide LGE adie setting from QCT original adie seeting.
+  * 2011-2-18, junyoub.an@lge.com
+  */
+#if defined(CONFIG_LGE_DOMESTIC)//20110524. mikyoung.chang@lge.com divide detect scheme with global.
 #include "marimba_profile_victor_kr.h"
 #else
 #include "marimba_profile_victor.h"

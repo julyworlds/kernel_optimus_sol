@@ -26,7 +26,10 @@
 
 #define JIFFIES_TO_MS(t) ((t) * 1000 / HZ)
 
-
+/* LGE_CHANGE
+ * Support MTC using diag port 
+ * 2010-07-11 taehung.kim@lge.com
+ */
 #if defined (CONFIG_MACH_MSM7X27_THUNDERC) || defined (LG_FW_MTC)
 extern unsigned char g_diag_mtc_check;
 #endif
@@ -411,7 +414,10 @@ uint32_t at_cmd,at_act;
 			int exec_result =0;
 
 			printk(KERN_INFO "\n[ETA]ATCMD_MTC\n ");
-
+			/* LGE_CHANGE
+			 * Support MTC using diag port 
+			 * 2010-07-11 taehung.kim@lge.com
+			 */
 #if defined (CONFIG_MACH_MSM7X27_THUNDERC) || defined (LG_FW_MTC)
 			g_diag_mtc_check = 0;
 #endif
@@ -419,7 +425,7 @@ uint32_t at_cmd,at_act;
 				result = HANDLE_FAIL;
 
 			printk(KERN_INFO "[ETA]totalBuffer : [%s] size: %d\n", totalBuffer, totalBufferSize);
-			exec_result = eta_execute_n(totalBuffer, totalBufferSize +1 ); 
+			exec_result = eta_execute_n(totalBuffer, totalBufferSize +1 ); //LGE_UPDATE [irene.park@lge.com] totalBuffesize increase + 1 ( Null size )
 			printk(KERN_INFO "[ETA]AT+MTC exec_result %d\n",exec_result);
 			
 /*

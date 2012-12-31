@@ -108,19 +108,19 @@
 #define ATCMD_WLANWL	78
 
 #define ATCMD_ATD	  79
-#define ATCMD_MTC	  80 
+#define ATCMD_MTC	  80 //LGE_CHANGE_S [seypark@lge.com] for AT+MTC
 
 //songth - more drm command 
-#define ATCMD_DRMINDEX		81 
+#define ATCMD_DRMINDEX		81 //LGE_CHANGE_S [kageki@lge.com] 
 
-
+//LGE_UPDATE_S 2009.07.07 [seypark@lge.com]
 #define ATCMD_FLIGHT		82
 #define ATCMD_LANG			83
 //LGE_UPDATE_E
 
 // yorong drm command
 #define ATCMD_DRMIMEI		84
-#define ATCMD_POWERDOWN		85  
+#define ATCMD_POWERDOWN		85  // LGE_CHANGE [jinwoonam@lge.com] Powerdown system when no battery
 #define ATCMD_MMCFORMAT    129
 
 #ifdef CONFIG_LGE_BROADCAST	
@@ -169,7 +169,7 @@ int lge_ats_handle_atcmd(struct msm_rpc_server *server,
 int lge_ats_handle_atcmd_eta(struct msm_rpc_server *server,
 								 struct rpc_request_hdr *req, unsigned len);
 
-
+//LGE_CHAGE[irene.park@lge.com] 2010-06- 04 - to get flex value from ARM9 
 int lge_ats_handle_flex(struct msm_rpc_server *server,
 							 struct rpc_request_hdr *req, unsigned len);
 

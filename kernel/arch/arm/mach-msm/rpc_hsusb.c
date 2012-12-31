@@ -740,6 +740,7 @@ int msm_nv_imei_get(unsigned char *nv_imei_ptr)
 }
 EXPORT_SYMBOL(msm_nv_imei_get);
 
+/* LGE_CHANGE_S [hyunhui.park@lge.com] 2009-04-21, Detect charger type using RPC  */
 #if defined(CONFIG_USB_SUPPORT_LGDRIVER_GSM) || \
 	defined(CONFIG_USB_SUPPORT_LGE_GADGET_GSM)
 
@@ -822,6 +823,6 @@ int msm_hsusb_detect_chg_type(void)
 EXPORT_SYMBOL(msm_hsusb_detect_chg_type);
 
 #endif
-
+/* LGE_CHANGE_E [hyunhui.park@lge.com] 2009-04-21 */
 
 #endif

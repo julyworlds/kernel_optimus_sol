@@ -38,11 +38,17 @@
 #include "gadget_chips.h"
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+/* LGE_CHANGE
+ * Add header for LGE android usb
+ * 2011-01-21, hyunhui.park@lge.com
+ */
 #include "u_lgeusb.h"
 #endif
 
-
+/* LGE_CHANGE
+ * USB dev class set define.
+ * 2011-02-10, hyunhui.park@lge.com
+ */
 #define set_device_class(desc, class, subclass, protocol)	\
 	do {													\
 		desc.bDeviceClass = class;						\
@@ -88,7 +94,10 @@ struct android_dev {
 static struct android_dev *_android_dev;
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+/* LGE_CHANGE
+ * LGE Android use IMEI as serial number.
+ * 2011-01-20, hyunhui.park@lge.com
+ */
 #define MAX_STR_LEN		20
 #else
 #define MAX_STR_LEN		16
@@ -145,7 +154,10 @@ static const struct usb_descriptor_header *otg_desc[] = {
 
 static struct list_head _functions = LIST_HEAD_INIT(_functions);
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET_FIX
-
+/* LGE_CHANGE
+ * Apply bug fix from google git(refer to Kconfig).
+ * 2011-01-12, hyunhui.park@lge.com
+ */
 static bool _are_functions_bound;
 #else /* below is original */
 static int _registered_function_count;
@@ -175,7 +187,10 @@ static struct android_usb_function *get_function(const char *name)
 }
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET_FIX
-
+/* LGE_CHANGE
+ * Apply bug fix from google git(refer to Kconfig).
+ * 2011-01-12, hyunhui.park@lge.com
+ */
 static bool are_functions_registered(struct android_dev *dev)
 {
 	char **functions = dev->functions;
@@ -246,7 +261,10 @@ static void bind_functions(struct android_dev *dev)
 	 */
 	usb_ep_autoconfig_reset(dev->cdev->gadget);
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET_FIX
-
+	/* LGE_CHANGE
+	 * Apply bug fix from google git(refer to Kconfig).
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	_are_functions_bound = true;
 #endif
 }
@@ -259,7 +277,10 @@ static int __ref android_bind_config(struct usb_configuration *c)
 	dev->config = c;
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET_FIX
-
+	/* LGE_CHANGE
+	 * Apply bug fix from google git(refer to Kconfig).
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	if (should_bind_functions(dev)) {
 		lgeusb_debug("bind_functions() is called\n");
 		bind_functions(dev);
@@ -312,7 +333,17 @@ static int product_has_function(struct android_usb_product *p,
 	for (i = 0; i < count; i++) {
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET_FIX
+		/* LGE_CHANGE
+		 * Apply bug fix from google git(refer to Kconfig).
+		 * 2011-01-12, hyunhui.park@lge.com
+		 */
 
+		/* For functions with multiple instances, usb_function.name
+		 * will have an index appended to the core name (ex: acm0),
+		 * while android_usb_product.functions[i] will only have the
+		 * core name (ex: acm). So, only compare up to the length of
+		 * android_usb_product.functions[i].
+		 */
 		if (!strncmp(name, functions[i], strlen(functions[i])))
 #else /* below is original */
 		if (!strcmp(name, *functions++))
@@ -387,7 +418,10 @@ static int __devinit android_bind(struct usb_composite_dev *cdev)
 		android_config_driver.bmAttributes |= USB_CONFIG_ATT_WAKEUP;
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+	/* LGE_CHANGE
+	 * Set serial number to 0 with factory cable.
+	 * 2011-02-22, hyunhui.park@lge.com
+	 */
 	if (lgeusb_detect_factory_cable())
 		device_desc.iSerialNumber = 0;
 #endif
@@ -422,7 +456,10 @@ static int __devinit android_bind(struct usb_composite_dev *cdev)
 	cdev->desc.idProduct = device_desc.idProduct;
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+	/* LGE_CHANGE
+	 * Set default device class
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	if ((product_id == LGE_DEFAULT_PID) || (product_id == LGE_FACTORY_PID))
 		set_device_class(device_desc, USB_CLASS_COMM, 0x00, 0x00);
 	else
@@ -444,7 +481,10 @@ void android_register_function(struct android_usb_function *f)
 {
 	struct android_dev *dev = _android_dev;
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET_FIX
-
+	/* LGE_CHANGE
+	 * Apply bug fix from google git(refer to Kconfig).
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	int lge_pid;
 
 	list_add_tail(&f->list, &_functions);
@@ -546,7 +586,10 @@ static void android_set_default_product(int pid)
  * RNDIS function enable/disable uses this.
 */
 
-
+/* LGE_CHANGE
+ * Add CDC ECM config
+ * 2011-01-12, hyunhui.park@lge.com
+ */
 #if defined(CONFIG_USB_ANDROID_RNDIS) || defined(CONFIG_USB_ANDROID_CDC_ECM)
 static void android_config_functions(struct usb_function *f, int enable)
 {
@@ -556,7 +599,10 @@ static void android_config_functions(struct usb_function *f, int enable)
 	char **functions;
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+	/* LGE_CHANGE
+	 * Change to search product id at all index
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	int f_index, f_found;
 
 	/* Searches for product id having function at all index */
@@ -640,7 +686,11 @@ void android_enable_function(struct usb_function *f, int enable)
 	int product_id;
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+	/* LGE_CHANGE
+	 * For LGE usb mass storage only mode,
+	 * enabling of ums is seperated from other function handling.
+	 * 2011-02-11, hyunhui.park@lge.com
+	 */
 	if (!strcmp(f->name, "usb_mass_storage")) {
 		/* We force to change mode even if mass storage is already enabled */
 		f->disabled = disable;
@@ -658,7 +708,11 @@ void android_enable_function(struct usb_function *f, int enable)
 #endif
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_AUTORUN
-
+	/* LGE_CHANGE
+	 * Enabling usb cdrom storage only mode,
+	 * enabling of cdrom is seperated from other function handling.
+	 * 2011-03-02, hyunhui.park@lge.com
+	 */
 	if (!strcmp(f->name, "usb_cdrom_storage")) {
 		/* We force to change mode even if cdrom storage is already enabled */
 		f->disabled = disable;
@@ -674,7 +728,12 @@ void android_enable_function(struct usb_function *f, int enable)
 		return;
 	}
 
-
+	/* LGE_CHANGE
+	 * Enabling usb modem mode in connection mode.
+	 * In LGE Autorun process, modem mode means default mode of
+	 * LGE Android driver.
+	 * 2011-03-11, hyunhui.park@lge.com
+	 */
 	if (!strcmp(f->name, "acm")) {
 		/* We force to change mode even if already enabled */
 		f->disabled = disable;
@@ -690,7 +749,13 @@ void android_enable_function(struct usb_function *f, int enable)
 		return;
 	}
 
-
+	/* LGE_CHANGE
+	 * Enabling usb charge only mode.
+	 * In Android Gadget driver, charge only means disconnection of
+	 * gadget driver. Therefore, we use android_usb_set_connected
+	 * function.
+	 * 2011-03-11, hyunhui.park@lge.com
+	 */
 	if (!strcmp(f->name, "charge_only")) {
 		f->disabled = disable;
 		if (enable) {
@@ -724,7 +789,10 @@ void android_enable_function(struct usb_function *f, int enable)
 #endif
 			} else {
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-	
+				/* LGE_CHANGE
+				 * LG Android USB driver use COMM device class.
+				 * 2011-01-12, hyunhui.park@lge.com
+				 */
 				set_device_class(dev->cdev->desc, USB_CLASS_COMM, 0x00, 0x00);
 #else /* below is original */
 				set_device_class(dev->cdev->desc, USB_CLASS_PER_INTERFACE,
@@ -737,7 +805,11 @@ void android_enable_function(struct usb_function *f, int enable)
 #endif
 
 #ifdef CONFIG_USB_ANDROID_CDC_ECM
-
+		/* LGE_CHANGE
+		 * Enable/disable CDC ECM.
+		 * NOTE : Do not configure RNDIS and CDC ECM together.
+		 * 2011-01-12, hyunhui.park@lge.com
+		 */
 		if (!strcmp(f->name, "ecm")) {
 			/* We need to specify the COMM class in the device
 			 * descriptor if we are using CDC ECM.
@@ -758,7 +830,10 @@ void android_enable_function(struct usb_function *f, int enable)
 #endif
 
 #ifdef CONFIG_USB_ANDROID_MTP
-
+		/* LGE_CHANGE
+		 * Enable/disable MTP.
+		 * 2011-02-11, hyunhui.park@lge.com
+		 */
 		if (!strcmp(f->name, "mtp")) {
 			if (enable) {
 				set_device_class(dev->cdev->desc, USB_CLASS_PER_INTERFACE,
@@ -772,7 +847,10 @@ void android_enable_function(struct usb_function *f, int enable)
 #endif
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+		/* LGE_CHANGE
+		 * Handle to enable adb when mass storage only mode.
+		 * 2011-04-16, hyunhui.park@lge.com
+		 */
 		if (device_desc.idProduct == LGE_UMSONLY_PID) {
 			/* When adb enable during mass storage only */
 			if (!strcmp(f->name, "adb")) {
@@ -850,7 +928,10 @@ static void android_debugfs_cleanup(void)
 #endif
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+/* LGE_CHANGE
+ * For switching into LG manufacturing USB mode
+ * 2011-01-14, hyunhui.park@lge.com
+ */
 static void android_lgeusb_switch_function(int pid, int need_reset)
 {
 	struct android_dev *dev = _android_dev;
@@ -865,7 +946,10 @@ static void android_lgeusb_switch_function(int pid, int need_reset)
 		usb_composite_force_reset(dev->cdev);
 }
 
-
+/* LGE_CHANGE
+ * Get current product id(for external).
+ * 2011-01-14, hyunhui.park@lge.com
+ */
 static int android_lgeusb_get_current_pid(void)
 {
 	struct android_dev *dev = _android_dev;
@@ -931,7 +1015,10 @@ static int __init android_probe(struct platform_device *pdev)
 #endif
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+	/* LGE_CHANGE
+	 * Registering usb information for LG Android USB
+	 * 2011-01-14, hyunhui.park@lge.com
+	 */
 	android_lgeusb_info.current_pid = dev->product_id;
 	android_lgeusb_info.serialno = serial_number;
 	android_lgeusb_info.defaultno = pdata->serial_number;

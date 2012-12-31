@@ -2,7 +2,7 @@
  * Gadget Driver for LGE Android charge only feature.
  *
  * Copyright (C) 2011 LG Electronics Inc.
- * 
+ * Author: Hyeon H. Park <hyunhui.park@lge.com>
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -19,7 +19,7 @@
  * LGE Android USB connection mode. This function do nothing about
  * the real USB data transfer. It is for only interface between Android
  * platform and linux android gadget driver.
- * 
+ * 2011-03-11, hyunhui.park@lge.com
  */
 
 #define DEBUG

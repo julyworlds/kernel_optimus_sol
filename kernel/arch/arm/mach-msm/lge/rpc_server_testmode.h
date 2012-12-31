@@ -3,7 +3,8 @@
 
 #include <linux/slab.h>	//jungjr_compile_error
 
-
+// LGE_DOM_UPDATE_S itsuki@lge.com 2009/10/07 {
+// [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE
 
 /* arch/arm/mach-msm/rpc_server_testmode.c
  *
@@ -80,7 +81,7 @@ typedef enum
     TEST_MODE_PROXIMITY_SENSOR_TEST,		
     TEST_MODE_FACTORY_RESET_TEST 			= 50,
     TEST_MODE_VOLUME_LEVEL_TEST,
-       
+        // START [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 First Booting Check {
         TEST_MODE_MEMORY_BAD_BLOCK_CHECK = 57, 
         TEST_MODE_FIRST_BOOTING_COMPLETE_CHECK = 58,
         
@@ -89,9 +90,10 @@ typedef enum
         TEST_MODE_IMEI_CMD = 72,
         TEST_MODE_CAL_CHECK_CMD = 82,
         TEST_MODE_BT_ADDRESS_CMD = 83,    
-       
+        // END [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 First Booting Check }
+	// START [jongrok.jung@lge.com] 20110316 Testmode db_integrity_check {
 	TEST_MODE_DB_INTEGRITY_CHECK_TEST = 91,
-
+	// END [jongrok.jung@lge.com] 20110316 Testmode db_integrity_check }
 
     TEST_MODE_MAX
 } testmode_sub1_cmd_type;
@@ -113,5 +115,5 @@ typedef  struct
 
 void *testmode_reponse_not_supported(void);
 
-
+// LGE_DOM_UPDATE_E itsuki@lge.com 2009/10/07 }
 #endif

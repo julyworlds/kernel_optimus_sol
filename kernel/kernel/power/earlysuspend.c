@@ -94,9 +94,11 @@ static void early_suspend(struct work_struct *work)
 	if (debug_mask & DEBUG_SUSPEND)
 		pr_info("early_suspend: call handlers\n");
 	list_for_each_entry(pos, &early_suspend_handlers, link) {
-
+//#ifndef CONFIG_LGE_DOMESTIC //LGE 110701 ntdeaewan.choi@lge.com
 #ifdef CONFIG_MACH_LGE
-
+		/* this is test code for detecting main cause of kthread's sleep
+		 * 2010-04-26, cleaneye.kim@lge.com
+		 */
 		char sym[KSYM_SYMBOL_LEN];
 
 		sprint_symbol(sym, (unsigned long)pos->suspend);
@@ -138,9 +140,11 @@ static void late_resume(struct work_struct *work)
 	if (debug_mask & DEBUG_SUSPEND)
 		pr_info("late_resume: call handlers\n");
 	list_for_each_entry_reverse(pos, &early_suspend_handlers, link) {
-
+//#ifndef CONFIG_LGE_DOMESTIC //LGE 110701 ntdeaewan.choi@lge.com
 #ifdef CONFIG_MACH_LGE
-
+		/* this is test code for detecting main cause of kthread's sleep
+		 * 2010-04-26, cleaneye.kim@lge.com
+		 */
 		char sym[KSYM_SYMBOL_LEN];
 
 		sprint_symbol(sym, (unsigned long)pos->resume);

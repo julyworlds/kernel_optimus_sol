@@ -59,11 +59,10 @@
 #define PM8058_GPIO_PM_TO_SYS(pm_gpio)     (pm_gpio + NR_GPIO_IRQS)
 #define PM8058_GPIO_SYS_TO_PM(sys_gpio)    (sys_gpio - NR_GPIO_IRQS)
 
-
-
 /* setting board revision information */
 int lge_bd_rev;
-char *rev_str[] = { "evb", "rev_a", "rev_b", "rev_c", "rev_d", "rev_10","rev_11","rev_11",};	
+char *rev_str[] = { "evb", "rev_a", "rev_b", "rev_c", "rev_d", "rev_e", "rev_f","rev_10","rev_11","rev_12","rev_13",};
+
 
 int board_is_rev(char *rev_info)
 {
@@ -91,7 +90,6 @@ static int __init board_revno_setup(char *rev_info)
 
 	return 1;
 }
-
 
 __setup("lge.rev=", board_revno_setup);
 
@@ -429,7 +427,10 @@ void __init msm7x30_allocate_memory_regions(void)
 	fb_phys_addr = __pa(addr);
 #endif
 #ifdef CONFIG_FB_MSM_LCDC_LGDISPLAY_WVGA_OLED 
-
+	/* LGE_CHANGE 
+	* Copy the oled display screen to oled frame buffer
+	* 2011-03-22, cheongil.hyun@lge.com
+	*/
 #ifdef CONFIG_FB_MSM_DEFAULT_DEPTH_RGB565
 	memcpy(addr, __va(0x2FD00000), 480*800*2);
 #elif defined (CONFIG_FB_MSM_DEFAULT_DEPTH_RGBA8888) \
@@ -929,7 +930,10 @@ __WEAK struct platform_device rndis_device = {
 };
 
 #ifdef CONFIG_USB_ANDROID_CDC_ECM
-
+/* LGE_CHANGE
+ * To bind LG AndroidNet, add platform data for CDC ACM.
+ * 2011-01-12, hyunhui.park@lge.com
+ */
 __WEAK struct usb_ether_platform_data ecm_pdata = {
 	/* ethaddr is filled by board_serialno_setup */
 	.vendorID   	= 0x1004,
@@ -946,7 +950,10 @@ __WEAK struct platform_device ecm_device = {
 #endif
 
 #ifdef CONFIG_USB_ANDROID_ACM
-
+/* LGE_CHANGE
+ * To bind LG AndroidNet, add platform data for CDC ACM.
+ * 2011-01-12, hyunhui.park@lge.com
+ */
 __WEAK struct acm_platform_data acm_pdata = {
 	.num_inst	    = 1,
 };
@@ -961,7 +968,11 @@ __WEAK struct platform_device acm_device = {
 #endif
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_AUTORUN
-
+/* LGE_CHANGE
+ * Add platform data and device for cdrom storage function.
+ * It will be used in Autorun feature.
+ * 2011-03-02, hyunhui.park@lge.com
+ */
 __WEAK struct usb_cdrom_storage_platform_data cdrom_storage_pdata = {
 	.nluns		= 1,
 	.vendor		= "Qualcomm Incorporated",

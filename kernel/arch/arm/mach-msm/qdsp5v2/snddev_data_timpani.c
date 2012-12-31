@@ -15,7 +15,7 @@
  * 02110-1301, USA.
  *
  */
-
+//LGE_UPDATE_S		taeho.youn@lge.com
 #if 0
 #include <linux/platform_device.h>
 #include <linux/debugfs.h>

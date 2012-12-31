@@ -1,6 +1,6 @@
 EXTRA_CFLAGS += -Iarch/arm/mach-msm
 
-# 
+# Loopback		taeho.youn@lge.com
 obj-$(CONFIG_MACH_MSM8X55_VICTOR) += lge_audio_misc_ctrl.o
 obj-$(CONFIG_MACH_MSM8X55_VICTOR) += board-victor.o
 obj-$(CONFIG_MACH_MSM8X55_VICTOR) += board-victor-pm.o
@@ -23,11 +23,11 @@ obj-$(CONFIG_LGE_SUPPORT_AT_CMD) += lge_ats_cmd.o
 obj-$(CONFIG_LGE_SUPPORT_AT_CMD) += lge_ats_eta.o
 obj-$(CONFIG_LGE_SUPPORT_AT_CMD) += lge_ats_mmc.o
 obj-$(CONFIG_LGE_SUPPORT_AT_CMD) += lge_ats_event_log.o
-obj-$(CONFIG_LGE_SUPPORT_AT_CMD) += lge_ats_flex.o 
+obj-$(CONFIG_LGE_SUPPORT_AT_CMD) += lge_ats_flex.o # LGE_CHANGE [irene.park@lge.com] 2010-06-04 - to get flex value from ARM9 
 
 obj-$(CONFIG_LGE_HANDLE_PANIC) += lge_handle_panic.o
 obj-$(CONFIG_LGE_ATCMD_TTY) += lge_tty_atcmd.o
-
+# START [sangki.hyun@lge.com][dom_testmode] 20100615 LAB1_FW LGE_TEST_MODE {
 obj-$(CONFIG_MSM_RPCSERVER_TESTMODE) += rpc_server_testmode.o
 obj-$(CONFIG_MSM_RPCSERVER_TESTMODE) += rpc_server_testmode_cam.o
 obj-$(CONFIG_MSM_RPCSERVER_TESTMODE) += rpc_server_testmode_memory.o
@@ -37,4 +37,4 @@ obj-$(CONFIG_MSM_RPCSERVER_TESTMODE) += rpc_server_testmode_keytest.o
 obj-$(CONFIG_MSM_RPCSERVER_TESTMODE) += rpc_server_testmode_sleep.o
 obj-$(CONFIG_MSM_RPCSERVER_TESTMODE) += testmode_sensor.o
 obj-$(CONFIG_MSM_RPCSERVER_TESTMODE) += testmode_input.o
-
+# END [sangki.hyun@lge.com][dom_testmode] 20100615 LAB1_FW }

@@ -295,14 +295,20 @@ static int kgsl_suspend(struct platform_device *dev, pm_message_t state)
 			INIT_COMPLETION(device->hwaccess_gate);
 			device->ftbl.device_suspend_context(device);
 			device->ftbl.device_stop(device);
-	
+			/* 2011-03-28, jinkyu.choi@lge.com
+			 * modified by QCT, it will be added at mainline, later.
+			 * and then remove this comment.
+			 */
 			device->state = KGSL_STATE_SUSPEND;
 			break;
 		default:
 			mutex_unlock(&device->mutex);
 			return KGSL_FAILURE;
 		}
-
+		/* 2011-03-28, jinkyu.choi@lge.com
+		 * modified by QCT, it will be added at mainline, later.
+		 * and then remove this comment.
+		 */
 		//device->state = KGSL_STATE_SUSPEND;
 		device->requested_state = KGSL_STATE_NONE;
 		device->pwrctrl.nap_allowed = nap_allowed_saved;
@@ -1061,24 +1067,18 @@ static struct vm_area_struct *kgsl_get_vma_from_start_addr(unsigned int addr)
 	if (!vma) {
 		KGSL_MEM_ERR("Could not find vma for address %x\n",
 			   addr);
-		//mina.park patch start
 		return NULL;
 	}
 	len = vma->vm_end - vma->vm_start;
-	
-	if (vma->vm_pgoff)
-		KGSL_MEM_ERR("vma->vm_pgoff is %lx\n", vma->vm_pgoff);
-
-	if (!KGSL_IS_PAGE_ALIGNED(len) ||
-		!KGSL_IS_PAGE_ALIGNED(vma->vm_start)) {
- 		KGSL_MEM_ERR("address %x is not aligned\n", addr);
-
-	
-		if (!KGSL_IS_PAGE_ALIGNED(len))
-			KGSL_MEM_ERR("len not aligned.\n");
-
-		if (!KGSL_IS_PAGE_ALIGNED(vma->vm_start))
-			KGSL_MEM_ERR("vma->vm_start not aligned.\n");
+	if (vma->vm_pgoff || !KGSL_IS_PAGE_ALIGNED(len) ||
+	  !KGSL_IS_PAGE_ALIGNED(vma->vm_start)) {
+		KGSL_MEM_ERR
+		("user address mapping must be at offset 0 and page aligned\n");
+		return NULL;
+	}
+	if (vma->vm_start != addr) {
+		KGSL_MEM_ERR
+		  ("vma start address is not equal to mmap address\n");
 		return NULL;
 	}
 	return vma;

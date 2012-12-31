@@ -5,7 +5,7 @@
  * Copyright (C) 2009 Samsung Electronics
  *                    Author: Michal Nazarewicz <m.nazarewicz@samsung.com>
  * Copyright (C) 2011 LG Electronics
- * 				
+ * 					  Author: Hyeon H. Park <hyunhui.park@lge.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -274,7 +274,7 @@
   * function driver, we use seperated function driver because of binding
   * process of android gadget. This function driver will be used as dedicated
   * virtual cdrom for feature like Autorun.
-  * 
+  * 2011-03-02, hyunhui.park@lge.com
   */
 
 /* #define VERBOSE_DEBUG */
@@ -325,7 +325,10 @@ static const char fsg_string_interface[] = "CD Storage";
 #define FSG_NO_OTG               1
 #define FSG_NO_INTR_EP           1
 
-
+/* Belows are LGE-customized SCSI cmd and
+ * sub-cmd for autorun processing.
+ * 2011-03-09, hyunhui.park@lge.com
+ */
 #define SC_LGE_SPE      		0xF1
 #define SUB_CODE_MODE_CHANGE		0x01
 #define SUB_CODE_GET_VALUE		0x02
@@ -354,7 +357,7 @@ static const char fsg_string_interface[] = "CD Storage";
 #define SUB_ACK_STATUS_ASK		0x03
 #define SUB_ACK_STATUS_CGO		0x04
 #define SUB_ACK_STATUS_TET		0x05
-
+/* 2011-03-09, hyunhui.park@lge.com */
 
 #include "storage_common.c"
 
@@ -365,6 +368,10 @@ static int write_error_after_csw_sent;
 
 struct fsg_dev;
 
+/* Belows are uevent string to communicate with
+ * android framework and application.
+ * 2011-03-09, hyunhui.park@lge.com
+ */
 static const char *chg_mode[] = {
 	"change_unknown",
 	"change_acm",
@@ -407,7 +414,7 @@ enum check_mode_state {
 	ACK_STATUS_TET = SUB_ACK_STATUS_TET,
 	ACK_STATUS_ERR,
 };
-
+/* 2011-03-09, hyunhui.park@lge.com */
 
 
 /* Data shared by all the FSG instances. */
@@ -1321,7 +1328,9 @@ static int do_inquiry(struct fsg_common *common, struct fsg_buffhd *bh)
 	return 36;
 }
 
-
+/* Add function which handles LGE-customized command from PC.
+ * 2011-03-09, hyunhui.park@lge.com
+ */
 static int do_ack_status(struct fsg_common *common, struct fsg_buffhd *bh, u8 ack)
 {
 	u8	*buf = (u8 *) bh->buf;
@@ -1403,7 +1412,7 @@ static int do_get_sub_ver(struct fsg_common *common, struct fsg_buffhd *bh)
 	buf[6] = 5;
 	return 7;
 }
-
+/* 2011-03-09, hyunhui.park@lge.com */
 
 static int do_request_sense(struct fsg_common *common, struct fsg_buffhd *bh)
 {
@@ -2144,7 +2153,9 @@ static int check_command(struct fsg_common *common, int cmnd_size,
 	return 0;
 }
 
-
+/* moved from downstair for using switch driver.
+ * 2011-03-09, hyunhui.park@lge.com
+ */
 static struct fsg_dev			*the_fsg;
 
 static int do_scsi_command(struct fsg_common *common)
@@ -2155,7 +2166,9 @@ static int do_scsi_command(struct fsg_common *common)
 	int			i;
 	static char		unknown[16];
 
-
+	/* USB default connection user mode.
+	 * 2011-03-09, hyunhui.park@lge.com
+	 */
 	unsigned int user_mode;
 
 	dump_cdb(common);
@@ -2183,7 +2196,9 @@ static int do_scsi_command(struct fsg_common *common)
 			reply = do_inquiry(common, bh);
 		break;
 
-
+	/* Handle LGE-customized SCSI cmd.
+	 * 2011-03-09, hyunhui.park@lge.com
+	 */
 	case SC_LGE_SPE:
 		pr_info("%s : SC_LGE_SPE - %x %x %x\n", __func__,
 			  common->cmnd[0], common->cmnd[1], common->cmnd[2]);
@@ -2773,7 +2788,10 @@ static void fsg_disable(struct usb_function *f)
 
 /*-------------------------------------------------------------------------*/
 
-			*the_fsg; */
+/* move to upstair for using switch driver.
+ * 2011-03-09, hyunhui.park@lge.com
+ */
+/* static struct fsg_dev			*the_fsg; */
 
 static void handle_exception(struct fsg_common *common)
 {
@@ -2891,7 +2909,7 @@ static void handle_exception(struct fsg_common *common)
 
 	case FSG_STATE_CONFIG_CHANGE:
 		do_set_interface(common, common->new_fsg);
-	
+		/* XXX: Temporary comment out, 2011-03-09, hyunhui.park@lge.com */
 		/* switch_set_state(&the_fsg->sdev, !!common->new_fsg); */
 		break;
 

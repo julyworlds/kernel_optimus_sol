@@ -40,7 +40,9 @@
 #define MT9V113_REG_MODEL_ID      0x00
 #define MT9V113_MODEL_ID          0x1048
 
-
+/* chaehee.lim@lge.com 
+   temp : we define the delay time on MSM as 0xFFFF address 
+*/
 #define MT9M113_REG_REGFLAG_DELAY  		0xFFFF
 
 DEFINE_MUTEX(mt9v113_mutex);
@@ -1249,7 +1251,7 @@ static int mt9v113_sensor_probe(const struct msm_camera_sensor_info *info,
 	s->s_release = mt9v113_sensor_release;
 	s->s_config  = mt9v113_sensor_config;
     s->s_camera_type = FRONT_CAMERA_2D;
-	s->s_mount_angle = 180; 
+	s->s_mount_angle = 180; //chaehee.lim@lge.com 2011.06.27 : Set Camera orientation for camcording
 	
     CAM_MSG("mt9v113.c : mt9v113_sensor_probe - complete : %d \n", rc);
     CAM_MSG("mt9v113.c : s_mount_angle : %d \n", s->s_mount_angle);	

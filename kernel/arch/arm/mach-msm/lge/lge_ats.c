@@ -27,10 +27,10 @@
 
 #define ONCRPC_LGE_ATCMD_ATS_PROC 3
 #define ONCRPC_LGE_ATCMD_ATS_ETA_PROC 6
-#define ONCRPC_LGE_GET_FLEX_MCC_PROC 7 
-#define ONCRPC_LGE_GET_FLEX_MNC_PROC 8 
-#define ONCRPC_LGE_GET_FLEX_OPERATOR_CODE_PROC 9 
-#define ONCRPC_LGE_GET_FLEX_COUNTRY_CODE_PROC 10 
+#define ONCRPC_LGE_GET_FLEX_MCC_PROC 7 //LGE_UPDATE_S [irene.park@lge.com] 2010.06.04 - Get Flex MCC/MNC value
+#define ONCRPC_LGE_GET_FLEX_MNC_PROC 8 //LGE_UPDATE_S [irene.park@lge.com] 2010.06.04 - Get Flex MCC/MNC value
+#define ONCRPC_LGE_GET_FLEX_OPERATOR_CODE_PROC 9 ///LGE_UPDATE_S [irene.park@lge.com] 2010.06.04 - Get Flex Operator ?value
+#define ONCRPC_LGE_GET_FLEX_COUNTRY_CODE_PROC 10 //LGE_UPDATE_S [irene.park@lge.com] 2010.06.04 - Get Flex Operator ?value
 
 struct ats_data {
 	struct atcmd_dev *atdev;
@@ -40,7 +40,7 @@ struct ats_data {
 	int (*handle_atcmd_eta) (struct msm_rpc_server *server,
 							 struct rpc_request_hdr *req, unsigned len);
 	void (*update_atcmd_state) (char *cmd, int state);
- 
+//LGE_CHAGE[irene.park@lge.com] 2010-06- 04 - to get flex value from ARM9 
 	int (*handle_flex) (struct msm_rpc_server *server,
 							 struct rpc_request_hdr *req, unsigned len);
 
@@ -77,7 +77,7 @@ static int handle_ats_rpc_call(struct msm_rpc_server *server,
 			if(data->handle_atcmd)
 				return data->handle_atcmd(server, req, len, data->update_atcmd_state);
 			break;
-			
+	    //LGE_CHAGE[irene.park@lge.com] 2010-06- 04 - to get flex value from ARM9 			
 		case ONCRPC_LGE_GET_FLEX_MCC_PROC:
 		case ONCRPC_LGE_GET_FLEX_MNC_PROC:
 		case ONCRPC_LGE_GET_FLEX_OPERATOR_CODE_PROC:
@@ -179,7 +179,7 @@ static int __init lge_ats_init(void)
 	lge_ats_data.handle_atcmd = lge_ats_handle_atcmd;
 	lge_ats_data.handle_atcmd_eta = lge_ats_handle_atcmd_eta;
 	lge_ats_data.update_atcmd_state = lge_ats_update_atcmd_state;
-	lge_ats_data.handle_flex = lge_ats_handle_flex; 
+	lge_ats_data.handle_flex = lge_ats_handle_flex; //LGE_CHAGE[irene.park@lge.com] 2010-06- 04 - to get flex value from ARM9 
 
 #ifdef CONFIG_LGE_DOMESTIC
 	err = platform_driver_register(&this_driver);

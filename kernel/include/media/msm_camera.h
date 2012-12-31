@@ -351,10 +351,10 @@ struct camera_enable_cmd {
 #define MSM_PMEM_VIDEO			14
 #define MSM_PMEM_PREVIEW		15
 #define MSM_PMEM_VIDEO_VPE		16
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-07-13 : Camera - differentiate vt display buffer from preview buffer
 #define MSM_PMEM_VT_DISPLAY   17
 #define MSM_PMEM_MAX			18
-
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-07-13
 
 #define STAT_AEAW			0
 #define STAT_AEC			1

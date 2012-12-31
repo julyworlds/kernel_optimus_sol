@@ -1,6 +1,6 @@
 /* arch/arm/mach-msm/include/mach/board-victor.h
  * Copyright (C) 2009 LGE, Inc.
- * 
+ * Author: SungEun Kim <cleaneye@lge.com>
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -25,16 +25,19 @@
 
 #include "pm.h"
 
-
-#define MSM_PMEM_SF_SIZE	0x1D00000 //0x1700000 //0x1C00000
-#define MSM_FB_SIZE		0x2EE000 //(480*800*32*2) //0x500000
-
+/* MSM_PMEM_SF_SIZE PMEM Size 0x1700000 --> 0x1C00000
+* 2011-05-07, cheongil.hyun@lge.com
+* 2011-08-20, Increas SF PMEM(0x1D00000), munyoung.hwang@lge.com
+*/
+#define MSM_PMEM_SF_SIZE	0x1D00000
+#define MSM_FB_SIZE		0x500000
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-06-27 : To support 720P and VT rotation, one more preview buffer is needed. => need to increase pmem
 #if 0
 #define MSM_PMEM_ADSP_SIZE      0x1800000
 #else
-#define MSM_PMEM_ADSP_SIZE      0x1B00000 //0x1D1A000 //0x2000000
+#define MSM_PMEM_ADSP_SIZE      0x1B00000
 #endif
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-06-27
 #define MSM_FLUID_PMEM_ADSP_SIZE	0x2800000
 #define PMEM_KERNEL_EBI1_SIZE   0x600000
 #define MSM_PMEM_AUDIO_SIZE     0x200000

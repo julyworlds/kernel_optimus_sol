@@ -27,7 +27,6 @@
 #include <linux/byteorder/little_endian.h>
 
 #include "tcm9000md.h"
-#include <mach/board_lge.h>
 
 #undef CAM_MSG
 #undef CAM_ERR
@@ -41,7 +40,9 @@
 #define TCM9000MD_REG_MODEL_ID      0x00
 #define TCM9000MD_MODEL_ID          0x1048
 
-
+/* chanhee.park@lge.com 
+   temp : we define the delay time on MSM as 0xFFFE address 
+*/
 #define MT9M113_REG_REGFLAG_DELAY  		0xFFFE
 
 DEFINE_MUTEX(tcm9000md_mutex);
@@ -788,12 +789,8 @@ static int tcm9000md_sensor_probe(const struct msm_camera_sensor_info *info,
 	s->s_init    = tcm9000md_sensor_init;
 	s->s_release = tcm9000md_sensor_release;
 	s->s_config  = tcm9000md_sensor_config;
-    	s->s_camera_type = FRONT_CAMERA_2D;
-	
-	if (board_is_rev("rev_11"))
-    		s->s_mount_angle = 180;
-  	else
-   		s->s_mount_angle = 0;
+    s->s_camera_type = FRONT_CAMERA_2D;
+	s->s_mount_angle = 180;
 	
     CAM_MSG("tcm9000md.c : tcm9000md_sensor_probe - complete : %d \n", rc);
     return 0;

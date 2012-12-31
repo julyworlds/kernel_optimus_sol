@@ -217,7 +217,9 @@ static int __cpuinit msm_cpufreq_init(struct cpufreq_policy *policy)
 	return 0;
 }
 
+#ifdef CONFIG_LGE_MODEL_SU610
 struct cpufreq_policy *resume_policy = NULL;
+#endif /* CONFIG_LGE_MODEL_SU610 */
 
 static int msm_cpufreq_suspend(void)
 {
@@ -240,21 +242,23 @@ static int msm_cpufreq_resume(void)
 		per_cpu(cpufreq_suspend, cpu).device_suspended = 0;
 	}
 
+#ifdef CONFIG_LGE_MODEL_SU610
 	printk(KERN_ERR "[msm_cpufreq_resume] resume_policy(%d)\n", (unsigned int)&resume_policy);
 	if( !resume_policy )
 		resume_policy = cpufreq_cpu_get(0);
 
 	if( resume_policy)
 		msm_cpufreq_target(resume_policy, 741111, 0);
-
+#endif /* CONFIG_LGE_MODEL_SU610 */
 	return NOTIFY_DONE;
 }
 
 static int msm_cpufreq_pm_event(struct notifier_block *this,
 				unsigned long event, void *ptr)
 {
+#ifdef CONFIG_LGE_MODEL_SU610
 	printk(KERN_ERR "[msm_cpufreq_pm_event] event (%lu)\n", event);
-
+#endif /* CONFIG_LGE_MODEL_SU610 */
 	switch (event) {
 	case PM_POST_HIBERNATION:
 	case PM_POST_SUSPEND:
@@ -286,6 +290,7 @@ static ssize_t store_mfreq(struct sysdev_class *class,
 
 static SYSDEV_CLASS_ATTR(mfreq, 0200, NULL, store_mfreq);
 
+#ifdef CONFIG_LGE_MODEL_SU610
 static int msm_cpufreq_subsuspend(struct cpufreq_policy *policy, pm_message_t pmsg)
 {
 #if 0
@@ -309,6 +314,8 @@ int	msm_cpufreq_subresume(struct cpufreq_policy *policy)
 #endif
 	return 0;
 }
+#endif /* CONFIG_LGE_MODEL_SU610 */
+
 
 static struct freq_attr *msm_cpufreq_attr[] = {
   &cpufreq_freq_attr_scaling_available_freqs,
@@ -321,8 +328,10 @@ static struct cpufreq_driver msm_cpufreq_driver = {
 	.init		= msm_cpufreq_init,
 	.verify		= msm_cpufreq_verify,
 	.target		= msm_cpufreq_target,
+#ifdef CONFIG_LGE_MODEL_SU610
 	.suspend   	= msm_cpufreq_subsuspend,
 	.resume   	= msm_cpufreq_subresume,
+#endif /* CONFIG_LGE_MODEL_SU610 */
 	.name		= "msm",
 	.attr		= msm_cpufreq_attr,
 };

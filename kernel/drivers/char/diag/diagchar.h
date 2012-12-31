@@ -58,10 +58,10 @@
 #define LOG_MASK_SIZE 8000
 #define EVENT_MASK_SIZE 1000
 //#define PKT_SIZE 4096
-
+/* LGE_CHANGE_S [woongchang.kim@lge.com] 2010-11-22 - fix diag packet drop issue, change 4096 to 8192 */
 #define PKT_SIZE 8192
 #define LGE_FIX_DIAG_PKT_DROP
-
+/* LGE_CHANGE_E [woongchang.kim@lge.com] 2010-11-22 */
 #define MAX_EQUIP_ID 12
 
 /* This is the maximum number of pkt registrations supported at initialization*/

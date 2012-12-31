@@ -377,7 +377,9 @@ static int msm_batt_power_get_property(struct power_supply *psy,
 		break;
 #ifdef CONFIG_MACH_LGE
 	case POWER_SUPPLY_PROP_TEMP:
-
+		/* 2011-05-19 by baborobo@lge.com
+		 * The android framework used 0.1 degree Celsius.
+		 */
 	#ifdef CONFIG_MACH_LG_FAKE_BATTERY
 		if(msm_get_fake_battery() == true)
 			val->intval = 250;	// return 25 degree Celsius
@@ -485,7 +487,10 @@ static int msm_batt_get_batt_chg_status(void)
 }
 
 #ifdef CONFIG_MACH_LGE
-
+/* 2010-12-14 by baborobo@lge.com
+ * if it is updateing of battery-status by rpc,
+ * don't request updateing of battery-status
+ */
 static bool is_run_batt_update;
 #endif
 static void msm_batt_update_psy_status(void)
@@ -504,7 +509,9 @@ static void msm_batt_update_psy_status(void)
 	struct	power_supply	*supp;
 
 #ifdef CONFIG_MACH_LGE
-
+  /* 2010-12-14 by baborobo@lge.com
+   * to check the updating-status
+   */
 	if (is_run_batt_update == true)
 		return;
 
@@ -531,7 +538,9 @@ static void msm_batt_update_psy_status(void)
 	/* Make correction for battery status */
 #ifdef CONFIG_MACH_LGE
 	if (battery_status == BATTERY_STATUS_REMOVED) {
-
+		/* LGE_CHANGE : 2011-02-17 baborobo@lge.com
+		 * for Battery Remove status
+		 */
 		battery_status = BATTERY_STATUS_INVALID;
 		battery_level = BATTERY_LEVEL_INVALID;
 	}
@@ -560,7 +569,9 @@ static void msm_batt_update_psy_status(void)
 				 unnecessary_event_count);
 
 #ifdef CONFIG_MACH_LGE
-
+    /* 2010-12-14 by baborobo@lge.com
+     * to check the updating-status
+     */
 	  is_run_batt_update = false;
 #endif
 		return;
@@ -622,7 +633,10 @@ static void msm_batt_update_psy_status(void)
 		    charger_status == CHARGER_STATUS_WEAK) {
 			if (msm_batt_info.current_chg_source) {
 #ifdef CONFIG_MACH_LGE
-		
+				/* LGE_CHANGE
+				 * add for Full charging
+				 * 2010-05-04 baborobo@lge.com
+				 */
 				if (battery_level == BATTERY_LEVEL_FULL) {
 					DBG_LIMIT("BATT: FULL.\n");
 					msm_batt_info.batt_status =
@@ -646,7 +660,10 @@ static void msm_batt_update_psy_status(void)
 			}
 
 #ifdef CONFIG_MACH_LGE
-
+			/* LGE_CHANGE
+			* add for unpluged status of battery
+			* 2010-04-28 baborobo@lge.com
+			*/
 			if (battery_status == BATTERY_STATUS_INVALID
 				&& battery_level == BATTERY_LEVEL_INVALID) {
 				DBG_LIMIT("BATT: No Battery.\n");
@@ -656,7 +673,10 @@ static void msm_batt_update_psy_status(void)
 #endif
 		} else {
 #ifdef CONFIG_MACH_LGE
-
+			/* LGE_CHANGE
+			* add for unpluged status of battery
+			* 2011-02-17 baborobo@lge.com
+			*/
 			if (battery_status == BATTERY_STATUS_INVALID
 				&& battery_level == BATTERY_LEVEL_INVALID) {
 				DBG_LIMIT("BATT: No Battery.\n");
@@ -676,7 +696,10 @@ static void msm_batt_update_psy_status(void)
 		}
 	} else {
 #ifdef CONFIG_MACH_LGE
-
+		/* LGE_CHANGE
+		 * add for unpluged status of battery
+		 * 2010-04-07 baborobo@lge.com
+		 */
 		if (battery_status == BATTERY_STATUS_INVALID
 			&& battery_level == BATTERY_LEVEL_INVALID) {
 			DBG_LIMIT("BATT: No Battery\n");
@@ -688,7 +711,10 @@ static void msm_batt_update_psy_status(void)
 		if (charger_type != CHARGER_TYPE_INVALID &&
 		    charger_status == CHARGER_STATUS_GOOD) {
 #ifdef CONFIG_MACH_LGE
-
+			/* LGE_CHANGE
+			 * add for Full charging
+			 * 2010-05-04 baborobo@lge.com
+			 */
 			if (battery_level == BATTERY_LEVEL_FULL) {
 				DBG_LIMIT("BATT: FULL\n");
 				msm_batt_info.batt_status =
@@ -835,7 +861,9 @@ static void msm_batt_update_psy_status(void)
 	}
 
 #ifdef CONFIG_MACH_LGE
-
+  /* 2010-12-14 by baborobo@lge.com
+   * to check the updating-status
+   */
 	is_run_batt_update = false;
 #endif
 }
@@ -941,7 +969,12 @@ static int msm_batt_modify_client(u32 client_handle, u32 desired_batt_voltage,
 }
 
 #ifdef CONFIG_MACH_LGE
-
+/* 2011-02-17 by baborobo@lge.com
+ * it is notthing at early-suspend / msm_batt_late_resume
+ * the rpc_client-setting is executed at suspend/resume
+ * when the phone is wake up by charger(USB or Wall-chager),
+ * the screen must be on-status.
+ */
 static int msm_batt_suspend(struct platform_device *pdev, pm_message_t state)
 {
 	int rc;

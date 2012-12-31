@@ -2,7 +2,7 @@
  *
  * Copyright (C) 2008 Google, Inc.
  * Copyright (C) 2011 LGE.
- *
+ * Author : Hyeon H. Park <hyunhui.park@lge.com>
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -33,7 +33,10 @@
 
 #include "u_lgeusb.h"
 
-
+/* LGE_CHANGE
+ * To check factory mode in user space.
+ * 2011-02-10, hyunhui.park@lge.com
+ */
 static struct mutex lock;
 
 static int lgeusb_get_mode(char *buffer, struct kernel_param *kp);
@@ -42,7 +45,10 @@ module_param_call(mode, NULL, lgeusb_get_mode, NULL, S_IRUGO);
 MODULE_PARM_DESC(mode, "LGE USB Specific mode");
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_AUTORUN
-
+/* LGE_CHANGE
+ * To set/get USB user mode to/from user space.
+ * 2011-03-09, hyunhui.park@lge.com
+ */
 static u16 user_mode;
 static int lgeusb_set_usermode(const char *val, struct kernel_param *kp);
 static int lgeusb_get_usermode(char *buffer, struct kernel_param *kp);
@@ -118,7 +124,10 @@ static int lgeusb_get_mode(char *buffer, struct kernel_param *kp)
 }
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_AUTORUN
-
+/* LGE_CHANGE
+ * To set/get USB user mode to/from user space for autorun.
+ * 2011-03-09, hyunhui.park@lge.com
+ */
 static int lgeusb_set_usermode(const char *val, struct kernel_param *kp)
 {
 	int ret = 0;
@@ -159,13 +168,21 @@ static void do_switch_mode(int pid, int need_reset)
 	info->switch_func(pid, need_reset);
 }
 
-
+/* LGE_CHANGE
+ * If factory cable (PIF or LT) is connected,
+ * return 1, otherwise return 0.
+ * 2011-01-13, hyunhui.park@lge.com
+ */
 int lgeusb_detect_factory_cable(void)
 {
 	return get_factory_cable();
 }
 
-
+/* LGE_CHANGE
+ * If factory dedicated cable is connected,
+ * switch to LGE usb factory mode.
+ * 2011-01-13, hyunhui.park@lge.com
+ */
 void lgeusb_switch_factory_mode(int need_reset)
 {
 	struct lgeusb_info *info = usb_info;
@@ -176,6 +193,11 @@ void lgeusb_switch_factory_mode(int need_reset)
 	do_switch_mode(LGE_FACTORY_PID, need_reset);
 }
 
+/* LGE_CHANGE
+ * If a normal cable is connected,
+ * switch to android mode back.
+ * 2011-01-13, hyunhui.park@lge.com
+ */
 void lgeusb_switch_android_mode(int need_reset)
 {
 	struct lgeusb_info *info = usb_info;
@@ -185,7 +207,10 @@ void lgeusb_switch_android_mode(int need_reset)
 	do_switch_mode(restore_pid, need_reset);
 }
 
-
+/* LGE_CHANGE
+ * Get current mode(factory or android).
+ * 2011-01-24, hyunhui.park@lge.com
+ */
 int lgeusb_get_current_mode(void)
 {
 	struct lgeusb_info *info = usb_info;
@@ -193,7 +218,11 @@ int lgeusb_get_current_mode(void)
 	return (int)info->current_mode;
 }
 
-
+/* LGE_CHANGE
+ * 1. If cable is factory cable, switch manufacturing mode.
+ * 2. Get serial number from CP and set product id to CP.
+ * 2011-01-13, hyunhui.park@lge.com
+ */
 int lgeusb_set_current_mode(int need_reset)
 {
 	struct lgeusb_info *info = usb_info;
@@ -241,7 +270,10 @@ int lgeusb_set_current_mode(int need_reset)
 	return info->current_pid;
 }
 
-
+/* LGE_CHANGE
+ * Register lge usb information(which include callback functions).
+ * 2011-01-14, hyunhui.park@lge.com
+ */
 void lgeusb_register_usbinfo(struct lgeusb_info *info)
 {
 	if (info) {

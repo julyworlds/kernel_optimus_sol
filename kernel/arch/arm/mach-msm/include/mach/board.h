@@ -360,7 +360,10 @@ static inline void msm_hsusb_set_vbus_state(int online) {}
 void __init msm_snddev_init(void);
 void __init msm_snddev_init_timpani(void);
 
-
+/* LGE_CHANGE
+  * For QCT ffa/surf board
+  * 2011-01-20, junyoub.an@lge.com
+  */
 #ifndef CONFIG_MACH_LGE
 void msm_snddev_poweramp_on(void);
 void msm_snddev_poweramp_off(void);

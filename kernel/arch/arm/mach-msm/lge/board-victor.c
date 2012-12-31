@@ -54,7 +54,7 @@
  *
  * To bind LG AndroidNet, we add ACM function named "acm2".
  * Please refer to drivers/usb/gadget/f_acm.c.
- * 
+ * 2011-01-12, hyunhui.park@lge.com
  */
 
 /* The binding list for LGE Android USB */
@@ -267,7 +267,10 @@ struct platform_device rndis_device = {
 
 
 #ifdef CONFIG_USB_ANDROID_CDC_ECM
-
+/* LGE_CHANGE
+ * To bind LG AndroidNet, add platform data for CDC ECM.
+ * 2011-01-12, hyunhui.park@lge.com
+ */
 struct usb_ether_platform_data ecm_pdata = {
 	/* ethaddr is filled by board_serialno_setup */
 	.vendorID   	= 0x1004,
@@ -284,7 +287,10 @@ struct platform_device ecm_device = {
 #endif
 
 #ifdef CONFIG_USB_ANDROID_ACM
-
+/* LGE_CHANGE
+ * To bind LG AndroidNet, add platform data for CDC ACM.
+ * 2011-01-12, hyunhui.park@lge.com
+ */
 struct acm_platform_data acm_pdata = {
 	.num_inst	    = 1,
 };
@@ -326,7 +332,11 @@ static struct msm_tsif_platform_data tsif_platform_data = {
 #endif 
 //LGE_FW_TDMB [END]
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_AUTORUN
-
+/* LGE_CHANGE
+ * Add platform data and device for cdrom storage function.
+ * It will be used in Autorun feature.
+ * 2011-03-02, hyunhui.park@lge.com
+ */
 struct usb_cdrom_storage_platform_data cdrom_storage_pdata = {
 	.nluns      = 1,
 	.vendor     = "LGE",

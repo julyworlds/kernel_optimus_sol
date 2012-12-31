@@ -92,6 +92,6 @@ static void __exit atcmd_exit(void)
 module_init(atcmd_init);
 module_exit(atcmd_exit);
 
-MODULE_AUTHOR("kimehm");
+MODULE_AUTHOR("kimeh@lge.com");
 MODULE_DESCRIPTION("lge_atcmd driver");
 MODULE_LICENSE("GPL");

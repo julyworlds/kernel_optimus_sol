@@ -1,8 +1,8 @@
 
-//
-// 
+// LGE_DOM_UPDATE_S smtk.kim@lge.com 2009/12/31 {
+// [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE
 
-/* 
+/* arch/arm/mach-msm/rpc_server_testmode.c
  *
  * Copyright (c) 2008-2009, LG Electronics. All rights reserved.
  *
@@ -86,6 +86,6 @@ extern void *testmode_memory_volume_check(uint32_t sub1_cmd, uint32_t sub2_cmd);
 extern void *testmode_external_memory(uint32_t sub1_cmd, uint32_t sub2_cmd);
 extern void *testmode_uv_sensor_test(uint32_t sub1_cmd, uint32_t sub2_cmd);
 extern void *testmode_memory_bad_block_check(uint32_t sub1_cmd, uint32_t sub2_cmd);
-
+// LGE_DOM_UPDATE_E smtk.kim@lge.com 2009/12/31 }
 
 

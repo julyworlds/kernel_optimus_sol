@@ -630,7 +630,7 @@ static struct resource resources_sdc2[] = {
 		.flags	= IORESOURCE_IRQ,
 	},
 	{
-
+/* LGE_CHANGE, change dma channel for emmc, munyoung.hwang@lge.com */
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
 		.start	= 7,
 		.end	= 7,

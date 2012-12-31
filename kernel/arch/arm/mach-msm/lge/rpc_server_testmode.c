@@ -1,6 +1,7 @@
+// LGE_DOM_UPDATE_S itsuki@lge.com 2009/10/07 {
+// [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE
 
-
-/* 
+/* arch/arm/mach-msm/rpc_server_testmode.c
  *
  * Copyright (c) 2008-2009, LG Electronics. All rights reserved.
  *
@@ -51,9 +52,9 @@
 /* refer to testmode.h in AMSS */
 #define ONCRPC_TESTMODE_CMD_RPOC  3
 #define ONCRPC_TESTMODE_CMD_LARGE_PROC 4
-
+// START sungchae.koo@lge.com 2010/10/06 LAB1_FW : DIAG_UART_TDMB_SUPPORT {
 #define ONCRPC_DIAG_TDMB_TEST_CMD_PROC 5
-
+// END sungchae.koo@lge.com 2010/10/06 LAB1_FW }
 
 #define HANDLE_OK  0
 #define HANLDE_FAIL 1
@@ -90,13 +91,13 @@ static unsigned char testmode_rsp_buf[TESTMODE_RSP_BUF_SIZE] = {0x0,};
 static struct testmode_dev *driver;
 static struct cdev *testmode_device;
 
-		
+// START [jongrok.jung@lge.com] 20110316 Testmode Smart_Phone_OS_Version {			
 #if defined(CONFIG_MACH_LGE)
 void* testmode_check_version(uint32_t sub1_cmd, uint32_t sub2_cmd);
 #else
 void* testmode_dummy(uint32_t sub1_cmd, uint32_t sub2_cmd);
 #endif
-		
+// END [jongrok.jung@lge.com] 20110316 Testmode Smart_Phone_OS_Version }		
 void* testmode_factory_reset(uint32_t sub1_cmd, uint32_t sub2_cmd);
 void *testmode_keyinput(uint32_t sub1_cmd, uint32_t sub2_cmd);
 void* testmode_lcd(uint32_t sub1_cmd, uint32_t sub2_cmd);
@@ -104,11 +105,12 @@ void *testmode_bluetooth(uint32_t sub1_cmd, uint32_t sub2_cmd);
 void *testmode_wifi_dmb(uint32_t sub1_cmd, uint32_t sub2_cmd);
 void *testmode_mp3_test(uint32_t sub1_cmd, uint32_t sub2_cmd);
 void *testmode_dispath_command(uint32_t sub1_cmd, uint32_t sub2_cmd);
-
+// START [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 First Booting Check {
 void* testmode_first_boot_complete_check(uint32_t sub1_cmd, uint32_t sub2_cmd);
-
+// END [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 First Booting Check }
+// START [jongrok.jung@lge.com] 20110309 Testmode 8.5 {
 void *testmode_db_integrity_check_test(uint32_t sub1_cmd, uint32_t sub2_cmd);
-
+// END [jongrok.jung@lge.com] 20110309 Testmode 8.5 }   
 
 extern void* testmode_sleep_mode_test(uint32_t sub1_cmd, uint32_t sub2_cmd); 
 #ifdef LGE_FW_LU2300
@@ -122,13 +124,13 @@ extern void keypad_input_report_key(unsigned char scancode);
 testmode_func_table_entry_type g_testmode_func_table[] =
 {
         /*Test Mode  0 ~ 9*/
-			
+// START [jongrok.jung@lge.com] 20110316 Testmode Smart_Phone_OS_Version {			
 #if defined(CONFIG_MACH_LGE)
 	 {TEST_MODE_SW_REV, testmode_check_version, TEST_MODE_MODEM_PROC},
 #else		
         {TEST_MODE_SW_REV, testmode_dummy, TEST_MODE_MODEM_PROC},
 #endif
-		
+// END [jongrok.jung@lge.com] 20110316 Testmode Smart_Phone_OS_Version }		
         {TEST_MODE_LCD, testmode_lcd, TEST_MODE_APP_PROC},
         {TEST_MODE_FOLDER, NULL, TEST_MODE_MODEM_PROC},
         {TEST_MODE_MOTOR, testmode_motor_test, TEST_MODE_APP_PROC},/*250-3*/
@@ -167,9 +169,9 @@ testmode_func_table_entry_type g_testmode_func_table[] =
         {TEST_MODE_GEOMETRIC_SENSOR, NULL, TEST_MODE_MODEM_PROC},	
         {TEST_MODE_ACCELATOR,  testmode_accelator, TEST_MODE_APP_PROC},
         {TEST_MODE_ALCHOL_SENSOR,  NULL, TEST_MODE_MODEM_PROC},	
-	
+        /* LGE_CHANGE_S, [yoohoo@leg.com], 2010-01-15, wifi test mode */	
         {TEST_MODE_WLAN_TDMB_SDMB,  testmode_wifi_dmb, TEST_MODE_APP_PROC},
-	
+        /* LGE_CHANGE_E, [yoohoo@leg.com], 2010-01-15, wifi test mode */	
         {TEST_MODE_TV_OUT,  NULL, TEST_MODE_MODEM_PROC},
         {TEST_MODE_NOT_DEFINED_35,  NULL, TEST_MODE_MODEM_PROC},	
         {TEST_MODE_MANUAL_TEST, NULL, TEST_MODE_MODEM_PROC},
@@ -192,7 +194,7 @@ testmode_func_table_entry_type g_testmode_func_table[] =
         /*Test Mode  50 ~ 51*/
         {TEST_MODE_FACTORY_RESET_TEST, testmode_factory_reset, TEST_MODE_MODEM_PROC},
         {TEST_MODE_VOLUME_LEVEL_TEST, testmode_volume_level_test, TEST_MODE_APP_PROC},/*250-51*/
- 
+        // START [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 First Booting Check {
         /*Test Mode  57 ~ 58*/
         {TEST_MODE_MEMORY_BAD_BLOCK_CHECK, testmode_memory_bad_block_check, TEST_MODE_MODEM_PROC},/*250-57*/
         {TEST_MODE_FIRST_BOOTING_COMPLETE_CHECK, testmode_first_boot_complete_check, TEST_MODE_APP_PROC},/*250-58*/
@@ -204,11 +206,11 @@ testmode_func_table_entry_type g_testmode_func_table[] =
         {TEST_MODE_CAL_CHECK_CMD, NULL, TEST_MODE_MODEM_PROC},
         {TEST_MODE_BT_ADDRESS_CMD, NULL, TEST_MODE_MODEM_PROC},
 	/*Test Mode  91 */
-
+	// START [jongrok.jung@lge.com] 20110316 Testmode db_integrity_check {
 	{TEST_MODE_DB_INTEGRITY_CHECK_TEST, testmode_db_integrity_check_test, TEST_MODE_MODEM_PROC},/*250-92*/
-
+	// END [jongrok.jung@lge.com] 20110316 Testmode db_integrity_check }
         {TEST_MODE_MAX, NULL, TEST_MODE_MODEM_PROC},
-
+        // END [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 First Booting Check }
 };
 
 struct rpc_misc_apps_bases_args {
@@ -385,16 +387,16 @@ void *testmode_wifi_dmb(uint32_t sub1_cmd, uint32_t sub2_cmd)
 				break;
 		}
 	}
-
+/* LGE_CHANGE_E, [youngsin.lee@lge.com], 2010/02/24 */	
 #if 1	
-
+//LAB1_CHANGE, 2010.08.23, justin.yun@lge.com, Wi-Fi MAC Address RW [START]
 //	else if((sub2_cmd>= 4)&& (sub2_cmd<= 68))
 	else if((sub2_cmd>= 4)&& (sub2_cmd<= 70))
-
+//LAB1_CHANGE, 2010.08.23, justin.yun@lge.com, Wi-Fi MAC Address RW [END]
 #else
 	else if((sub2_cmd>= 4)&& (sub2_cmd<= 69))
 #endif
-
+/* LGE_CHANGE_E, [youngsin.lee@lge.com] */
 	{
 		/* WiFi(WLAN) Mode On/Off */
 		relay_result = testmode_dispath_command(sub1_cmd, sub2_cmd);
@@ -407,7 +409,7 @@ void *testmode_wifi_dmb(uint32_t sub1_cmd, uint32_t sub2_cmd)
 	return relay_result;
 }
 
-
+// LGE_DOM_UPDATE_S jiyoung.song@lge.com 2010/02/08 {
 /* key input  test mode on (250-40-X) */
 
 void *testmode_keyinput(uint32_t sub1_cmd, uint32_t sub2_cmd)
@@ -482,9 +484,10 @@ void *testmode_keyinput(uint32_t sub1_cmd, uint32_t sub2_cmd)
 
 	return relay_result;
 }
+// LGE_DOM_UPDATE_E jiyoung.song@lge.com 2010/02/08 }
 
 
-
+// LGE_DOM_UPDATE_S kyungsoo.oh@lge.com 2010/01/19 {
 /* lcd  test mode on (250-1-X) */
 void *testmode_lcd(uint32_t sub1_cmd, uint32_t sub2_cmd)
 {
@@ -536,8 +539,9 @@ void *testmode_lcd(uint32_t sub1_cmd, uint32_t sub2_cmd)
 
 	return relay_result;
 }
+// LGE_DOM_UPDATE_E kyungsoo.oh@lge.com 2010/01/19 }
 
-
+// START [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 First Booting Check { 
 void* testmode_first_boot_complete_check(uint32_t sub1_cmd, uint32_t sub2_cmd)
 {
     struct testmode_relay_result *relay_result;
@@ -554,8 +558,9 @@ void* testmode_first_boot_complete_check(uint32_t sub1_cmd, uint32_t sub2_cmd)
     return relay_result;
 
 }
+// END [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 First Booting Check }
 
-
+// START [jongrok.jung@lge.com] 20110316 Testmode Smart_Phone_OS_Version {
 #if defined(CONFIG_MACH_LGE)
 void* testmode_check_version(uint32_t sub1_cmd, uint32_t sub2_cmd)
 {
@@ -584,9 +589,9 @@ void* testmode_dummy(uint32_t sub1_cmd, uint32_t sub2_cmd)
 	return testmode_reponse_not_supported();
 }
 #endif
+// END [jongrok.jung@lge.com] 20110316 Testmode Smart_Phone_OS_Version }
 
-
-
+// START [jongrok.jung@lge.com] 20110309 Testmode 8.5 {
 void *testmode_db_integrity_check_test(uint32_t sub1_cmd, uint32_t sub2_cmd)
 {
 	struct testmode_relay_result *relay_result;
@@ -637,13 +642,13 @@ void *testmode_db_integrity_check_test(uint32_t sub1_cmd, uint32_t sub2_cmd)
 	   		
 	return relay_result;	
 }
-
+// END [jongrok.jung@lge.com] 20110309 Testmode 8.5 }    
 
 static int  testmode_process_command(uint32_t sub1_cmd, uint32_t sub2_cmd, struct msm_rpc_server *server)
 {
     struct testmode_relay_result *relay_result;
     testmode_func_table_entry_type *testmode_func_entry = NULL;
-    int nIndex = 0;  
+    int nIndex = 0;  // [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 First Booting Check
 
     if (sub1_cmd >= TEST_MODE_MAX) {
         relay_result = (struct testmode_relay_result *)testmode_reponse_not_supported();
@@ -652,6 +657,7 @@ static int  testmode_process_command(uint32_t sub1_cmd, uint32_t sub2_cmd, struc
 
     testmode_func_entry = &g_testmode_func_table[sub1_cmd];
 
+    // START [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 First Booting Check {
     while( g_testmode_func_table[nIndex].sub1_cmd != TEST_MODE_MAX )
     {
         if( sub1_cmd == g_testmode_func_table[nIndex].sub1_cmd )
@@ -668,7 +674,7 @@ static int  testmode_process_command(uint32_t sub1_cmd, uint32_t sub2_cmd, struc
  //jungjr_compile_error       return relay_result;
          goto exit;
     }
-   
+    // END [sangki.hyun@lge.com] 20100801 LAB1_FW : Testmode 8.1 First Booting Check }
 
     if (testmode_func_entry->testmode_func == NULL) {
         relay_result = (struct testmode_relay_result *)testmode_reponse_not_supported();
@@ -689,7 +695,7 @@ exit:
 }
 
 #ifdef LGE_TEST_MODE_TBD
-
+// START sungchae.koo@lge.com 2010/10/06 LAB1_FW : DIAG_UART_TDMB_SUPPORT {
 extern int8_t broadcast_tdmb_blt_power_on(void);
 extern int8_t broadcast_tdmb_blt_power_off(void);
 extern int8_t broadcast_tdmb_blt_open(void);
@@ -756,7 +762,7 @@ exit:
 
     return HANDLE_OK;
 }
-
+// END sungchae.koo@lge.com 2010/10/06 LAB1_FW }
 
 static int handle_testmode_rpc_call(struct msm_rpc_server *server, struct rpc_request_hdr *req, unsigned len)
 {
@@ -771,9 +777,9 @@ static int handle_testmode_rpc_call(struct msm_rpc_server *server, struct rpc_re
 			args->sub_cmd1 = be32_to_cpu(args->sub_cmd1);
 			args->sub_cmd2 = be32_to_cpu(args->sub_cmd2);
 
-
+			/* LGE_CHANGE_E, [youngsin.lee@lge.com], 2010/02/24 */
 			printk(KERN_INFO "handle_testmode_rpc_call cmd %d, %d\n", args->sub_cmd1, args->sub_cmd2);
-			
+			/* LGE_CHANGE_E, [youngsin.lee@lge.com] */			
 
 			memset(server->retvalues.ret_string, 0, sizeof(server->retvalues.ret_string));
 		
@@ -785,7 +791,7 @@ static int handle_testmode_rpc_call(struct msm_rpc_server *server, struct rpc_re
 		}
 			break;
 
-
+// START sungchae.koo@lge.com 2010/10/06 LAB1_FW : DIAG_UART_TDMB_SUPPORT {
 		case ONCRPC_DIAG_TDMB_TEST_CMD_PROC:
 		{
 			struct rpc_misc_apps_bases_args *args;
@@ -793,7 +799,9 @@ static int handle_testmode_rpc_call(struct msm_rpc_server *server, struct rpc_re
 			args->sub_cmd1 = be32_to_cpu(args->sub_cmd1);
 			args->sub_cmd2 = be32_to_cpu(args->sub_cmd2);
 
-			
+			/* LGE_CHANGE_E, [youngsin.lee@lge.com], 2010/02/24 */
+			//printk("handle_testmode_rpc_call cmd %d, %d\n", args->sub_cmd1, args->sub_cmd2);
+			/* LGE_CHANGE_E, [youngsin.lee@lge.com] */			
 
 			memset(server->retvalues.ret_string, 0, sizeof(server->retvalues.ret_string));
 		
@@ -804,7 +812,7 @@ static int handle_testmode_rpc_call(struct msm_rpc_server *server, struct rpc_re
 			}
 		}
 			break;
-
+// END sungchae.koo@lge.com 2010/10/06 LAB1_FW }
 
 		default:
 
@@ -951,4 +959,4 @@ err_reg_dev:
 }
 
 module_init(rpc_testmode_server_init);
-
+// LGE_DOM_UPDATE_E itsuki@lge.com 2009/10/07 }

@@ -26,8 +26,8 @@
 #include <mach/vreg.h>
 #include <mach/clk.h>
 
-#define LGE_DISABLE_VREG_CTRL                  
-#define LGE_MIGRATE_MCLK_CTRL                   
+#define LGE_DISABLE_VREG_CTRL                   // taeyol.kim@lge.com
+#define LGE_MIGRATE_MCLK_CTRL                   // taeyol.kim@lge.com
 
 #define CAMIF_CFG_RMSK             0x1fffff
 #define CAM_SEL_BMSK               0x2

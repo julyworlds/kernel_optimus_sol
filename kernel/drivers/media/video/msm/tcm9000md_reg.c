@@ -19,7 +19,9 @@
 
 #define TCM9001MD_SENSOR  // donghyun.kwon(20110609) : change initial code for VGA CAM
 
-
+/* chanhee.park@lge.com 
+   temp : we define the delay time on MSM as 0xFFFE address 
+*/
 /************************************************************
 ; slave address 0x7A
 ;	MCK:31M	PCK:60M

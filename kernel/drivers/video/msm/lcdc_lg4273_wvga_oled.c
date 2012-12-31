@@ -49,13 +49,17 @@
 #define ESD_REG_CHECK msecs_to_jiffies(2000)
 
 
-
+//LGE_UPDATE_S minhobb2.kim@lge.com for adding PLC Control by only TMUS HW request (2011.06.14)
 #if defined (CONFIG_LGE_MODEL_E739)
 //#define FEATURE_LGD_PLC_CONTROL
 #else
-
+/* enable or disable the PLC Control  */
+/* Disable the PLC Control by HW request.
+* 2011-05-07, cheongil.hyun@lge.com
+*/
+/*#define FEATURE_LGD_PLC_CONTROL*/
 #endif
-
+//LGE_UPDATE_E minhobb2.kim@lge.com for adding PLC Control by only TMUS HW request (2011.06.14)
 
 #define OLED_REV_1_0	1
 #define OLED_REV_2_0	2
@@ -86,7 +90,10 @@ struct lgdisplay_state_type{
 	boolean disp_powered_up;
 };
 
-
+/* LGE_CHANGE
+* Do Not initialize the oled driver on boot
+* 2011-03-22, cheongil.hyun@lge.com
+*/
 static struct lgdisplay_state_type lgdisplay_state = { 1, 1, 1 };
 static struct msm_panel_common_pdata *lcdc_lgdisplay_pdata;
 
@@ -1181,7 +1188,10 @@ static void oled_brightness_set(struct led_classdev *led_cdev, enum led_brightne
 		value = 15 ;
 
 #if 1
-
+	/* following code is just temporal!
+	 * this code should be removed after brightness tuning is finished
+	 * 2010-01-30, cleaneye.kim@lge.com
+	 */
 	if (value > 0)
 		value = 0xF;
 #endif
@@ -1459,7 +1469,8 @@ static void lgdisplay_disp_on(void)
 }
 
 #ifdef CONFIG_ESD_REG_CHECK
-
+/* To ESD test: check register 0xC4, if the value is wrong, re-initialze registers  */
+/* baryun.hwang@lge.com : Thu Aug  4 09:13:59 KST 2011*/
 static void reg_check(struct work_struct *work)
 {
 

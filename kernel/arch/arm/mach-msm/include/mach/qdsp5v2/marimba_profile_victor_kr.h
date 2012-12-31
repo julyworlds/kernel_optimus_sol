@@ -3150,7 +3150,13 @@
 	{ADIE_CODEC_ACTION_ENTRY, ADIE_CODEC_PACK_ENTRY(0x11, 0xff, 0x00)}, \
 	{ADIE_CODEC_ACTION_STAGE_REACHED, ADIE_CODEC_DIGITAL_OFF} }
 
-
+/* LGE_CHANGE
+  * To remove noise.
+  * Codec Rx PA control register 4(0x38) : Set legacy mode (from 0x82 to 0x80)
+  * Codec Rx PA control register 3(0x37) : Set Inverted polarity at LINE-OUT LEFT POLARITY
+  *                                                         (from 0x82 to 0x80)
+  * 2011-03-18, junyoub.an@lge.com
+  */
 #define HEADSET_STEREO_SPEAKER_STEREO_RX_CAPLESS_48000_OSR_256 \
 	{{ADIE_CODEC_ACTION_STAGE_REACHED, ADIE_CODEC_FLASH_IMAGE}, \
 	{ADIE_CODEC_ACTION_ENTRY, ADIE_CODEC_PACK_ENTRY(0x3B, 0xFF, 0xac)}, \
@@ -3352,7 +3358,13 @@
 	{ADIE_CODEC_ACTION_ENTRY, ADIE_CODEC_PACK_ENTRY(0x33, 0x80, 0x00)}, \
 	{ADIE_CODEC_ACTION_STAGE_REACHED, ADIE_CODEC_DIGITAL_OFF} }
 
-
+/* LGE_CHANGE
+  * Codec AuxPGA(0x2B) : Increase AUXPGA LEFT GAIN (from 0x89 to 0x8f)
+  * Codec AuxPGA(0x2C) : Increase AUXPGA RIGHT GAIN (from 0x89 to 0x8f)
+  * 2011-04-05, junyoub.an@lge.com
+  * Codec Rx PA contro(0x37) : Change mode from stereo to mono
+  * 2011-04-26, bob.cho@lge.com
+  */
 #define ADIE_AUXPGA_SPEAKER_RX \
 	{{ADIE_CODEC_ACTION_STAGE_REACHED, ADIE_CODEC_FLASH_IMAGE}, \
 	{ADIE_CODEC_ACTION_ENTRY, ADIE_CODEC_PACK_ENTRY(0x80, 0x02, 0x02)}, \

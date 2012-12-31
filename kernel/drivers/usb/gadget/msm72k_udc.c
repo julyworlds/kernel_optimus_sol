@@ -48,7 +48,10 @@
 #include <linux/wakelock.h>
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+/* LGE_CHANGE
+ * Add Header for LGE USB
+ * 2011-01-14, hyunhui.park@lge.com
+ */
 #include "u_lgeusb.h"
 
 static int lgeusb_cable_type = -1;
@@ -196,7 +199,10 @@ struct usb_info {
 	struct msm_hsusb_gadget_platform_data *pdata;
 	struct work_struct phy_status_check;
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_FACTORY_CABLE_WQ
-
+	/* LGE_CHANGE
+	 * Detection of factory cable using wq
+	 * 2011-01-14, hyunhui.park@lge.com
+	 */
 	struct delayed_work lgeusb_cable_det;
 #endif
 
@@ -296,7 +302,10 @@ static inline enum chg_type usb_get_chg_type(struct usb_info *ui)
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
 	struct msm_otg *otg = to_msm_otg(ui->xceiv);
 
-
+	/* LGE_CHANGE
+	 * Check if PIF Cable is connected.
+	 * 2011-01-21, hyunhui.park@lge.com
+	 */
 	lgeusb_cable_type = lgeusb_detect_factory_cable();
 	atomic_set(&otg->lgeusb_cable_type, lgeusb_cable_type);
 #endif
@@ -447,7 +456,11 @@ static void usb_chg_detect(struct work_struct *w)
 		otg_set_power(ui->xceiv, maxpower);
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+	/* LGE_CHANGE
+	 * If cable is factory cable,
+	 * we avoid to enter into lpm for manufacturing process
+	 * 2011-01-21, hyunhui.park@lge.com
+	 */
 	if (lgeusb_cable_type)
 		goto skip;
 #endif
@@ -1393,7 +1406,10 @@ static irqreturn_t usb_interrupt(int irq, void *data)
 
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_FACTORY_CABLE_WQ
-
+/* LGE_CHANGE
+ * Detection of factory cable using wq.
+ * 2011-01-14, hyunhui.park@lge.com
+ */
 static void lgeusb_cable_detect_work(struct work_struct *w)
 {
 	/* With USB S/W reset */
@@ -1428,7 +1444,10 @@ static void usb_prepare(struct usb_info *ui)
 	if (ui->pdata && ui->pdata->is_phy_status_timer_on)
 		INIT_WORK(&ui->phy_status_check, usb_phy_stuck_recover);
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_FACTORY_CABLE_WQ
-
+	/* LGE_CHANGE
+	 * Detection of factory cable using wq
+	 * 2011-01-14, hyunhui.park@lge.com
+	 */
 	INIT_DELAYED_WORK(&ui->lgeusb_cable_det, lgeusb_cable_detect_work);
 #endif
 }
@@ -1596,7 +1615,10 @@ static void usb_do_work(struct work_struct *w)
 					cancel_delayed_work_sync(&ui->chg_det);
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_FACTORY_CABLE_WQ
-		
+				/* LGE_CHANGE
+				 * Detection of factory cable using wq
+				 * 2011-01-14, hyunhui.park@lge.com
+				 */
 				cancel_delayed_work(&ui->lgeusb_cable_det);
 #endif
 
@@ -1707,7 +1729,10 @@ static void usb_do_work(struct work_struct *w)
 
 				usb_reset(ui);
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_FACTORY_CABLE_WQ
-			
+				/* LGE_CHANGE
+				 * Detection of factory cable using wq
+				 * 2011-01-14, hyunhui.park@lge.com
+				 */
 				schedule_delayed_work(&ui->lgeusb_cable_det, 0);
 /*
 				if(lgeusb_detect_factory_cable()) {

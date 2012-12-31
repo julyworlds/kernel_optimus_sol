@@ -258,8 +258,12 @@ struct mtp_ext_config_desc_function {
 };
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
-
+/* LGE_CHANGE
+ * MS Ext Desciptor for MTP and adb (to use in testing driver).
+ * FIXME:MUST use ALWAYS MTP with ADB enabled.
+ * This will be changed in future use.
+ * 2011-02-09, hyunhui.park@lge.com
+ */
 
 /* MTP Extended Configuration Descriptor */
 struct {

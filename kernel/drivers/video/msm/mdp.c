@@ -873,7 +873,10 @@ static void mdp_drv_init(void)
 	}
 
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
-
+/* LGE_CHANGE
+ *	to avoid the display off in boot time
+ *	2011-03-14 cheongil.hyun@lge.com
+ */
 	atomic_inc(&mdp_block_power_cnt[MDP_OVERLAY1_BLOCK]);
 #endif
 
@@ -1486,7 +1489,10 @@ static void mdp_suspend_sub(void)
 	flush_workqueue(mdp_pipe_ctrl_wq);
 
 	#ifdef CONFIG_MACH_MSM8X55_VICTOR
-
+	/* LGE_CHANGE
+	 *	to avoid the display off in boot time
+	 *	2011-03-14 cheongil.hyun@lge.com
+	 */
 	{
 		static int s_b_first = TRUE;
 		if (s_b_first)	{

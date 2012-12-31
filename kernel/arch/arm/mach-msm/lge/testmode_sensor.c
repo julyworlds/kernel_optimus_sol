@@ -15,7 +15,7 @@
  * along with this program; if not, you can find it at http://www.fsf.org.
  */
 //LGE jspark - sensor testmode
-
+// [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE
 #include <linux/module.h>
 #include <linux/kernel.h> 
 #include <mach/msm_rpcrouter.h>

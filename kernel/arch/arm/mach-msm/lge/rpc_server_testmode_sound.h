@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can find it at http://www.fsf.org.
  */
-
+// [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE
+// LGE_DOM_UPDATE_S jin333.kim@lge.com 2010/01/19 {
 
 /* MP3 Test (250-27-X)  Test mode 7.8 */
 typedef enum 
@@ -75,6 +76,6 @@ extern void *testmode_reponse_not_supported(void);
 //extern void mvs_pkt_loopback_start();
 //extern void mvs_pkt_loopback_stop();
 extern int check_lcd_status(void);
-
+// LGE_DOM_UPDATE_E jin333.kim@lge.com 2010/01/19 }
 
 

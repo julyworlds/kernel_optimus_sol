@@ -154,7 +154,7 @@ static void __exit atcmd_class_exit(void)
 module_init(atcmd_class_init);
 module_exit(atcmd_class_exit);
 
-MODULE_AUTHOR("kimeh");
+MODULE_AUTHOR("kimeh@lge.com");
 MODULE_DESCRIPTION("LGE_c710_atcmd class driver");
 MODULE_LICENSE("GPL");
 

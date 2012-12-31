@@ -61,23 +61,24 @@
 #define WLAN_RESET_GPIO CONFIG_BCM4329_GPIO_WL_RESET
 #endif
 
-
+/* LGE_CHANGE_S, [jongpil.yoon@lge.com], 2011-01-07, <Add BCM4330> */ 
 #ifdef CONFIG_BCM4330_GPIO_WL_RESET
 #define WLAN_RESET_GPIO CONFIG_BCM4330_GPIO_WL_RESET
 #endif
+/* LGE_CHANGE_E, [jongpil.yoon@lge.com], 2011-01-07, <Add BCM4330> */
 
-
+/* LGE_CHANGE_S [jisung.yang@lge.com] 2010-04-24, for gpio_to_irq */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 #include <asm/gpio.h>
-
+/*LGE_CHANGE_S, [dongp.kim@lge.com], 2010-03-17, mmc_fmax is 24576000Hz for Wi-Fi */ 
 #define BRCM_WLAN_SLOT 3
-
+/*LGE_CHANGE_E, [dongp.kim@lge.com], 2010-03-17, mmc_fmax is 24576000Hz for Wi-Fi */ 
 #endif
-
+/* LGE_CHANGE_E [jisung.yang@lge.com] 2010-04-24, for gpio_to_irq */
 
 #define DRIVER_NAME "msm-sdcc"
 
-
+/* LGE_CHANGE [fred.cho@lge.com] 2010-08-05, Delay time for work-queue to rescan. */
 #define TIME_STEP ( 4 * HZ / 5 )
 
 #define DBG(host, fmt, args...)	\
@@ -138,7 +139,7 @@ msmsdcc_print_status(struct msmsdcc_host *host, char *hdr, uint32_t status)
 }
 #endif
 
-
+/* LGE_CHANGE_S [jisung.yang@lge.com] 2010-04-24, Support Host Wakeup */
 #if defined(CONFIG_BRCM_LGE_WL_HOSTWAKEUP)
 struct early_suspend dhdpm;
 EXPORT_SYMBOL(dhdpm);
@@ -165,7 +166,7 @@ void unregister_mmc_card_pm(void)
 }
 EXPORT_SYMBOL(unregister_mmc_card_pm);
 #endif
-
+/* LGE_CHANGE_E [jisung.yang@lge.com] 2010-04-24, Support Host Wakeup */
 
 static void
 msmsdcc_start_command(struct msmsdcc_host *host, struct mmc_command *cmd,
@@ -750,7 +751,12 @@ msmsdcc_pio_irq(int irq, void *dev_id)
 			break;
 
 #if 0
-
+		/* LGE_CHANGE
+		 * QCT SR Defect 00364002
+		 * Kernel Panic issue by Null Pointer
+		 * Exception handling
+		 * fred.cho@lge.com , 2010-08-26
+		 */
 
 		if(!host->curr.data)
 		{
@@ -773,13 +779,13 @@ msmsdcc_pio_irq(int irq, void *dev_id)
 		if (status & MCI_TXACTIVE)
 			len = msmsdcc_pio_write(host, buffer, remain, status);
 
-
+/*LGE_CHANGE_S, [jisung.yang@lge.com], 2010-04-24, when PIO_irq, delay is given */ 
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 		if (host->mmc->card != NULL && host->mmc->card->type == MMC_TYPE_SDIO){ 
 			msmsdcc_delay(host);
 		}
 #endif	
-
+/*LGE_CHANGE_E, [jisung.yang@lge.com], 2010-04-24, when PIO_irq, delay is given */ 
 		/* Unmap the buffer */
 		kunmap_atomic(buffer, KM_BIO_SRC_IRQ);
 		local_irq_restore(flags);
@@ -1356,7 +1362,12 @@ int msmsdcc_set_pwrsave(struct mmc_host *mmc, int pwrsave)
 
 /* FIXME: temporal deletion of code for enabling compile */
 
-
+/* LGE_CHANGE
+ * Func : check gpio pin status
+ * If the status is changed, go to rescan through delayed work queue.
+ * And still same status, just skip.
+ * fred.cho@lge.com, 2010-08-05
+ */
 static int msmsdcc_get_status(struct mmc_host *mmc)
 {
 	struct msmsdcc_host *host = mmc_priv(mmc);
@@ -1366,43 +1377,7 @@ static int msmsdcc_get_status(struct mmc_host *mmc)
 
 	if (host->plat->status) {
 
-// LGE_UPDATE_S /* To distinguish between Real-Interrupt and Fake-Interrupt */
-#if 0
 		status = host->plat->status(mmc_dev(mmc));
-#else
-		#define MAX_RECHECK 4
-		#define SD_DETECT_GPIO_RECHECK_DELAYTIME 25 // 25ms
-		int gpio_recheck_count=0;
-		int gpio_first_value=0;
-		int gpio_hit_count=0;
-
-		gpio_first_value=host->plat->status(mmc_dev(mmc));
-		for(gpio_recheck_count=0 ;gpio_recheck_count < MAX_RECHECK ; gpio_recheck_count++ )
-		{
-			msleep(SD_DETECT_GPIO_RECHECK_DELAYTIME); /* Time-Delay¸¦ ÁØ´Ù.*/
-			status = host->plat->status(mmc_dev(mmc)); /* Recheck */
-			if(gpio_first_value != status) /* Fake-Interrupt Case */
-			{
-				printk(KERN_INFO "FAKE-INTERRUPT! gpio_first_value:%d,status:%d\n", 
-					gpio_first_value,status);
-				gpio_hit_count=0;
-				gpio_first_value = status;
-				gpio_recheck_count=0;
-			}
-			else
-			{
-				gpio_hit_count++;
-				if(gpio_hit_count >= MAX_RECHECK)
-				{
-					printk(KERN_INFO "INTERRUPT-HIT!REAL! gpio_hit_count:%d\n", 
-						gpio_hit_count);
-					gpio_hit_count=0;
-					break;
-				}
-			}
-		}
-#endif
-// LGE_UPDATE_E
 		host->eject = !status;
 
 		if (status ^ host->oldstat) {
@@ -1508,7 +1483,12 @@ static const struct mmc_host_ops msmsdcc_ops = {
 	.get_status = msmsdcc_get_status,
 };
 
-
+/* LGE_CHANGE
+ * Func : check gpio pin status
+ * If the status is changed, go to rescan through delayed work queue.
+ * And still same status, just skip.
+ * fred.cho@lge.com, 2010-08-05
+ */
 static void
 msmsdcc_check_status(unsigned long data)
 {
@@ -1523,7 +1503,7 @@ msmsdcc_check_status(unsigned long data)
 		if (status ^ host->oldstat) {
 			pr_info("%s: Slot status change detected (%d -> %d)\n",
 					mmc_hostname(host->mmc), host->oldstat, status);
-		
+			/* LGE_DEV_PORTING, [jongpil.yoon@lge.com], 2011-03-05, <for WiFi> */
 #ifdef CONFIG_LGE_BCM432X_PATCH
 			if(host->plat->status_irq == MSM_GPIO_TO_INT(WLAN_RESET_GPIO)) {
 				printk(KERN_ERR "[host->plat->status_irq:%d:MSM_GPIO_TO_INT:%d:%s:%d]\n",
@@ -1540,7 +1520,7 @@ msmsdcc_check_status(unsigned long data)
 			}
 			else
 #endif
-
+				/* LGE_DEV_PORTING, [jongpil.yoon@lge.com], 2011-03-05, <for WiFi> */
 				mmc_detect_change(host->mmc, 0);
 		}
 		host->oldstat = status;
@@ -1686,7 +1666,7 @@ static void msmsdcc_early_suspend(struct early_suspend *h)
 	struct msmsdcc_host *host =
 		container_of(h, struct msmsdcc_host, early_suspend);
 	unsigned long flags;
-
+/* LGE_CHANGE_S [jisung.yang@lge.com] 2010-04-24, don't do this to WLAN */
 #ifdef  WLAN_RESET_GPIO
 	if ( host->plat->status_irq != gpio_to_irq(WLAN_RESET_GPIO) )
 #endif
@@ -1696,14 +1676,14 @@ static void msmsdcc_early_suspend(struct early_suspend *h)
 		host->mmc->caps &= ~MMC_CAP_NEEDS_POLL;
 		spin_unlock_irqrestore(&host->lock, flags);
 	}
-
+/* LGE_CHANGE_S [jisung.yang@lge.com] 2010-04-24, don't do this to WLAN */
 };
 static void msmsdcc_late_resume(struct early_suspend *h)
 {
 	struct msmsdcc_host *host =
 		container_of(h, struct msmsdcc_host, early_suspend);
 	unsigned long flags;
-
+/* LGE_CHANGE_S [jisung.yang@lge.com] 2010-04-24, don't do this to WLAN */
 #ifdef  WLAN_RESET_GPIO
 	if ( host->plat->status_irq != gpio_to_irq(WLAN_RESET_GPIO) )
 #endif
@@ -1715,7 +1695,7 @@ static void msmsdcc_late_resume(struct early_suspend *h)
 			spin_unlock_irqrestore(&host->lock, flags);
 		}
 	}
-
+/* LGE_CHANGE_S [jisung.yang@lge.com] 2010-04-24, don't do this to WLAN */
 };
 #endif
 
@@ -1921,7 +1901,7 @@ msmsdcc_probe(struct platform_device *pdev)
 	 */
 	mmc->ops = &msmsdcc_ops;
 	mmc->f_min = plat->msmsdcc_fmin;
-
+/*LGE_CHANGE_S, [dongp.kim@lge.com], 2010-03-17, mmc_fmax is 24576000Hz for Wi-Fi */ 
 #if !defined(CONFIG_LGE_BCM432X_PATCH)
 	mmc->f_max = plat->msmsdcc_fmax;
 #else
@@ -1946,7 +1926,7 @@ msmsdcc_probe(struct platform_device *pdev)
 		mmc->caps |= MMC_CAP_MMC_HIGHSPEED | MMC_CAP_SD_HIGHSPEED;
 	}
 #endif	/* CONFIG_LGE_BCM432X_PATCH */
-
+/*LGE_CHANGE_E, [dongp.kim@lge.com], 2010-03-17, mmc_fmax is 24576000Hz for Wi-Fi */ 
 
 	if (plat->nonremovable)
 		mmc->caps |= MMC_CAP_NONREMOVABLE;
@@ -2340,6 +2320,7 @@ msmsdcc_runtime_suspend(struct device *dev)
 		host->sdcc_suspending = 1;
 		mmc->suspend_task = current;
 
+/* LGE_CHANGE_S, [jisung.yang@lge.com], 2010-04-24, <never sleep policy - host wakeup> */
 #if defined(CONFIG_BRCM_LGE_WL_HOSTWAKEUP)
 		if (host->plat->status_irq == gpio_to_irq(WLAN_RESET_GPIO)) {
 			if(dhdpm.suspend != NULL) {
@@ -2351,7 +2332,7 @@ msmsdcc_runtime_suspend(struct device *dev)
 		}
 		else {
 #endif
-			
+/* LGE_CHANGE_E, [jisung.yang@lge.com], 2010-05-04, <do not do for wifi> */			
 			/*
 			 * MMC core thinks that host is disabled by now since
 			 * runtime suspend is scheduled after msmsdcc_disable()
@@ -2369,9 +2350,9 @@ msmsdcc_runtime_suspend(struct device *dev)
 			pm_runtime_get_noresume(dev);
 			rc = mmc_suspend_host(mmc);
 			pm_runtime_put_noidle(dev);
-
+/* LGE_CHANGE_S, [jisung.yang@lge.com], 2010-04-24, <never sleep policy - host wakeup> */
 		}
-			
+/* LGE_CHANGE_E, [jisung.yang@lge.com], 2010-05-04, <do not do for wifi> */			
 
 		if (!rc) {
 			/*
@@ -2381,7 +2362,7 @@ msmsdcc_runtime_suspend(struct device *dev)
 			mmc->ios.clock = 0;
 			mmc->ops->set_ios(host->mmc, &host->mmc->ios);
 
-
+/* LGE_CHANGE_S, [jisung.yang@lge.com], 2010-05-04, <do not do for wifi> */
 #ifndef WLAN_RESET_GPIO
 		if (mmc->card && (mmc->card->type == MMC_TYPE_SDIO) &&
 				(mmc->pm_flags & MMC_PM_WAKE_SDIO_IRQ)) {
@@ -2389,7 +2370,7 @@ msmsdcc_runtime_suspend(struct device *dev)
 		if (mmc->card && (mmc->card->type == MMC_TYPE_SDIO) &&
 				(mmc->pm_flags & MMC_PM_WAKE_SDIO_IRQ) && host->plat->status_irq != gpio_to_irq(WLAN_RESET_GPIO) ) {
 #endif			
-		
+/* LGE_CHANGE_E, [jisung.yang@lge.com], 2010-05-04, <do not do for wifi> */			
 			if (host->plat->sdiowakeup_irq) {
 				host->sdio_irq_disabled = 0;
 				msmsdcc_enable_irq_wake(host);
@@ -2423,7 +2404,7 @@ msmsdcc_runtime_resume(struct device *dev)
 		writel(host->mci_irqenable, host->base + MMCIMASK0);
 		dsb();
 
-
+/* LGE_CHANGE_S, [jisung.yang@lge.com], 2010-05-04, <do not do for wifi> */
 #ifndef WLAN_RESET_GPIO
 //FRANDRO_README_S
 		if (mmc->card && (mmc->card->type == MMC_TYPE_SDIO) &&
@@ -2435,7 +2416,7 @@ msmsdcc_runtime_resume(struct device *dev)
 				(mmc->pm_flags & MMC_PM_WAKE_SDIO_IRQ) &&
 				!host->sdio_irq_disabled && host->plat->status_irq != gpio_to_irq(WLAN_RESET_GPIO) ) {
 #endif			
-
+/* LGE_CHANGE_E, [jisung.yang@lge.com], 2010-05-04, <do not do for wifi> */
 				if (host->plat->sdiowakeup_irq) {
 					disable_irq_nosync(
 						host->plat->sdiowakeup_irq);
@@ -2446,13 +2427,13 @@ msmsdcc_runtime_resume(struct device *dev)
 
 		spin_unlock_irqrestore(&host->lock, flags);
 
-
+		// LGE_DEV_PORTING, 2011-02-24, jongpil.yoon@lge.com, <wifi suspend/resume>
 		if (host->plat->status_irq != gpio_to_irq(WLAN_RESET_GPIO)) {
 			mmc_resume_host(mmc);
 		}
+		// LGE_DEV_END, 2011-02-24, jongpil.yoon@lge.com, <wifi suspend/resume>
 
-
-
+/* LGE_CHANGE_S, [jisung.yang@lge.com], 2010-04-24, <never sleep policy - host wakeup> */
 #if defined(CONFIG_BRCM_LGE_WL_HOSTWAKEUP)
 		//if ( mmc->card && mmc->card->type == MMC_TYPE_SDIO) {
 		if (host->plat->status_irq == gpio_to_irq(WLAN_RESET_GPIO)) {
@@ -2463,7 +2444,7 @@ msmsdcc_runtime_resume(struct device *dev)
 			}
 		}
 #endif	
-
+/* LGE_CHANGE_E, [jisung.yang@lge.com], 2010-04-24, <never sleep policy - host wakeup> */
 
 		/*
 		 * After resuming the host wait for sometime so that

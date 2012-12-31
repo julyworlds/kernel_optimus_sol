@@ -13,7 +13,7 @@
  *
  */
 
-
+ //LGE_CHAGE[irene.park@lge.com] 2010-06- 04 - to get flex value from ARM9 
  
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -137,7 +137,7 @@ int lg_get_flex_from_xml(char *strIndex, char* flexValue)
 	return 0;
 
 }
-
+//LGE_CHANGE_E [seypark@lge.com]
 
 int lge_ats_handle_flex(struct msm_rpc_server *server,
 							 struct rpc_request_hdr *req, unsigned len
@@ -186,11 +186,11 @@ int lge_ats_handle_flex(struct msm_rpc_server *server,
 			server->retvalue.ret_value2 = 0;
 			printk(KERN_INFO "ONCRPC_LGE_GET_FLEX_OPERATOR_CODE_PROC return string : %d , %s\n",
 				  server->retvalue.ret_value1,server->retvalue.ret_string); 
-			
+			//LGE_CHANGE_S [bluerti@lge.com] 2009-08-17 <Activate fb_refresh during hidden reset > 
 	#if 0
 			if (!msm_fb_refesh_enabled && !fb_control_timer_init) { 
 				printk("[Blue Debug] Set Timer\n");
-				setup_timer(&lg_fb_control, lg_fb_control_timer, 0);	
+				setup_timer(&lg_fb_control, lg_fb_control_timer, 0);	// LGE_CHANGE [bluerti@lge.com] 2009-10-8
 		
 				if( strncmp(server->retvalue.ret_string,"ORG",3) ==0 ) { //ORG
 					mod_timer (&lg_fb_control,jiffies + (ORG_FB_TIMEOUT * HZ / 1000) ); //15sec
@@ -201,7 +201,7 @@ int lge_ats_handle_flex(struct msm_rpc_server *server,
 				fb_control_timer_init = 1;
 			}
 	#endif
-
+			//LGE_CHANGE_E [bluerti@lge.com]
 		
 			break;
 		}

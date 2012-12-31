@@ -1230,7 +1230,7 @@ CONFIG_BRCM_USE_WLBTAMP=y
 # CONFIG_USB_HSO is not set
 # CONFIG_USB_IPHETH is not set
 # CONFIG_WAN is not set
-
+# LGE_CHANGE_S, [Lab1_DCM_Data_Froyo_005][jewon.lee@lge.com], 2010-11-02,  < PPP config enable for VPN >
 CONFIG_PPP=y
 CONFIG_PPP_MULTILINK=y
 CONFIG_PPP_FILTER=y
@@ -1243,7 +1243,7 @@ CONFIG_PPPOE=y
 CONFIG_PPPOL2TP=y
 CONFIG_PPPOLAC=y
 CONFIG_PPPOPNS=y
-
+# LGE_CHANGE_E, [Lab1_DCM_Data_Froyo_005][jewon.lee@lge.com], 2010-11-02,  < PPP config enable for VPN >
 
 CONFIG_SLIP=y
 CONFIG_SLIP_COMPRESSED=y

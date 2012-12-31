@@ -37,7 +37,10 @@ struct ats_mtc_key_log_type ats_mtc_key_log1;
 extern unsigned int ats_mtc_log_mask;
 extern void ats_mtc_send_key_log_to_eta(struct ats_mtc_key_log_type *);
 
-
+/* LGE_CHANGE
+ * support MTC using diag port
+ * 2010-07-11 taehung.kim@lge.com
+ */
 #if defined (CONFIG_MACH_MSM7X27_THUNDERC) || defined(LG_FW_MTC)
 extern unsigned char g_diag_mtc_check;
 extern void mtc_send_key_log_data(struct ats_mtc_key_log_type* p_ats_mtc_key_log);
@@ -150,7 +153,10 @@ static const struct input_device_id ats_event_log_ids[] = {
 
 static void event_log_work_func(struct work_struct *work)
 {
-
+/* LGE_CHANGE
+ * support MTC using diag port
+ * 2010-07-11 taehung.kim@lge.com
+ */
 #if defined (CONFIG_MACH_MSM7X27_THUNDERC) || defined(LG_FW_MTC)
 	if(g_diag_mtc_check==1)
 		mtc_send_key_log_data(&ats_mtc_key_log1);

@@ -24,7 +24,10 @@
 #include <linux/slab.h>
 
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
-
+/* LGE_CHANGE
+  * For qt602240_ts bring up for Victor
+  * 2011-01-25, guilbert.lee@lge.com
+  */
 #include <linux/gpio.h>
 #include <mach/board_lge.h>
 
@@ -209,7 +212,10 @@
 
 /* Touchscreen absolute values */
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
-
+/* LGE_CHANGE
+  * For qt602240_ts bring up for Victor
+  * 2011-01-25, guilbert.lee@lge.com
+  */
 #define QT602240_MAX_XC			479
 #define QT602240_MAX_YC			798
 #define QT602240_MAX_AREA		0xFF
@@ -301,7 +307,10 @@ static const u8 init_vals_ver_21[] = {
 };
 
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
-
+/* LGE_CHANGE
+  * For qt602240_ts bring up for Victor
+  * 2011-01-25, guilbert.lee@lge.com
+  */
 static const u8 init_vals_ver_22[] = {
 	/* QT602240_GEN_COMMAND(6) */
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

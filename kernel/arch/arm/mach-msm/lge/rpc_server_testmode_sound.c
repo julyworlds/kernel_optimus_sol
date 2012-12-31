@@ -1,4 +1,4 @@
-/* 
+/* arch/arm/mach-msm/rpc_server_testmode_sound.c
  *
  * Copyright (c) 2008-2009, LG Electronics. All rights reserved.
  *
@@ -14,7 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, you can find it at http://www.fsf.org.
  */
-
+// [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE
+// LGE_DOM_UPDATE_S jin333.kim@lge.com 2010/01/19 {
 #include <linux/module.h>
 #include <linux/kernel.h> 
 #include <linux/interrupt.h>
@@ -137,9 +138,10 @@ void *testmode_mp3_test(uint32_t sub1_cmd, uint32_t sub2_cmd)
 }
 
 
+// START [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE {
 //extern void akm_test_mode_set_audio(bool test_on);
 #define akm_test_mode_set_audio(test_on)  
-
+// END [sangki.hyun@lge.com] 20100615 LAB1_FW }
 
 /* Speaker Phone Test (250-43-X) Test mode 7.8 */
 void *testmode_speaker_phone_test(uint32_t sub1_cmd, uint32_t sub2_cmd)
@@ -299,5 +301,5 @@ void *testmode_acoustic_test(uint32_t sub1_cmd, uint32_t sub2_cmd)
 	need_to_wait_for_sound =false;
 	return relay_result;
 }
-
+// LGE_DOM_UPDATE_E jin333.kim@lge.com 2010/01/19 }
 

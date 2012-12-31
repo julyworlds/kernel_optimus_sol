@@ -1230,7 +1230,7 @@ CONFIG_BRCM_USE_WLBTAMP=y
 
 #
 #	Enable VPN function
-
+#	- hyoseab.son@lge.com
 CONFIG_ATM_DRIVERS=y
 # CONFIG_ATM_DUMMY is not set
 # CONFIG_ATM_TCP is not set
@@ -2366,7 +2366,7 @@ CONFIG_ZRAM_STATS=y
 
 #
 #	Enable NFC function
-
+#	- seokmin.hong@lge.com
 #CONFIG_LGE_NFC_AT must be coupled with USES_LGE_NFC_AT in su610.mk
 #CONFIG_LGE_NXP_NFC=y
 CONFIG_LGE_NXP_DRIVER_TEST=y

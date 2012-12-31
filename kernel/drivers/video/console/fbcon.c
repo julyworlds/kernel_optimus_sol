@@ -562,12 +562,12 @@ static void fbcon_prepare_logo(struct vc_data *vc, struct fb_info *info,
 static void fbcon_prepare_logo(struct vc_data *vc, struct fb_info *info,
 			       int cols, int rows, int new_cols, int new_rows)
 {
-
+//LGE 110624 ntdeaewan.choi@lge.com
 #ifdef CONFIG_LGE_DOMESTIC
 	logo_shown = FBCON_LOGO_DONTSHOW;
 	return;
 #else
-
+//LGE 110624 ntdeaewan.choi@lge.com
 	/* Need to make room for the logo */
 	struct fbcon_ops *ops = info->fbcon_par;
 	int cnt, erase = vc->vc_video_erase_char, step;

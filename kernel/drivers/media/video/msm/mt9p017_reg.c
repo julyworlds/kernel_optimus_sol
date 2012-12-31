@@ -49,7 +49,7 @@ struct mt9p017_i2c_reg_conf const init_tbl[] =
 	{0x3EE2, 0x0060},	 // Manufacturer-Specific  
 	{0x3EF2, 0xD965},	 // Manufacturer-Specific  
 	{0x3EF8, 0x797F},	 // Manufacturer-Specific  
-	{0x3EFC, 0xA8EF},	                                                                 
+	{0x3EFC, 0xA8EF},	                                                                 //improve colomn noise_20110719_gungil.lee@lge.com
 	{0x3EFE, 0x1F0F},	 // Manufacturer-Specific  
 	{0x31E0, 0x1F01},	 // Manufacturer-Specific  
 	{0x3E00, 0x0429},	 // Manufacturer-Specific  

@@ -35,6 +35,12 @@ unsigned lge_get_pif_info(void)
 		return err;
 	}
 
+	/* 2011-01-26 by baborobo@lge.com
+	 * 0 : Boot-on by PMIC VBUS
+	       ( it is connected the USB Cable or the TA Charger )
+	 * 1 : Boot-on by Normal Power long key or reboot
+	 * 2 : Boot-on by PIF or PMIC remote-power-on Port
+	 */
 	return pif_value;
 }
 EXPORT_SYMBOL(lge_get_pif_info);

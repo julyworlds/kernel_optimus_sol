@@ -14,12 +14,13 @@
  * GNU General Public License for more details.
  *
  */
-
+//LGE jspark - sensor testmode
+// [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE
  
 #ifndef TESTMODE_ACCELATOR_H
 #define TESTMODE_ACCELATOR_H
 
-
+//LGE jspark - sensor testmode
 void* testmode_accelator(uint32_t sub1_cmd, uint32_t sub2_cmd);
 void* testmode_proximity(uint32_t sub1_cmd, uint32_t sub2_cmd);
 

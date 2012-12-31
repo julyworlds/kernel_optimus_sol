@@ -551,7 +551,7 @@ wl_pattern_atoh(char *src, char *dst)
 	return i;
 }
 
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-04-03, configs */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 #include <linux/fs.h>
 #include <linux/ctype.h>
@@ -798,7 +798,7 @@ err:
 	goto out;
 }
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-04-03, configs */
 
 int
 dhd_preinit_ioctls(dhd_pub_t *dhd)
@@ -808,7 +808,7 @@ dhd_preinit_ioctls(dhd_pub_t *dhd)
 	char iovbuf[WL_EVENTING_MASK_LEN + 12];	/*  Room for "event_msgs" + '\0' + bitvec  */
 
 	uint up = 0;
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-08-27, roam_off, PM */
 #if !defined(CONFIG_LGE_BCM432X_PATCH)
 #ifdef BCMCCX								/* LGE_CHANGE_S, 2011-0226, add CCX */	//by sjpark 11-03-15
 	uint roamvar = 0;
@@ -821,7 +821,7 @@ dhd_preinit_ioctls(dhd_pub_t *dhd)
 #endif
 	uint power_mode = PM_FAST;
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-08-27, roam_off, PM */
 	uint32 dongle_align = DHD_SDALIGN;
 	uint32 glom = 0;
 	int arpoe = 1;
@@ -856,11 +856,11 @@ dhd_preinit_ioctls(dhd_pub_t *dhd)
 		return BCME_NOTUP;
 	}
 	memcpy(dhd->mac.octet, iovbuf, ETHER_ADDR_LEN);
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-04-03, configs */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 	dhd_preinit_config(dhd, 0);
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-04-03, configs */
 
 	/* Set Country code */
 	if (dhd->country_code[0] != 0) {
@@ -870,12 +870,12 @@ dhd_preinit_ioctls(dhd_pub_t *dhd)
 		}
 	}
 
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-08-27, already PM setup is configured */
 #if !defined(CONFIG_LGE_BCM432X_PATCH)
 	/* Set PowerSave mode */
 	dhd_wl_ioctl_cmd(dhd, WLC_SET_PM, (char *)&power_mode, sizeof(power_mode), TRUE, 0);
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-08-27, already PM setup is configured */
 
 	/* Match Host and Dongle rx alignment */
 	bcm_mkiovar("bus:txglomalign", (char *)&dongle_align, 4, iovbuf, sizeof(iovbuf));
@@ -1070,7 +1070,7 @@ dhd_prot_stop(dhd_pub_t *dhd)
 	/* Nothing to do for CDC */
 }
 
-
+/* LGE_CHANGE_S, [yoohoo@lge.com], 2009-11-19, Use deepsleep instead of dhd_dev_reset when driver start or stop */
 #if defined(CONFIG_LGE_BCM432X_PATCH) && defined(CONFIG_BRCM_USE_DEEPSLEEP)
 extern dhd_pub_t * get_dhd_pub_from_dev(struct net_device *dev);
 int dhd_deep_sleep(struct net_device *dev, int flag)
@@ -1121,4 +1121,4 @@ int dhd_deep_sleep(struct net_device *dev, int flag)
 
 }
 #endif /* CONFIG_LGE_BCM432X_PATCH && CONFIG_BRCM_USE_DEEPSLEEP */
-
+/* LGE_CHANGE_E, [yoohoo@lge.com], 2009-11-19, Use deepsleep instead of dhd_dev_reset when driver start or stop */

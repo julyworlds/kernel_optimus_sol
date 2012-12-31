@@ -1128,7 +1128,10 @@ config RMNET_SMD_DATA_CHANNEL
 
 endchoice
 
-
+# LGE_CHANGE
+# Porting from Froyo
+# 2011-01-18, hyunhui.park@lge.com
+#
 config USB_SUPPORT_LGE_ANDROID_GADGET
 	boolean "USB Support LG Driver"
 	depends on USB_ANDROID

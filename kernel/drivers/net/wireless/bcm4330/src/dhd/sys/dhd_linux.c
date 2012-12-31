@@ -92,19 +92,19 @@ typedef struct histo_ {
 static histo_t vi_d1, vi_d2, vi_d3, vi_d4;
 #endif /* WLMEDIA_HTSF */
 
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-03-05, for gpio set in dhd_linux */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 #include <asm/gpio.h>
 #endif /* CONFIG_LGE_BCM432X_PATCH */
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-03-05, for gpio set in dhd_linux */
 
-
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-03-30, change ifname to wlan%d */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 #undef alloc_etherdev
 #define alloc_etherdev(sizeof_priv) \
 	alloc_netdev(sizeof_priv, "wlan%d", ether_setup)
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-03-30, change ifname to wlan%d */
 
 #if defined(CONFIG_MACH_MAHIMAHI) && defined(CONFIG_WIFI_CONTROL_FUNC)
 #include <linux/wifi_tiwlan.h>
@@ -408,11 +408,11 @@ module_param(dhd_msg_level, int, 0);
 module_param_string(firmware_path, firmware_path, MOD_PARAM_PATHLEN, 0);
 module_param_string(nvram_path, nvram_path, MOD_PARAM_PATHLEN, 0);
 
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-04-03, configs */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 module_param_string(config_path, config_path, MOD_PARAM_PATHLEN, 0);
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-04-03, configs */
 
 /* Watchdog interval */
 uint dhd_watchdog_ms = 10;
@@ -680,7 +680,7 @@ static int dhd_set_suspend(int value, dhd_pub_t *dhd)
 #endif
 
 				/* Enable packet filter, only allow unicast packet to send up */
-				dhd_set_packet_filter(1, dhd);
+//				dhd_set_packet_filter(1, dhd);
 
 #if !defined(CONFIG_LGE_BCM432X_PATCH)
 				/* If DTIM skip is set up as default, force it to wake
@@ -715,7 +715,7 @@ static int dhd_set_suspend(int value, dhd_pub_t *dhd)
 #endif
 
 				/* disable pkt filter */
-				dhd_set_packet_filter(0, dhd);
+//				dhd_set_packet_filter(0, dhd);
 
 #if !defined(CONFIG_LGE_BCM432X_PATCH)
 				/* restore pre-suspend setting for dtim_skip */
@@ -2628,8 +2628,10 @@ dhd_bus_start(dhd_pub_t *dhdp)
 	setbit(dhdp->eventmask, WLC_E_PFN_NET_FOUND);
 #endif /* PNO_SUPPORT */
 
-
-
+/* enable dongle roaming event */
+/* LGE_DEV_PORTING, [jongpil.yoon@lge.com], 2011-04-07, <current issue because of L2 Roaming> */
+	//setbit(dhdp->eventmask, WLC_E_ROAM);
+/* LGE_DEV_END, [jongpil.yoon@lge.com], 2011-04-07, <current issue because of L2 Roaming> */
 
 	dhdp->pktfilter_count = 1;
 	/* Setup filter to allow only unicast */
@@ -2991,7 +2993,7 @@ dhd_module_cleanup(void)
 	wifi_del_dev();
 #endif
 
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-03-05, for gpio set in dhd_linux */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 	//gpio_tlmm_config(GPIO_CFG(CONFIG_BCM4330_GPIO_WL_RESET, 0, GPIO_OUTPUT, GPIO_NO_PULL, GPIO_2MA), GPIO_ENABLE);
 	if (!gpio_get_value(CONFIG_BCM4330_GPIO_WL_RESET)) {
@@ -3001,7 +3003,7 @@ dhd_module_cleanup(void)
 	gpio_set_value(CONFIG_BCM4330_GPIO_WL_RESET, 0);
 	//gpio_tlmm_config(GPIO_CFG(CONFIG_BCM4330_GPIO_WL_RESET, 0, GPIO_INPUT, GPIO_NO_PULL, GPIO_2MA), GPIO_ENABLE);
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-03-05, for gpio set in dhd_linux */
 
 	/* Call customer gpio to turn off power with WL_REG_ON signal */
 	dhd_customer_gpio_wlan_ctrl(WLAN_POWER_OFF);
@@ -3064,11 +3066,11 @@ dhd_module_init(void)
 		goto fail_1;
 	}
 
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-03-05, for gpio set in dhd_linux */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 	gpio_set_value(CONFIG_BCM4330_GPIO_WL_RESET, 1);
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-03-05, for gpio set in dhd_linux */
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 27))
 		/*

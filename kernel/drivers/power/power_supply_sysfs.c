@@ -136,13 +136,13 @@ static struct device_attribute power_supply_attrs[] = {
 	POWER_SUPPLY_ATTR(voltage_min),
 	POWER_SUPPLY_ATTR(voltage_max_design),
 	POWER_SUPPLY_ATTR(voltage_min_design),
-
+// BEGIN: kidong0420.kim@lge.com 2011-04-14 display the battery voltage as mV unit	
 #ifdef CONFIG_MACH_LGE
 	POWER_SUPPLY_ATTR(batt_vol),
 #else
 	POWER_SUPPLY_ATTR(voltage_now),
 #endif
-
+// END: kidong0420.kim@lge.com 2011-04-14
 	POWER_SUPPLY_ATTR(voltage_avg),
 	POWER_SUPPLY_ATTR(current_now),
 	POWER_SUPPLY_ATTR(current_avg),

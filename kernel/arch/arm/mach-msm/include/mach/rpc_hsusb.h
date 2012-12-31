@@ -66,12 +66,12 @@ int msm_hsusb_send_productID(uint32_t product_id);
 int msm_hsusb_send_serial_number(const char *serial_number);
 int msm_hsusb_is_serial_num_null(uint32_t val);
 
-
+/* LGE_CHANGE_S [hyunhui.park@lge.com] 2009-04-21, Detect charger type using RPC  */
 #if defined(CONFIG_USB_SUPPORT_LGDRIVER_GSM) || \
 	defined(CONFIG_USB_SUPPORT_LGE_GADGET_GSM)
 int msm_hsusb_detect_chg_type(void);
 #endif
-
+/* LGE_CHANGE_E [hyunhui.park@lge.com] 2009-04-21 */
 
 #if defined(CONFIG_USB_SUPPORT_LGE_SERIAL_FROM_ARM9_IMEI)
 /* Type to hold UE IMEI */

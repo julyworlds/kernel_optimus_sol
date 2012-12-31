@@ -1,7 +1,7 @@
 /*
  *  drivers/input/keyboard/atcmd_virtual_kbd.c
  *
- *  This driver is made for virtual keyboard of AT COMMAND.
+ *  This driver is made for virtual keyboard of AT COMMAND. ynj.kim@lge.com
  *
  *  Copyright (c) 2010 LGE.
  *  

@@ -1450,7 +1450,9 @@ wl_iw_get_rssi(
 #endif /* CONFIG_LGE_BCM432X_PATCH */
 	int error = 0;
 	char *p = extra;
-
+/* LGE_CHANGE_S, [yoohoo@lge.com], 2009-05-13,
+ * <some ssid use '<' character sometimes and it cause response discard
+ * in wpa_supplicant (wpa_ctrl_request())> */
 #if !defined(CONFIG_LGE_BCM432X_PATCH)	
 	static char ssidbuf[SSID_FMT_BUF_LEN];
 #endif /* CONFIG_LGE_BCM432X_PATCH */
@@ -1552,7 +1554,8 @@ wl_control_wl_start(struct net_device *dev)
 }
 #endif /* defined(CONFIG_LGE_BCM432X_PATCH) && defined(SOFTAP) */
 
-
+//ADD: 0015047: [Wi-Fi] when in suspend/resume, wi-fi does not suspend/resume
+/* LGE_CHANGE_S, [dongp.kim@lge.com], 2011-01-29, when wifi suspend/resume, firmware is not reloaded each time*/
 #if !defined(CONFIG_LGE_BCM432X_PATCH)
 static int
 wl_iw_control_wl_off(
@@ -1741,7 +1744,7 @@ wl_iw_control_wl_on(
 
 	}
 
-
+// 20110413 mingi.sung@lge.com [Wi-Fi] Patch for BELKIN AP - to succeed DHCP procedure after wakeup [START]
 #if defined(CONFIG_BRCM_LGE_WL_ARPOFFLOAD)
 	do
 	{
@@ -1755,7 +1758,7 @@ wl_iw_control_wl_on(
 
 	} while(0);
 #endif //CONFIG_BRCM_LGE_WL_ARPOFFLOAD
-
+// 20110413 mingi.sung@lge.com [Wi-Fi] Patch for BELKIN AP - to succeed DHCP procedure after wakeup [END]
 
 	wl_iw_send_priv_event(dev, "START");
 
@@ -1773,7 +1776,7 @@ wl_iw_control_wl_on(
 }
 
 #endif	/* !defined(CONFIG_LGE_BCM432X_PATCH) */
-
+/* LGE_CHANGE_E, [dongp.kim@lge.com], 2011-01-29, when wifi suspend/resume, firmware is not reloaded each time*/
 //END: 0015047: [Wi-Fi] when in suspend/resume, wi-fi does not suspend/resume
 
 #ifdef SOFTAP
@@ -4028,9 +4031,9 @@ wl_iw_get_scan(
 	int error;
 	uint buflen_from_user = dwrq->length;
 //ADD: 0013766: [Wi-Fi] due to kernel crash, speicific scan length is reduced as value less than 8 byte
-
+/* LGE_CHANGE_S, [dongp.kim@lge.com], 2011-01-09, for kernel crash, specific scan length is reduced as value less than 8704Byte*/
 	uint len =  G_SCAN_RESULTS  - 1024;
-
+/* LGE_CHANGE_E, [dongp.kim@lge.com], 2011-01-09, for kernel crash, specific scan length is reduced as value less than 8704Byte*/
 //END: 0013766: [Wi-Fi] due to kernel crash, speicific scan length is reduced as value less than 8 byte
 	__u16 len_ret = 0;
 #if  !defined(CSCAN)
@@ -5827,7 +5830,7 @@ wl_iw_get_wpaauth(
 #endif /* WIRELESS_EXT > 17 */
 
 
-
+/* LGE_CHANGE_S [yoohoo@lge.com] 2009-05-14, support private command */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 static int
 wl_iw_set_powermode(
@@ -6000,7 +6003,7 @@ static int wl_iw_voip_stop(struct net_device *dev)
 }
 
 #endif /* CONFIG_LGE_BCM432X_PATCH */
-
+/* LGE_CHANGE_E [yoohoo@lge.com] 2009-05-14, support private command */
 
 #ifdef SOFTAP
 /*
@@ -7869,7 +7872,7 @@ wl_iw_set_priv(
 	int ret = 0;
 	char * extra;
 
-
+/* LGE_CHANGE_S, [dongp.kim@lge.com] 2010-04-02 */
 /* [WLAN] Fixing wl_iw_set_priv function */
 #if defined(CONFIG_LGE_BCM432X_PATCH)
 	wl_iw_t *iw;
@@ -7880,7 +7883,7 @@ wl_iw_set_priv(
 	}
 	iw = *(wl_iw_t **)netdev_priv(dev);
 #endif /* defined(CONFIG_LGE_BCM432X_PATCH) */
-
+/* LGE_CHANGE_E, [dongp.kim@lge.com] 2010-04-02 */
 
 	if (!(extra = kmalloc(dwrq->length, GFP_KERNEL)))
 	    return -ENOMEM;

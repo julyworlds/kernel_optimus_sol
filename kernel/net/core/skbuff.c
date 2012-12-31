@@ -336,7 +336,7 @@ static void skb_release_data(struct sk_buff *skb)
 			       &skb_shinfo(skb)->dataref)) {
 		if (skb_shinfo(skb)->nr_frags) {
 			int i;
-
+			/* Add debug message, munyoung.hwang@lge.com */
 			for (i = 0; i < skb_shinfo(skb)->nr_frags; i++) {
 				if(skb_shinfo(skb)->frags[i].page == NULL) {
 					printk(KERN_ERR "%s: page is NULL?? %d\n", __func__, i);

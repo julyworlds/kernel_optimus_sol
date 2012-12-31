@@ -30,7 +30,9 @@
 #include <mach/board_lge.h>
 #include "mt9p017.h"
 
-
+// sungmin.woo@lge.com for fast af modification start //
+//#define 		USE_LG_fast_af
+// sungmin.woo@lge.com for fast af modification end //
 
 #define MT9P017_REG_MODEL_ID 		 0x0000
 #define MT9P017_MODEL_ID     		 0x4800
@@ -97,7 +99,8 @@
 #define	MT9P017_HRZ_QTR_BLK_PIXELS		2104
 #define	MT9P017_VER_QTR_BLK_LINES		76
 
-
+/* AF Total steps parameters */
+// sungmin.woo@lge.com for fast af modification start //
 #ifdef USE_LG_fast_af
 #define MT9P017_STEPS_NEAR_TO_CLOSEST_INF  50//32
 #define MT9P017_TOTAL_STEPS_NEAR_TO_FAR    50//32
@@ -123,7 +126,7 @@ uint16_t mt9p017_l_region_code_per_step = 4;
 #endif
 uint16_t mt9p017_damping_threshold = 10;
 uint16_t mt9p017_sw_damping_time_wait = 1;
-
+// sungmin.woo@lge.com for fast af modification end //
 
 enum mt9p017_move_focus_dir {
 	CAMSENSOR_MOVE_FOCUS_NEAR,
@@ -446,11 +449,12 @@ static int32_t mt9p017_write_exp_gain(uint16_t gain, uint32_t line)
 
 	uint16_t max_legal_gain = 0x0E7F;
 	int32_t rc = 0;
-
+// LGE_UPDATE_S jeonghoon.cho@lge.com : modification QCTK
 	uint16_t gain_NR = 0;
 	uint16_t line_NR = 0;
 
-
+//	unsigned short Gain_value;	
+// LGE_UPDATE_E jeonghoon.cho@lge.com : modification QCTK
 	CDBG("mt9p017_write_exp_gain entering.... \n");
 	if (mt9p017_ctrl->sensormode == SENSOR_PREVIEW_MODE) {
 		mt9p017_ctrl->my_reg_gain = gain;
@@ -460,7 +464,7 @@ static int32_t mt9p017_write_exp_gain(uint16_t gain, uint32_t line)
 	if (gain > max_legal_gain)
 		gain = max_legal_gain;
 
-
+// LGE_UPDATE_S jeonghoon.cho@lge.com : modification QCTK
 	gain_NR = gain;
 	line_NR = line;
 
@@ -546,7 +550,7 @@ static int32_t mt9p017_write_exp_gain(uint16_t gain, uint32_t line)
 	if (rc < 0)
 		return rc;
 	CDBG("mt9p017_write_exp_gain exit.... \n");
-#if 0 
+#if 0 // for read NR gain test(jeonghoon.cho@lge.com)
 	rc = mt9p017_i2c_read_w(mt9p017_client->addr, 0x3102, &Gain_value);
 	//printk("[NOISE]mt9p017 0x3102 Gain value = 0x%x\n", Gain_value);	
 #endif	
@@ -853,7 +857,7 @@ static int32_t mt9p017_sensor_setting(int update_type, int rt)
 			/* write mode settings */
 			if (rt == RES_PREVIEW)
 			{
-#ifndef CONFIG_LGE_DOMESTIC  
+#ifndef CONFIG_LGE_DOMESTIC  //LGE_UPDATE_S chaehee.lim@lge.com 2011.06.27 : For Domestic board
 			  if(lge_bd_rev >= LGE_REV_D){
               rc = mt9p017_i2c_write_w_table(mt9p017_regs.prev_tbl,
   				                              mt9p017_regs.prevtbl_size);
@@ -870,7 +874,7 @@ static int32_t mt9p017_sensor_setting(int update_type, int rt)
   			if (rc < 0)
   				return rc;
 			}else{
-#ifndef CONFIG_LGE_DOMESTIC  	
+#ifndef CONFIG_LGE_DOMESTIC  //LGE_UPDATE_S chaehee.lim@lge.com 2011.06.27 : For Domestic board		
 			  if(lge_bd_rev >= LGE_REV_D){
   			  rc = mt9p017_i2c_write_w_table(mt9p017_regs.snap_tbl,
                                 				mt9p017_regs.snaptbl_size);

@@ -698,12 +698,12 @@ void redraw_screen(struct vc_data *vc, int is_switch)
 			update_attr(vc);
 			clear_buffer_attributes(vc);
 		}
-
+//LGE 110624 ntdeaewan.choi@lge.com
 #ifndef CONFIG_LGE_DOMESTIC
 		if (update && vc->vc_mode != KD_GRAPHICS)
 			do_update_region(vc, vc->vc_origin, vc->vc_screenbuf_size / 2);
 #endif /* CONFIG_LGE_DOMESTIC */
-
+//LGE 110624 ntdeaewan.choi@lge.com
 	}
 	set_cursor(vc);
 	if (is_switch) {

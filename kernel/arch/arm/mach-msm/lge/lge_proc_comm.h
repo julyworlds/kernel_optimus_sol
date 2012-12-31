@@ -1,7 +1,10 @@
 #ifndef __LGE_PROC_COMM_H
 #define __LGE_PROC_COMM_H
 
-
+/* 2011-01-26 by baborobo@lge.com
+ * match with
+ * /modem/AMSS/products/7x30/modem/rfa/pmic/common/app/src/pmapp_pcil.c
+ */
 enum {
 	CUSTOMER_CMD1_SET_SPECIAL_CLOCK0,
 	CUSTOMER_CMD1_GET_BOOT_ON_TYPE,

@@ -21,7 +21,7 @@
 
 #include <linux/syscalls.h>
 #include <linux/fcntl.h>
-
+//LG_BTUI_NV : Get_BDADDR - kukdong.bae@lge.com
 #include <linux/lge_alohag_at.h>
 #include <linux/delay.h>
 //LG_BTUI_NV
@@ -100,7 +100,7 @@ int lge_ats_handle_atcmd(struct msm_rpc_server *server,
 			result = HANDLE_FAIL;
 		update_atcmd_state("fmr", at_param); //state is up? down?
 		break;
-	
+		/*[LGE_CHANGE_S][Camera][kwangsoo.park@lge.com 2010-05-26 : AT Command AT_CAM AT_AVR */
 	case ATCMD_AVR:	//45
 		if(at_act != ATCMD_ACTION)
 			result = HANDLE_FAIL;
@@ -111,7 +111,7 @@ int lge_ats_handle_atcmd(struct msm_rpc_server *server,
 			result = HANDLE_FAIL;
 		update_atcmd_state("cam", at_param); //state is up? down?
 		break;
-	
+		/*[LGE_CHANGE_E[Camera][kwangsoo.park@lge.com 2010-05-26 : AT Command AT_CAM AT_AVR */
 
 	case ATCMD_EMT:  // 46
 		ret_value1 = external_memory_test();
@@ -129,7 +129,7 @@ int lge_ats_handle_atcmd(struct msm_rpc_server *server,
 		ret_value1 = 0;
 		break;
 
-	
+	//LGE_UPDATE_S ins.lee@lge.com 2010-06-21, add AT%FLIHGT
 	case ATCMD_FLIGHT:  // 82
 		if(at_act != ATCMD_ACTION)
 			result = HANDLE_FAIL;
@@ -137,7 +137,7 @@ int lge_ats_handle_atcmd(struct msm_rpc_server *server,
 		wirte_flight_mode(at_param);	
 		update_atcmd_state("flight", at_param); //state is up? down?
 		break;
-   
+    //LGE_UPDATE_E ins.lee@lge.com 2010-06-21, add AT%FLIHGT
 
 	case ATCMD_MMCFORMAT:  // 129
 		if(at_act != ATCMD_ACTION)
@@ -155,7 +155,7 @@ int lge_ats_handle_atcmd(struct msm_rpc_server *server,
 		//LGE_UPDATE_E FS 2011-03-22
 		break;
 
-
+//LG_BTUI_NV : Get_BDADDR - kukdong.bae@lge.com
 	case ATCMD_BTAD: //52
 		if(at_act != ATCMD_ACTION)
 			result = HANDLE_FAIL;
@@ -174,7 +174,7 @@ int lge_ats_handle_atcmd(struct msm_rpc_server *server,
 		if(at_param==3)
 			msleep(1000); // 1sec delay
 		else
-			msleep(6000); // 6sec delay
+			msleep(5000); // 5sec delay
 		break;
 //LG_BTUI_DUT : use brcm_patchram_plus [E]	
 #ifdef CONFIG_LGE_BROADCAST	

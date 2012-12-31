@@ -27,7 +27,9 @@
 #include <linux/rfkill.h>
 
 #if defined (CONFIG_MACH_LGE)
-
+	/* add lge bluetooth platform data structure
+	 * 2011-02-16, tei.kim@lge.com
+	 */
 #include <mach/board_lge.h>
 
 static struct bluetooth_platform_data *bt_platform_data = 0;
@@ -48,7 +50,9 @@ static int bluetooth_toggle_radio(void *data, bool blocked)
 #endif 
 
 #if defined (CONFIG_MACH_LGE)
-
+	/* add lge bluetooth platform data structure
+	 * 2011-02-16, tei.kim@lge.com
+	 */
 static struct rfkill_ops bluetooth_power_rfkill_ops;
 #else
 static const struct rfkill_ops bluetooth_power_rfkill_ops = {
@@ -62,7 +66,9 @@ static int bluetooth_power_rfkill_probe(struct platform_device *pdev)
 	int ret;
 
 #if defined (CONFIG_MACH_LGE)
-
+	/* add lge bluetooth platform data structure
+	 * 2011-02-16, tei.kim@lge.com
+	 */
 	bluetooth_power_rfkill_ops.set_block = bt_platform_data->bluetooth_toggle_radio;
 #endif
 	rfkill = rfkill_alloc("bt_power", &pdev->dev, RFKILL_TYPE_BLUETOOTH,
@@ -116,7 +122,9 @@ static int __devinit bt_power_probe(struct platform_device *pdev)
 		return -ENOSYS;
 	}
 #if defined (CONFIG_MACH_LGE)	
-
+	/* add lge bluetooth platform data structure
+	 * 2011-02-16, tei.kim@lge.com
+	 */
 	bt_platform_data = (struct bluetooth_platform_data *)pdev->dev.platform_data;
 #endif
 	ret = bluetooth_power_rfkill_probe(pdev);

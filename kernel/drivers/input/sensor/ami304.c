@@ -164,7 +164,7 @@ static int AMI304_I2c_Write(u8 reg_adr, u8 *buf, u8 buf_len)
 	int res = 0;
 	u8 databuf[64];
 	
-	
+	// LGE_CHANGE [dojip.kim@lge.com] 2010-10-05, check the buf_len
 	if ( (buf_len+2) > 64)
 		return -EINVAL;
 
@@ -504,7 +504,7 @@ static int AMI304_Report_Value(int iEnable)
 		report_enable = 1;
 	}
 
-	
+	// LGE_CHANGE [dojip.kim@lge.com] 2010-10-28, not supported
 #if 0
 	if(controlbuf[AMI304_CB_ACTIVESENSORS] & AMIT_BIT_GYROSCOPE) {
 		input_report_abs(data->input_dev, ABS_HAT1X, ami304mid_data.gyro.x);/* x-axis of gyro sensor */
@@ -534,32 +534,6 @@ static ssize_t show_chipinfo_value(struct device *dev,
 	char strbuf[AMI304_BUFSIZE];
 	AMI304_ReadChipInfo(strbuf, AMI304_BUFSIZE);
 	return sprintf(buf, "%s\n", strbuf);
-}
-
-static ssize_t show_enable_value(struct device *dev, 
-		struct device_attribute *attr, char *buf)
-{
-	char strbuf[AMI304_BUFSIZE];
-	sprintf(strbuf, "%d", atomic_read(&ami304_report_enabled));
-	return sprintf(buf, "%s\n", strbuf);
-}
-
-static ssize_t store_enable_value(struct device *dev, 
-		struct device_attribute *attr, const char *buf, size_t count)
-{
-	int mode=0;
-	sscanf(buf, "%d", &mode);
-	if (mode) {
-			ami304_resume(dev);
-			atomic_set(&ami304_report_enabled, 1);
-			printk(KERN_INFO "Compass_Power On\n");
-	}
-	else {
-			ami304_suspend(dev);
-			atomic_set(&ami304_report_enabled, 0);
-			printk(KERN_INFO "Compass_Power Off\n");
-	}
-	return 0;
 }
 
 static ssize_t show_sensordata_value(struct device *dev, 
@@ -675,7 +649,6 @@ static ssize_t show_wia_value(struct device *dev, struct device_attribute *attr,
 	return sprintf(buf, "%s\n", strbuf);			
 }
 
-#if defined(AMI304_TEST)
 /* Test mode attribute */
 static ssize_t show_pitch_value(struct device *dev, 
 		struct device_attribute *attr, char *buf)
@@ -707,7 +680,7 @@ static ssize_t store_motion_cal_onoff(struct device *dev,
 	val = simple_strtoul(buf, NULL, 10);
 
 	if (val) {
-		
+		/* 07082011 bluewave96@lge.com checking for device is on a flat place */
 		na_x = ami304mid_data.na.x;
 		na_y = ami304mid_data.na.y;
 
@@ -729,39 +702,32 @@ static ssize_t store_motion_cal_onoff(struct device *dev,
 
 	return count;
 }
-#endif
-
 static DEVICE_ATTR(chipinfo, S_IRUGO, show_chipinfo_value, NULL);
 static DEVICE_ATTR(sensordata, S_IRUGO, show_sensordata_value, NULL);
-static DEVICE_ATTR(enable,S_IRUGO|S_IWUSR, show_enable_value, store_enable_value);
 static DEVICE_ATTR(posturedata, S_IRUGO, show_posturedata_value, NULL);
 static DEVICE_ATTR(calidata, S_IRUGO, show_calidata_value, NULL);
 static DEVICE_ATTR(gyrodata, S_IRUGO, show_gyrodata_value, NULL);
 static DEVICE_ATTR(midcontrol, S_IRUGO | S_IWUSR, show_midcontrol_value, store_midcontrol_value );
 static DEVICE_ATTR(mode, S_IRUGO | S_IWUSR, show_mode_value, store_mode_value );
 static DEVICE_ATTR(wia, S_IRUGO, show_wia_value, NULL);
-#if defined(AMI304_TEST)
 static DEVICE_ATTR(pitch, S_IRUGO | S_IWUSR, show_pitch_value, NULL);
 static DEVICE_ATTR(roll, S_IRUGO | S_IWUSR, show_roll_value, NULL);
 //Sensor Calibration
 static DEVICE_ATTR(cal_onoff, S_IRUGO|S_IWUSR, show_motion_cal_onoff, store_motion_cal_onoff);
-#endif
+
 static struct attribute *ami304_attributes[] = {
 	&dev_attr_chipinfo.attr,
-	&dev_attr_sensordata.attr,	/*AT command attributr */
+	&dev_attr_sensordata.attr,
 	&dev_attr_posturedata.attr,
 	&dev_attr_calidata.attr,
 	&dev_attr_gyrodata.attr,
 	&dev_attr_midcontrol.attr,
 	&dev_attr_mode.attr,
 	&dev_attr_wia.attr,
-	&dev_attr_enable.attr,	/*AT command attributr */
-#if defined(AMI304_TEST)
 	/* Test mode attribute */
 	&dev_attr_pitch.attr,
 	&dev_attr_roll.attr,
 	&dev_attr_cal_onoff.attr,
-#endif
 	NULL,
 };
 
@@ -1796,7 +1762,12 @@ static int __init ami304_init(void)
 	rwlock_init(&ami304mid_data.datalock);
 	rwlock_init(&ami304_data.lock);
 	memset(&ami304mid_data.controldata[0], 0, sizeof(int)*10);
-
+	/* LGE_CHANGE [dojip.kim@lge.com] 2010-05-27, [LS670]
+	 * 200ms is too slow to calibrate, so set 100ms
+	 */
+	/* LGE_CHANGE [dojip.kim@lge.com] 2010-08-11, [LS670]
+	 * 20 ms by sprint request
+	 */
 	ami304mid_data.controldata[AMI304_CB_LOOPDELAY] = 20;  // Loop Delay
 	ami304mid_data.controldata[AMI304_CB_RUN] = 1;         // Run = 1	//resume = 2
 	ami304mid_data.controldata[AMI304_CB_ACCCALI] = 0;     // Start-AccCali
@@ -1835,3 +1806,5 @@ module_exit(ami304_exit);
 
 MODULE_AUTHOR("Kyle K.Y. Chen");
 MODULE_DESCRIPTION("AMI304 MI-Sensor driver without DRDY");
+MODULE_LICENSE("GPL");
+MODULE_VERSION(DRIVER_VERSION);

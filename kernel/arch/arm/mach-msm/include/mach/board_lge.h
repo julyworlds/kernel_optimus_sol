@@ -32,17 +32,20 @@
 
 #ifdef CONFIG_ARCH_MSM7X30
 
-
-#define MSM_PMEM_SF_SIZE	0x1D00000 //0x1700000 //0x1C00000
-#define MSM_FB_SIZE		0x2EE000 //(480*800*32*2) //0x500000
+/* MSM_PMEM_SF_SIZE PMEM Size 0x1700000 --> 0x1C00000
+* 2011-05-07, cheongil.hyun@lge.com
+* 2011-08-20, Increas SF PMEM(0x1D00000), munyoung.hwang@lge.com
+*/
+#define MSM_PMEM_SF_SIZE	0x1D00000
+#define MSM_FB_SIZE		0x500000
 #define MSM_GPU_PHYS_SIZE       SZ_2M
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-06-27 : To support 720P and VT rotation, one more preview buffer is needed. => need to increase pmem
 #if 0
 #define MSM_PMEM_ADSP_SIZE      0x1800000
 #else
-#define MSM_PMEM_ADSP_SIZE      0x1B00000 //0x1D1A000 //0x2000000
+#define MSM_PMEM_ADSP_SIZE      0x1B00000
 #endif
-
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-06-27
 #define MSM_FLUID_PMEM_ADSP_SIZE	0x2800000
 #define PMEM_KERNEL_EBI1_SIZE   0x600000
 #define MSM_PMEM_AUDIO_SIZE     0x200000
@@ -62,8 +65,12 @@ enum {
 	LGE_REV_B,
 	LGE_REV_C,
 	LGE_REV_D,
+	LGE_REV_E,
+	LGE_REV_F,
 	LGE_REV_10,
 	LGE_REV_11,
+	LGE_REV_12,
+	LGE_REV_13,
 	LGE_REV_TOT_NUM,
 };
 

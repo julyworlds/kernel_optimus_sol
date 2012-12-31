@@ -137,5 +137,5 @@ static int __init lge_ftm_init(void)
 module_init(lge_ftm_init);
 
 MODULE_DESCRIPTION("LGE Factory test module");
-MODULE_AUTHOR("Munyoung Hwang ")
+MODULE_AUTHOR("Munyoung Hwang <munyoung.hwang@lge.com>")
 MODULE_LICENSE("GPL v2");

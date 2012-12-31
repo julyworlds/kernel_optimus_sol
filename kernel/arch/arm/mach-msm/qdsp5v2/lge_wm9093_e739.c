@@ -35,9 +35,9 @@
 
 char amp_cal_data[AMP_CAL_MAX] = {IN_VOL_0, OUT_VOL_DEFAULT-7,                    /* HEADSET_VOICE */
                                                                   IN_VOL_0, OUT_VOL_DEFAULT-3,            /* SPEAKER_VOICE */
-                                                                  IN_VOL_0, OUT_VOL_DEFAULT-18,          /* TTY */
+                                                                  IN_VOL_0, OUT_VOL_DEFAULT,          /* TTY */
                                                                   IN_VOL_0, OUT_VOL_DEFAULT+1,          /* HEADSET_AUDIO */
-                                                                  IN_VOL_12, OUT_VOL_DEFAULT-26, OUT_VOL_DEFAULT,  /* HEADSET_SPEAKER */
+                                                                  IN_VOL_12, OUT_VOL_DEFAULT-12, OUT_VOL_DEFAULT,  /* HEADSET_SPEAKER */
                                                                   IN_VOL_0, OUT_VOL_DEFAULT-1};        /* SPEAKER_AUDIO */
 
 struct wm9093_reg_type
@@ -419,5 +419,5 @@ module_init(wm9093_amp_ctl_init);
 module_exit(wm9093_amp_ctl_exit);
 
 MODULE_DESCRIPTION("WM9093 Amp Control");
-MODULE_AUTHOR("Youn Tae Ho ");
+MODULE_AUTHOR("Youn Tae Ho <taeho.youn@lge.com>");
 MODULE_LICENSE("GPL");

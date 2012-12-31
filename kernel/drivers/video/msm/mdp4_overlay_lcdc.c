@@ -54,22 +54,25 @@ int first_pixel_start_y;
 
 static struct mdp4_overlay_pipe *lcdc_pipe;
 static struct completion lcdc_comp;
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-08-24 : fixed the problme wait4vync is called when mdp lcd is off
 static bool   mdp4_lcdc_on_state;   // taeyol
-
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-08-24
 
 #ifdef CONFIG_LGE_HIDDEN_RESET_PATCH
-
+/* LGE_CHANGE 
+* add hidden reset module  
+* 2011-07-07, tei.kim@lge.com
+*/
 extern int on_hidden_reset;
 #endif
-
+//LGE 110624 ntdeaewan.choi@lge.com
 #ifdef CONFIG_LGE_DOMESTIC
 #ifdef CONFIG_FB_MSM_LOGO
 #define INIT_IMAGE_FILE "/initlogo.rle"
 extern int load_rle_image(char *filename);
 #endif
 #endif
-
+//LGE 110624 ntdeaewan.choi@lge.com
 int mdp_lcdc_on(struct platform_device *pdev)
 {
 	int lcdc_width;
@@ -252,13 +255,13 @@ int mdp_lcdc_on(struct platform_device *pdev)
 	MDP_OUTP(MDP_BASE + LCDC_BASE + 0x24, active_v_end);
 
 	mdp4_overlay_reg_flush(pipe, 1);
-
+//LGE 110624 ntdeaewan.choi@lge.com
 #ifdef CONFIG_LGE_DOMESTIC
 #ifdef CONFIG_FB_MSM_LOGO
 	if (!load_rle_image(INIT_IMAGE_FILE)) ;	/* Flip buffer */
 #endif
 #endif /* CONFIG_LGE_DOMESTIC */
-
+//LGE 110624 ntdeaewan.choi@lge.com
 #ifdef CONFIG_MSM_BUS_SCALING
 	mdp_bus_scale_update_request(2);
 #endif
@@ -281,11 +284,11 @@ int mdp_lcdc_on(struct platform_device *pdev)
 	/* MDP cmd block disable */
 	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_OFF, FALSE);
 
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-08-24 : fixed the problme wait4vync is called when mdp lcd is off
 	if( ret >= 0 ) {  // taeyol
 		mdp4_lcdc_on_state = TRUE;
 	}
-
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-08-24
 
 	return ret;
 }
@@ -293,9 +296,9 @@ int mdp_lcdc_on(struct platform_device *pdev)
 int mdp_lcdc_off(struct platform_device *pdev)
 {
 	int ret = 0;
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-08-24 : fixed the problme wait4vync is called when mdp lcd is off
 	mdp4_lcdc_on_state = FALSE;
-
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-08-24
 
 	/* MDP cmd block enable */
 	mdp_pipe_ctrl(MDP_CMD_BLOCK, MDP_BLOCK_POWER_ON, FALSE);
@@ -319,9 +322,9 @@ int mdp_lcdc_off(struct platform_device *pdev)
 	mdp_bus_scale_update_request(0);
 #endif
 
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-08-24 : fixed the problme wait4vync is called when mdp lcd is off
 	complete_all(&lcdc_comp);	// taeyol
-
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-08-24
 
 	return ret;
 }
@@ -368,9 +371,9 @@ void mdp4_overlay_lcdc_wait4vsync(struct msm_fb_data_type *mfd)
 	mdp_intr_mask |= INTR_PRIMARY_VSYNC;
 	outp32(MDP_INTR_ENABLE, mdp_intr_mask);
 	spin_unlock_irqrestore(&mdp_spin_lock, flag);
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-08-24 : fixed the problme wait4vync is called when mdp lcd is off
 	if( mdp4_lcdc_on_state ){
-	
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-08-24		
 		wait_for_completion_killable(&lcdc_comp);
 	}
 	mdp_disable_irq(MDP_DMA2_TERM);
@@ -379,10 +382,10 @@ void mdp4_overlay_lcdc_wait4vsync(struct msm_fb_data_type *mfd)
 void mdp4_overlay_vsync_push(struct msm_fb_data_type *mfd,
 			struct mdp4_overlay_pipe *pipe)
 {
-
+//[LGE_UPDATE_S] taeyol.kim@lge.com 2011-08-24 : fixed the problme wait4vync is called when mdp lcd is off
 	if( !mdp4_lcdc_on_state )
 		return;
-
+//[LGE_UPDATE_E] taeyol.kim@lge.com 2011-08-24
 
 	mdp4_overlay_reg_flush(pipe, 1);
 	if (pipe->flags & MDP_OV_PLAY_NOWAIT)
@@ -414,7 +417,10 @@ void mdp4_lcdc_overlay(struct msm_fb_data_type *mfd)
 	int bpp;
 	struct mdp4_overlay_pipe *pipe;
 #ifdef CONFIG_LGE_HIDDEN_RESET_PATCH
-
+/* LGE_CHANGE 
+* add hidden reset module  
+* 2011-07-07, tei.kim@lge.com
+*/
 	unsigned int tmp;
 #endif
 
@@ -424,7 +430,10 @@ void mdp4_lcdc_overlay(struct msm_fb_data_type *mfd)
 	/* no need to power on cmd block since it's lcdc mode */
 	bpp = fbi->var.bits_per_pixel / 8;
 #ifdef CONFIG_LGE_HIDDEN_RESET_PATCH
-
+/* LGE_CHANGE 
+* add hidden reset module  
+* 2011-07-07, tei.kim@lge.com
+*/
 	if (on_hidden_reset) {
 		tmp = (unsigned int)lge_get_fb_copy_virt_rgb888_addr();
 		buf = (unsigned char *)__pa((unsigned int)tmp);

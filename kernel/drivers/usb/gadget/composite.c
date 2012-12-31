@@ -30,7 +30,10 @@
 #include <linux/usb/composite.h>
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+/* LGE_CHANGE
+ * To consider usb CDC class.
+ * 2011-03-24, hyunhui.park@lge.com
+ */
 #include <linux/usb/cdc.h>
 #endif
 
@@ -306,7 +309,10 @@ static int config_buf(struct usb_configuration *config,
 	struct usb_interface_descriptor *intf;
 	struct usb_interface_assoc_descriptor *iad = NULL;
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+	/* LGE_CHANGE
+	 * Set master and slave interface of cdc union descriptor.
+	 * 2011-03-24, hyunhui.park@lge.com
+	 */
 	struct usb_cdc_union_desc *union_desc = NULL;
 #endif
 	void				*next = buf + USB_DT_CONFIG_SIZE;
@@ -377,8 +383,10 @@ static int config_buf(struct usb_configuration *config,
 				iad = (struct usb_interface_assoc_descriptor *)
 						dest;
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
-		
+			/* LGE_CHANGE
+			 * Set master and slave interface of cdc union descriptor.
+			 * 2011-03-24, hyunhui.park@lge.com
+			 */
 			} else if (intf->bDescriptorType == USB_DT_CS_INTERFACE) {
 				/* If descriptor is cdc union type,
 				 * we set bMasterInterface0 and bSlaveInterface0.
@@ -854,7 +862,10 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 	int id = 0;
 	unsigned long			flags;
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-	
+	/* LGE_CHANGE
+	 * For finding correct interface number.
+	 * 2011-03-24, hyunhui.park@lge.com
+	 */
 	int cnt = 0;
 #endif
 
@@ -963,7 +974,16 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 		if (!cdev->config || w_index >= MAX_CONFIG_INTERFACES)
 			break;
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+		/* LGE_CHANGE
+		 * Android gadget which added usb switching feature
+		 * intends to handle interface IDs properly. But, handling of request
+		 * for set interface and get interface could not find correct
+		 * function and interface number. It is fix for this.
+		 * By this fix, android gadget can handle CDC ECM class correctly.
+		 * LGE uses this for USB Tethering.
+		 * 2011-03-24, hyunhui.park@lge.com
+		 */
+		/* Find correct function */
 		for (id = 0, cnt = 0; id < MAX_CONFIG_INTERFACES; id++) {
 			f = cdev->config->interface[id];
 			if (!f)
@@ -990,7 +1010,15 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 		if (w_value && !f->set_alt)
 			break;
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-	
+		/* LGE_CHANGE
+		 * Android gadget which added usb switching feature
+		 * intends to handle interface IDs properly. But, handling of request
+		 * for set interface and get interface could not find correct
+		 * function and interface number. It is fix for this.
+		 * By this fix, android gadget can handle CDC ECM class correctly.
+		 * LGE uses this for USB Tethering.
+		 * 2011-03-24, hyunhui.park@lge.com
+		 */
 		value = f->set_alt(f, w_index + cnt, w_value);
 #else
 		value = f->set_alt(f, w_index, w_value);
@@ -1002,7 +1030,16 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 		if (!cdev->config || w_index >= MAX_CONFIG_INTERFACES)
 			break;
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+		/* LGE_CHANGE
+		 * Android gadget which added usb switching feature
+		 * intends to handle interface IDs properly. But, handling of request
+		 * for set interface and get interface could not find correct
+		 * function and interface number. It is fix for this.
+		 * By this fix, android gadget can handle CDC ECM class correctly.
+		 * LGE uses this for USB Tethering.
+		 * 2011-03-24, hyunhui.park@lge.com
+		 */
+		/* Find correct function */
 		for (id = 0, cnt = 0; id < MAX_CONFIG_INTERFACES; id++) {
 			f = cdev->config->interface[id];
 			if (!f)
@@ -1027,7 +1064,15 @@ composite_setup(struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 		if (!f)
 			break;
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+		/* LGE_CHANGE
+		 * Android gadget which added usb switching feature
+		 * intends to handle interface IDs properly. But, handling of request
+		 * for set interface and get interface could not find correct
+		 * function and interface number. It is fix for this.
+		 * By this fix, android gadget can handle CDC ECM class correctly.
+		 * LGE uses this for USB Tethering.
+		 * 2011-03-24, hyunhui.park@lge.com
+		 */
 		/* lots of interfaces only need altsetting zero... */
 		value = f->get_alt ? f->get_alt(f, w_index + cnt) : 0;
 #else

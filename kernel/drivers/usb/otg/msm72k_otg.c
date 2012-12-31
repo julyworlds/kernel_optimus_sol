@@ -531,12 +531,18 @@ static int msm_otg_set_power(struct otg_transceiver *xceiv, unsigned mA)
 
 	if (new_chg == USB_CHG_TYPE__WALLCHARGER) {
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+		/* LGE_CHANGE
+		 * When factory cable is connected, skip lpm.
+		 * 2011-01-23, hyunhui.park@lge.com
+		 */
 		int is_factory_cable = atomic_read(&dev->lgeusb_cable_type);
 #endif
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET
-
+		/* LGE_CHANGE
+		 * When factory cable is connected, skip lpm.
+		 * 2011-01-23, hyunhui.park@lge.com
+		 */
 		if (!is_factory_cable) {
 			wake_lock(&dev->wlock);
 			queue_work(dev->wq, &dev->sm_work);

@@ -101,7 +101,10 @@ static inline struct f_acm *port_to_acm(struct gserial *p)
 
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_ACM_FIX
-
+/* LGE_CHANGE
+ * Apply CDC ACM function fixup for LG Android USB
+ * 2011-01-12, hyunhui.park@lge.com
+ */
 #define GS_NOTIFY_MAXPACKET		16	/* For LG host driver */
 #else
 #define GS_NOTIFY_MAXPACKET		10	/* notification + 2 bytes */
@@ -471,13 +474,19 @@ static int acm_cdc_notify(struct f_acm *acm, u8 type, u16 value,
 	struct usb_request		*req;
 	struct usb_cdc_notification	*notify;
 #ifndef CONFIG_USB_SUPPORT_LGE_ANDROID_ACM_FIX
-
+	/* LGE_CHANGE
+	 * Apply CDC ACM function fixup for LG Android USB
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	const unsigned			len = sizeof(*notify) + length;
 #endif
 	void				*buf;
 	int				status;
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_ACM_FIX
-
+	/* LGE_CHANGE
+	 * Apply CDC ACM function fixup for LG Android USB
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	unsigned char noti_buf[GS_NOTIFY_MAXPACKET];
 
 	memset(noti_buf, 0, GS_NOTIFY_MAXPACKET);
@@ -488,12 +497,15 @@ static int acm_cdc_notify(struct f_acm *acm, u8 type, u16 value,
 	acm->pending = false;
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_ACM_FIX
-
+	/* LGE_CHANGE
+	 * Apply CDC ACM function fixup for LG Android USB
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	req->length = GS_NOTIFY_MAXPACKET;
 #else
 	req->length = len;
 #endif
-
+/* LGE_CHANGE_E [hyunhui.park@lge.com] 2010-07-18 */
 	notify = req->buf;
 	buf = notify + 1;
 
@@ -504,7 +516,10 @@ static int acm_cdc_notify(struct f_acm *acm, u8 type, u16 value,
 	notify->wIndex = cpu_to_le16(acm->ctrl_id);
 	notify->wLength = cpu_to_le16(length);
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_ACM_FIX
-
+	/* LGE_CHANGE
+	 * Apply CDC ACM function fixup for LG Android USB
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	memcpy(noti_buf, data, length);
 	memcpy(buf, noti_buf, GS_NOTIFY_MAXPACKET);
 #else
@@ -776,7 +791,10 @@ acm_unbind(struct usb_configuration *c, struct usb_function *f)
 	usb_free_descriptors(f->descriptors);
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_ACM_FIX
-
+	/* LGE_CHANGE
+	 * This prevents kernel panic from QCT's acm patch
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	if (acm->notify_req)
 		gs_free_req(acm->notify, acm->notify_req);
 #endif
@@ -792,7 +810,11 @@ static inline bool can_support_cdc(struct usb_configuration *c)
 }
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET_FIX
-
+/* LGE_CHANGE
+ * To bind LG AndroidNet, another ACM instance
+ * named "acm2" is used.
+ * 2011-01-12, hyunhui.park@lge.com
+ */
 static int acm_count;
 #endif
 
@@ -818,7 +840,15 @@ int acm_bind_config(struct usb_configuration *c, u8 port_num)
 
 
 #ifndef CONFIG_USB_SUPPORT_LGE_ANDROID_ACM_FIX
+	/* LGE_CHANGE
+	 * By not set string IDs, iMACAddress of ECM descriptor
+	 * for LG AndroidNet will be set properly.
+	 * 2011-03-22, hyunhui.park@lge.com
+	 */
 
+	/* REVISIT might want instance-specific strings to help
+	 * distinguish instances ...
+	 */
 
 	/* maybe allocate device-global string IDs, and patch descriptors */
 	if (acm_string_defs[ACM_CTRL_IDX].id == 0) {
@@ -865,7 +895,11 @@ int acm_bind_config(struct usb_configuration *c, u8 port_num)
 	acm->port.send_break = acm_send_break;
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET_FIX
-
+	/* LGE_CHANGE
+	 * To bind LG AndroidNet, another ACM instance
+	 * named "acm2" is used.
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	if (!acm_count)
 		acm->port.func.name = "acm";
 	else
@@ -891,7 +925,10 @@ int acm_bind_config(struct usb_configuration *c, u8 port_num)
 }
 
 #ifdef CONFIG_USB_ANDROID_ACM
-
+/* LGE_CHANGE
+ * Add ACM platform data
+ * 2011-01-12, hyunhui.park@lge.com
+ */
 #include <linux/platform_device.h>
 
 static struct acm_platform_data *acm_pdata;
@@ -911,7 +948,10 @@ static struct platform_driver acm_platform_driver __refdata = {
 int acm_function_bind_config(struct usb_configuration *c)
 {
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET_FIX
-
+	/* LGE_CHANGE
+	 * Add ACM platform data
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	int i;
 	u8 num_inst = acm_pdata ? acm_pdata->num_inst : 1;
 	int ret;
@@ -944,7 +984,10 @@ static struct android_usb_function acm_function = {
 };
 
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET_FIX
-
+/* LGE_CHANGE
+ * Add ACM function instance named "acm2".
+ * 2011-01-12, hyunhui.park@lge.com
+ */
 int acm2_function_bind_config(struct usb_configuration *c)
 {
 	int ret = acm_bind_config(c, 0);
@@ -963,7 +1006,10 @@ static int __init init(void)
 	platform_driver_probe(&acm_platform_driver, acm_probe);
 	android_register_function(&acm_function);
 #ifdef CONFIG_USB_SUPPORT_LGE_ANDROID_GADGET_FIX
-
+	/* LGE_CHANGE
+	 * Add ACM function instance named "acm2".
+	 * 2011-01-12, hyunhui.park@lge.com
+	 */
 	android_register_function(&acm2_function);
 #endif
 	return 0;

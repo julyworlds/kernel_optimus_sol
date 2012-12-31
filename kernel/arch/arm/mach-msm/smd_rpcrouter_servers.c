@@ -193,7 +193,7 @@ static int rpc_send_accepted_void_reply(struct msm_rpc_endpoint *client,
 	return rc;
 }
 
-
+/* LGE_CHANGES_S [hoonylove004@lge.com] 2009-12-29, [VS740] AT CMD */
 /* Factory AT CMD feature added based on EVE */
 #ifdef CONFIG_LGE_SUPPORT_AT_CMD
 static int AT_rpc_send_accepted_void_reply(struct msm_rpc_endpoint *client,
@@ -299,9 +299,9 @@ static int AT_rpc_send_accepted_void_reply(struct msm_rpc_endpoint *client,
 	return rc;
 }
 #endif
+/* LGE_CHANGES_E [hoonylove004@lge.com] 2009-12-29, [VS740] */
 
-
-
+// START [sangki.hyun@lge.com][dom_testmode] 20100615 LAB1_FW LGE_TEST_MODE {
 #ifdef CONFIG_MSM_RPCSERVER_TESTMODE
 static int rpc_send_accepted_void_reply_testmode(struct msm_rpc_endpoint *client,
 												uint32_t xid, uint32_t accept_status, struct msm_rpc_server *server)
@@ -390,7 +390,7 @@ static int rpc_send_accepted_void_reply_testmode(struct msm_rpc_endpoint *client
 }
 #endif /* CONFIG_MSM_RPCSERVER_TESTMODE */
 
-
+// END [sangki.hyun@lge.com][dom_testmode] 20100615 LAB1_FW }
 
 
 /*
@@ -786,7 +786,7 @@ static int rpc_servers_thread(void *data)
 			rc = server->rpc_call(server, req1, rc);
 		}
 
-
+/* LGE_CHANGES_S [hoonylove004@lge.com] 2009-12-29, [VS740] AT CMD */
 /* Factory AT CMD feature added based on EVE */
 #ifdef CONFIG_LGE_SUPPORT_AT_CMD
 		switch (rc) {
@@ -819,14 +819,14 @@ static int rpc_servers_thread(void *data)
 			break;
 		/* LGE_CHANGES LGE_FACTORY_AT_COMMANDS  */
 #ifdef CONFIG_MSM_RPCSERVER_TESTMODE
-
+// START [sangki.hyun@lge.com][dom_testmode] 20100615 LAB1_FW LGE_TEST_MODE {
 		case 10: /* RPC_ACCEPTSTAT_TESTMODE_SUCCESS */
 		case 12: /* RPC_ACCEPTSTAT_TESTMODE_ERROR */
 			rpc_send_accepted_void_reply_testmode(
 				endpoint, req.xid,
 				(rc), server);
 			break;
-
+// END [sangki.hyun@lge.com][dom_testmode] 20100615 LAB1_FW }
 #endif		
 		default:
 			if (rc < 0) {
@@ -851,7 +851,7 @@ static int rpc_servers_thread(void *data)
 			msm_rpc_server_send_accepted_reply(server, 0);
 		}
 #endif
-
+/* LGE_CHANGES_E [hoonylove004@lge.com] 2009-12-29, [VS740] */	
  free_buffer:
 		xdr_clean_input(&server_xdr);
 		server_xdr.out_index = 0;
