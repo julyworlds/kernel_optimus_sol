@@ -546,6 +546,12 @@ config FSYNC_CONTROL
         help
           Say Y here to enable FSync Control
 
+config GPU_OC
+        bool "Support for GPU OC Control"
+        default y
+        help
+          Say Y here to enable GPU OC CONTROLLER
+
 
 source "drivers/misc/c2port/Kconfig"
 source "drivers/misc/eeprom/Kconfig"

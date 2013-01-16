@@ -39,6 +39,10 @@
 
 #include "yamato_reg.h"
 
+#ifdef CONFIG_GPU_OC
+#include <linux/gpuocpatch.h>
+#endif
+
 #define GSL_RBBM_INT_MASK \
 	 (RBBM_INT_CNTL__RDERR_INT_MASK |  \
 	  RBBM_INT_CNTL__DISPLAY_UPDATE_INT_MASK)
@@ -609,6 +613,10 @@ kgsl_yamato_init_pwrctrl(struct kgsl_device *device)
 	}
 
 done:
+	//GPU OC ENABLER/DISABLER
+#ifdef CONFIG_GPU_OC
+	set_gpuoc_dev(device);
+#endif
 	return result;
 }
 

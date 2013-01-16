@@ -80,7 +80,10 @@ static ssize_t sw_status_read(struct device *dev,
 
 static ssize_t sw_status_write(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t size){
-
+	if(sw_suspended == true){
+		pr_info("%s: sweep2wake cant be changed with phone suspended\n", __FUNCTION__);
+		return size;
+	}
 	unsigned int data;
 	if(sscanf(buf, "%u\n", &data) == 1) {
 		if (data == 1) {
@@ -108,7 +111,10 @@ static ssize_t sw_unlock_status_read(struct device *dev,
 
 static ssize_t sw_unlock_status_write(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t size){
-	
+	if(sw_suspended == true){
+		pr_info("%s: sweep2wake cant be changed with phone suspended\n", __FUNCTION__);
+		return size;
+	}
 	unsigned int data;
 	if(sscanf(buf, "%u\n", &data) == 1) {
 		if (data == 1) {
@@ -136,7 +142,10 @@ static ssize_t sw_lock_status_read(struct device *dev,
 
 static ssize_t sw_lock_status_write(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t size){	
-	
+	if(sw_suspended == true){
+		pr_info("%s: sweep2wake cant be changed with phone suspended\n", __FUNCTION__);
+		return size;
+	}
 	unsigned int data;
 	if(sscanf(buf, "%u\n", &data) == 1) {
 		if (data == 1) {
