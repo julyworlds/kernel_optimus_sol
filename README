@@ -1,11 +1,13 @@
-----XpauM-Kernel for stock-base OPTIMUS SOL (2.3)-----
+----XpauM-Kernel OPTIMUS SOL ----
 ----( Compiled with Linaro-toolchain )           -----
-----( BLN support ported from galaxy s II )      -----
-----( Idea of SWEEP2WAKE taken from XDA )        -----
 
-Last version: 0.51
+Last version: 0.6
 
 Changelog:
+---v0.6
+-based v10f
+-fixes ...
+
 ---v0.51
 -update to latest linaro tc
 -tweaks for kernel and config
