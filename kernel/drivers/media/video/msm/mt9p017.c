@@ -31,7 +31,7 @@
 #include "mt9p017.h"
 
 // sungmin.woo@lge.com for fast af modification start //
-//#define 		USE_LG_fast_af
+#define USE_LG_fast_af
 // sungmin.woo@lge.com for fast af modification end //
 
 #define MT9P017_REG_MODEL_ID 		 0x0000
@@ -680,7 +680,7 @@ static void mt9p017_af_init(void)
 			mt9p017_step_position_table[i] = mt9p017_step_position_table[i-1] + mt9p017_l_region_code_per_step;
 			printk("** mt9p017_step_position_table[%d] = %d **\n", i,mt9p017_step_position_table[i] );
 			}
-		if (mt9p017_step_position_table[i] >255) //sungmin.woo 255¸¦ ³Ñ¾î°¡¸é ÀÇ¹Ì ¾øÀ½ 
+		if (mt9p017_step_position_table[i] >255) //sungmin.woo 255\B8\A6 \B3Ñ¾î°¡\B8\E9 \C0Ç¹\CC \BE\F8\C0\BD 
 		{	
 			mt9p017_step_position_table[i] = 255;
 			printk("*** mt9p017_step_position_table[%d] = %d ***\n", i,mt9p017_step_position_table[i] );
