@@ -115,7 +115,7 @@ config LGE_AUDIO_LOOPBACK
 
 config LGE_HIDDEN_RESET_PATCH
     bool "Support LGE hidden reset function"
-	default n
+	default y
 	depends on MACH_LGE
 	depends on ANDROID_RAM_CONSOLE
 	help

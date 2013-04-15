@@ -50,10 +50,7 @@ static struct snddev_ecodec_drv_state snddev_ecodec_drv;
 
 #if !defined(CONFIG_LGE_MODEL_E739)
 #ifdef CONFIG_LGE_AUDIO_LOOPBACK
-	/* LGE_CHANGE
-	  * added for BT loopback
-	  * 2010-03-22, bob.cho@lge.com
-	  */
+
 #define TESTMODE_HANDSET_PCM_CTL_VAL (PCM_CTL__RPCM_WIDTH__LINEAR_V | PCM_CTL__TPCM_WIDTH__LINEAR_V)
 #define TESTMODE_AUX_CODEC_INTF   AUX_CODEC_INTF_CTL__PCMINTF_DATA_EN_V
 #define TESTMODE_DATA_FORMAT_PADDING (DATA_FORMAT_PADDING_INFO__RPCM_FORMAT_V | DATA_FORMAT_PADDING_INFO__TPCM_FORMAT_V)
@@ -482,11 +479,7 @@ static int snddev_ecodec_probe(struct platform_device *pdev)
 
 #if !defined(CONFIG_LGE_MODEL_E739)
 #ifdef CONFIG_LGE_AUDIO_LOOPBACK
-	/* LGE_CHANGE
-	  * added for BT loopback
-	  * 2010-03-22, bob.cho@lge.com
-	  */
-	/* Register sysfs hooks */
+
 	rc = device_create_file(&pdev->dev, &dev_attr_btlb);
 	if (rc) {
 		printk(KERN_ALERT "sysfs register failed for loopback attr\n");

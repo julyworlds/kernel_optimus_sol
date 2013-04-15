@@ -81,12 +81,12 @@ static struct snddev_icodec_data snddev_iearpiece_data = {
 	.default_sample_rate = 48000,
 	.pamp_on = NULL,
 	.pamp_off = NULL,
-//20110524, sh80.choi@lge.com, Domestic WM Gain set [SOUND_DOMESTIC]_START
+
 #if defined (CONFIG_LGE_DOMESTIC)
 	.max_voice_rx_vol[VOC_NB_INDEX] = 400,
 	.min_voice_rx_vol[VOC_NB_INDEX] = -1600,
 #else
-//20110524, sh80.choi@lge.com, Domestic WM Gain set [SOUND_DOMESTIC]_END
+
 	.max_voice_rx_vol[VOC_NB_INDEX] = 400,
 	.min_voice_rx_vol[VOC_NB_INDEX] = -2300,
 #endif	//#if defined (CONFIG_LGE_TUNE_610)
@@ -466,19 +466,19 @@ static struct snddev_ecodec_data snddev_bt_sco_earpiece_data = {
 	.conf_aux_codec_intf = BT_SCO_AUX_CODEC_INTF,
 	.conf_data_format_padding_val = BT_SCO_DATA_FORMAT_PADDING,
 	.max_voice_rx_vol[VOC_NB_INDEX] = 400,		/* bt_sco be tunned */
-//20110524, sh80.choi@lge.com, Domestic WM Gain set [SOUND_DOMESTIC]_START	
+	
 #if defined (CONFIG_LGE_DOMESTIC)	
 	.min_voice_rx_vol[VOC_NB_INDEX] = -1600,
 #else
-//20110524, sh80.choi@lge.com, Domestic WM Gain set [SOUND_DOMESTIC]_END
+
 	.min_voice_rx_vol[VOC_NB_INDEX] = -1100,
 #endif	//#if defined (CONFIG_LGE_TUNE_610)
 	.max_voice_rx_vol[VOC_WB_INDEX] = 400,
-//20110524, sh80.choi@lge.com, Domestic WM Gain set [SOUND_DOMESTIC]_START
+
 #if defined (CONFIG_LGE_DOMESTIC)	
 	.min_voice_rx_vol[VOC_WB_INDEX] = -1600,
 #else
-//20110524, sh80.choi@lge.com, Domestic WM Gain set [SOUND_DOMESTIC]_END
+
 	.min_voice_rx_vol[VOC_WB_INDEX] = -1100,
 #endif	//#if defined (CONFIG_LGE_TUNE_610)
 };
@@ -1186,12 +1186,12 @@ enum {
   QTR_SPEAKER_MIC,
   QTR_TTY_MIC,
   QTR_REC_MIC,
-//20110618 mikyoung.chang@lge.com add devices for FMC, SKT FMC, Camcording [START]
+
 #if defined(CONFIG_LGE_DOMESTIC)
   QTR_CAM_REC_TX,
   QTR_ASR_TX, 
 #endif
- //20110618 mikyoung.chang@lge.com add devices for FMC, SKT FMC, Camcording [END]
+
   QTR_CAL_MAX
 };
 
@@ -1381,11 +1381,11 @@ static  s32 voice_level_data[4][2] = {
     {0,-1700},
     {-700,-2200},
     {500,-1500},
-//20110524, sh80.choi@lge.com, Domestic WM Gain set [SOUND_DOMESTIC]_START
+
 #if defined (CONFIG_LGE_DOMESTIC)
     {400,-1600}};
 #else
-//20110524, sh80.choi@lge.com, Domestic WM Gain set [SOUND_DOMESTIC]_END
+
 	{400,-1100}};
 #endif	//#if defined (CONFIG_LGE_TUNE_610) 
 
@@ -1476,7 +1476,7 @@ static int QTR_index_data[QTR_CAL_MAX][3] = {
     {16,11,-1},
     {16,11,-1},
     {15,11,-1},
- 	//20110618 mikyoung.chang@lge.com add devices for FMC, SKT FMC, Camcording [START]
+
 #if defined(CONFIG_LGE_DOMESTIC)
     {16,11,-1},
     {16,11,-1},
@@ -1486,7 +1486,7 @@ static int QTR_index_data[QTR_CAL_MAX][3] = {
     {15,11,-1},
     {15,11,-1},
 #endif
- //20110618 mikyoung.chang@lge.com add devices for FMC, SKT FMC, Camcording [END]
+
 	};
 
 static u8 QTR_cal_data[QTR_CAL_MAX][3] = {
@@ -1500,7 +1500,7 @@ static u8 QTR_cal_data[QTR_CAL_MAX][3] = {
     {0x08,0xD0,0xFF},
     {0x06,0xC8,0xFF},
     {0x07,0xC1,0xFF},
-	//20110618 mikyoung.chang@lge.com add devices for FMC, SKT FMC, Camcording [START]
+
 #if defined(CONFIG_LGE_DOMESTIC)
     {0x11,0xd0,0xFF},
     {0x1C,0xd0,0xFF},
@@ -1510,7 +1510,7 @@ static u8 QTR_cal_data[QTR_CAL_MAX][3] = {
     {0x11,0xd0,0xFF},
     {0x1C,0xd0,0xFF},
 #endif
-	 //20110618 mikyoung.chang@lge.com add devices for FMC, SKT FMC, Camcording [END]
+	
 	};
 
 static struct adie_codec_action_unit *codec_cal[QTR_CAL_MAX] = {
@@ -1526,12 +1526,12 @@ static struct adie_codec_action_unit *codec_cal[QTR_CAL_MAX] = {
    ispeaker_in_call_tx_48KHz_osr256_actions, //speaker_in_call_tx,
    mic1_rec_tx_actions, //tty_headset_mono_tx,
    cam_rec_tx_actions, //speaker_mono_tx,
- //20110618 mikyoung.chang@lge.com add devices for FMC, SKT FMC, Camcording [START]
+
 #if defined(CONFIG_LGE_DOMESTIC)
 	ispeaker_tx_48KHz_osr256_actions, //speaker_mono_tx,
 	mic1_asr_tx_actions,
 #endif
- //20110618 mikyoung.chang@lge.com add devices for FMC, SKT FMC, Camcording [END]
+
 };
 	
 void set_QTRcal_data(void)

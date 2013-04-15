@@ -1,4 +1,4 @@
-// [sangki.hyun@lge.com] 20100615 LAB1_FW LGE_TEST_MODE
+
 /* list of events as a input key */
 #define TESTMODE_INPUT_KEY_HOME				1
 #define TESTMODE_INPUT_KEY_BACK				2
@@ -90,26 +90,20 @@
 #define TESTMODE_DPAD_RIGHT 	73
 #define TESTMODE_LCDOFF_AND_LOCK 	74
 
-// START sungchae.koo@lge.com 2010/10/14 LAB1_FW : FACTORY_DEBUGGING {
-#define TESTMODE_ENABLE_ADB 75
-// END sungchae.koo@lge.com 2010/10/14 LAB1_FW }		
 
-// START [jongrok.jung@lge.com] 20110309 Testmode 8.5  - db_integrity_check{
+#define TESTMODE_ENABLE_ADB 75
+		
+
+
 #define TESTMODE_DB_INTEGRITY_CHECK 76
 #define TESTMODE_FPRI_CRC_CHECK 77
 #define TESTMODE_FILE_CRC_CHECK 78
 #define TESTMODE_DB_DUMP 79
 #define TESTMODE_DB_COPY 80
-//#define MAX_KEYS	80
-//#define MAX_KEYS	73
-// END [jongrok.jung@lge.com] 20110309 Testmode 8.5 }  
 
-// START LGE_BROADCAST andrew74.kim@lge.com 2011-03-18 : TDMB BLT Test {
-// Requested by Production Tech.
+
 #define TESTMODE_INPUT_KEY_TDMB_PLAY_ON  81
 #define TESTMODE_INPUT_KEY_TDMB_PLAY_OFF 82
 #define MAX_KEYS 82
-// END LGE_BROADCAST}
 
-/* exported function to deliver an event to the android event hub */
 void testmode_input_report_evt(int evtcode);

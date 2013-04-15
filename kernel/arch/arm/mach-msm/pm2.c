@@ -16,6 +16,7 @@
  *
  */
 
+
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/clk.h>
@@ -49,6 +50,10 @@
 
 #ifdef CONFIG_MSM_MEMORY_LOW_POWER_MODE_SUSPEND_DEEP_POWER_DOWN
 #include <mach/msm_migrate_pages.h>
+#endif
+
+#ifdef CONFIG_MACH_LGE
+#include <asm/cacheflush.h>  //0905 : LGE_UPDATE
 #endif
 
 #include "smd_private.h"
@@ -1747,10 +1752,7 @@ static struct platform_suspend_ops msm_pm_ops = {
 static uint32_t restart_reason = 0x776655AA;
 
 #ifdef CONFIG_MACH_LGE
-/* flush console before reboot
- * from google's mahimahi kernel
- * 2010-05-04, cleaneye.kim@lge.com
- */
+
 
 static bool console_flushed;
 
@@ -1785,12 +1787,7 @@ DEFINE_SPINLOCK(power_lock);
 static void msm_pm_power_off(void)
 {
 #ifndef CONFIG_MACH_LGE
-	/* FIXME: there is a problem in power donw sequence of AMSS
-	 * if msm_rpcrouter_close() is not called,
-	 * power down sequence by msm_proc_comm() is processed well.
-	 * this should be reverted later
-	 * 2011-03-14, cleaneye.kim@lge.com
-	 */
+
 	msm_rpcrouter_close();
 #endif
 	printk(KERN_INFO"%s: \n",__func__);
@@ -1808,10 +1805,7 @@ static void msm_pm_restart(char str, const char *cmd)
 {
 
 #ifdef CONFIG_MACH_LGE
-	/* flush console before reboot
-	 * from google's mahimahi kernel
-	 * 2010-05-04, cleaneye.kim@lge.com
-	 */
+
 	msm_pm_flush_console();
 #endif
 
@@ -1819,6 +1813,10 @@ static void msm_pm_restart(char str, const char *cmd)
 	msm_rpcrouter_close();
 
 	spin_lock(&power_lock);
+#endif
+
+#ifdef CONFIG_MACH_LGE
+           flush_cache_all(); //0905 LGE_UPDAT E
 #endif
 
 #ifdef CONFIG_LGE_HANDLE_PANIC

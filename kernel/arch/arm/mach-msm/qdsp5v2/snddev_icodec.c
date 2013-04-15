@@ -173,7 +173,7 @@ static struct snddev_icodec_drv_state snddev_icodec_drv;
 #ifdef CONFIG_LGE_AUDIO_LOOPBACK
 	/* LGE_CHANGE
 	  * added for Audio loopback
-	  * 2010-02-24, bob.cho@lge.com
+
 	  */
 #include "lge_audio_amp.h"
 #include <linux/delay.h>
@@ -954,7 +954,6 @@ static int snddev_icodec_close(struct msm_snddev_info *dev_info)
 #if 0//!defined(CONFIG_LGE_MODEL_E739)
 	/* LGE_CHANGE
 	  * added for Audio loopback
-	  * 2010-02-24, bob.cho@lge.com
 	  */
 	if (lb_suspend && drv->rx_active == 0 && drv->tx_active == 0)	{
 		/* enable loopback mode */
@@ -982,7 +981,6 @@ static int snddev_icodec_open(struct msm_snddev_info *dev_info)
 #if 0//!defined(CONFIG_LGE_MODEL_E739)
 	/* LGE_CHANGE
 	  * added for Audio loopback
-	  * 2010-02-24, bob.cho@lge.com
 	  */
 	if (lb_suspend == 0 && LB_IS_ENABLE(lb_status))	{
 		MM_INFO("snddev_icodec_open : loopback off\n");
@@ -1244,7 +1242,6 @@ static int snddev_icodec_probe(struct platform_device *pdev)
 #if 0//!defined(CONFIG_LGE_MODEL_E739)
 	/* LGE_CHANGE
 	  * added for Audio loopback
-	  * 2010-02-24, bob.cho@lge.com
 	  */
 	/* Register sysfs hooks */
 	rc = device_create_file(&pdev->dev, &dev_attr_loopback);
