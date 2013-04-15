@@ -294,7 +294,11 @@ static void pmic8058_led_work(struct work_struct *work)
 		break;
 	case PMIC8058_ID_LED_0:
 #ifdef CONFIG_MACH_MSM8X55_VICTOR
+#ifdef CONFIG_GENERIC_BLN
 		if( (led->brightness == 0 && !bln_is_ongoing()) || suspend_check != 1 ){
+#else
+		if( (led->brightness == 0 ) || suspend_check != 1 ){
+#endif
 			led_lc_set(led, led->brightness);
 			//pr_info("%s: brightness changed -> id:%d brightness: %d\n",__FUNCTION__,led->id,led->brightness); //Debug info
 		}/*else{
@@ -341,13 +345,13 @@ static bool enable_led_notification(void){
 
 	led = &led_data[2]; //LEDS of keyboard
 	spin_lock_irqsave(&led->value_lock, flags);
-	led->brightness = 5;//LED_FULL was too much brilliant
-	mutex_lock(&led->lock);
+	mutex_lock(&led->lock);		
+	led->brightness = get_bln_brightness();//take int from bln
 	led_lc_set(led, led->brightness);
 	mutex_unlock(&led->lock);	
 	spin_unlock_irqrestore(&led->value_lock, flags);	
 
-	pr_info("%s: leds are enabled\n",__FUNCTION__);
+	//pr_info("%s: leds are enabled\n",__FUNCTION__);
 	return true;
   }
   else
@@ -355,7 +359,7 @@ static bool enable_led_notification(void){
   return false;
 }
 
-static void disable_led_notification(void){
+static bool disable_led_notification(void){
   /* check if its suspended */
   if (suspend_check == 1){
 	/* Power off leds */
@@ -364,12 +368,16 @@ static void disable_led_notification(void){
 	
 	led = &led_data[2];
 	spin_lock_irqsave(&led->value_lock, flags);
-	led->brightness = LED_OFF;
 	mutex_lock(&led->lock);
+	led->brightness = LED_OFF;
 	led_lc_set(led, led->brightness);
 	mutex_unlock(&led->lock);
 	spin_unlock_irqrestore(&led->value_lock, flags);
+	return true;
  }
+ else
+    pr_info("%s: cannot set notification led, suspend_check = 0\n",__FUNCTION__);
+ return false;
 }
 
 static struct bln_implementation bln = {

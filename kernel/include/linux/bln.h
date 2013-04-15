@@ -5,9 +5,10 @@
 
 struct bln_implementation {
 	bool (*enable)(void);
-	void (*disable)(void);
+	bool (*disable)(void);
 };
 
 void register_bln_implementation(struct bln_implementation *imp);
 bool bln_is_ongoing(void);
+int get_bln_brightness(void);
 #endif
